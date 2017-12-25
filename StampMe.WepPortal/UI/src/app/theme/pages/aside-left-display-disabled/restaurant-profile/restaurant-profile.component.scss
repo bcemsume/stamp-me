@@ -1,0 +1,13 @@
+// component css goes here
+@import "~nouislider/distribute/nouislider.min.css";
+
+
+.m-portlet {
+    box-shadow: none;
+}
+
+// 0 1px 15px 1px rgba(113,106,202,.08)
+
+.m-portlet.m-portlet--creative {
+    box-shadow: 0 1px 15px 1px rgba(113,106,202,.08)
+}

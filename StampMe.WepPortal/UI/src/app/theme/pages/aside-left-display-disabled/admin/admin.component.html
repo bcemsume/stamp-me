@@ -1,0 +1,201 @@
+<!-- END: Subheader -->
+<toaster-container [toasterconfig]="config1"></toaster-container>
+<div class="m-content">
+    <!--begin:: Widgets/Stats-->
+    <div class="m-portlet">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="m-portlet m-portlet--mobile">
+                    <div class="m-portlet__head">
+                        <div class="m-portlet__head-caption">
+                            <div class="m-portlet__head-title">
+                                <h3 class="m-portlet__head-text">
+                                    Kullanıcılar
+                                </h3>
+                            </div>
+                        </div>
+                        <div class="m-portlet__head-tools">
+                            <ul class="m-portlet__nav">
+                                <li class="m-portlet__nav-item">
+                                    <div class="m-dropdown m-dropdown--inline m-dropdown--arrow m-dropdown--align-right m-dropdown--align-push" data-dropdown-toggle="hover"
+                                        aria-expanded="true">
+                                        <a href="#" class="m-portlet__nav-link btn btn-lg btn-secondary  m-btn m-btn--icon m-btn--icon-only m-btn--pill  m-dropdown__toggle">
+                                            <i class="la la-ellipsis-h m--font-brand"></i>
+                                        </a>
+                                        <div class="m-dropdown__wrapper">
+                                            <span class="m-dropdown__arrow m-dropdown__arrow--right m-dropdown__arrow--adjust"></span>
+                                            <div class="m-dropdown__inner">
+                                                <div class="m-dropdown__body">
+                                                    <div class="m-dropdown__content">
+                                                        <ul class="m-nav">
+                                                            <li class="m-nav__section m-nav__section--first">
+                                                                <span class="m-nav__section-text">
+                                                                    İşlemler
+                                                                </span>
+                                                            </li>
+                                                            <li class="m-nav__item">
+                                                                <a (click)="this.form.reset(); this.popupTitle='Yeni Ekle'" href="" class="m-nav__link" data-toggle="modal" data-target="#m_modal_4">
+                                                                    <i class="m-nav__link-icon flaticon-user-add"></i>
+                                                                    <span class="m-nav__link-text">
+                                                                        Yeni Ekle
+                                                                    </span>
+                                                                </a>
+                                                            </li>
+                                                            <li class="m-nav__item">
+                                                                <a href="" class="m-nav__link" data-toggle="modal" data-target="#modalConfirm">
+                                                                    <i class="m-nav__link-icon flaticon-delete"></i>
+                                                                    <span class="m-nav__link-text">
+                                                                        Sil
+                                                                    </span>
+                                                                </a>
+                                                            </li>
+                                                            <li class="m-nav__item">
+                                                                <a href="" class="m-nav__link" (click)="btnEdit(); this.popupTitle='Düzenle'" data-toggle="modal" data-target="#m_modal_4">
+                                                                    <i class="m-nav__link-icon flaticon-edit"></i>
+                                                                    <span class="m-nav__link-text">
+                                                                        Düzenle
+                                                                    </span>
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="m-portlet__body">
+                        <!--begin: Datatable -->
+                        <dx-data-grid #grid id="gridContainer" [dataSource]="dataSource" [showRowLines]="true" [showBorders]="true">
+
+                            <dxo-paging [pageSize]="20"></dxo-paging>
+                            <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 50, 100]" [showInfo]="true">
+                            </dxo-pager>
+                            <dxo-selection [selectAllMode]="allPages" [showCheckBoxesMode]="onClick" mode="multiple"></dxo-selection>
+
+                        </dx-data-grid>
+                        <!--end: Datatable -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="m_modal_4" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    {{popupTitle}}
+                </h5>
+                <button id="btnCloseImageModal" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">
+                        &times;
+                    </span>
+                </button>
+            </div>
+            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="recipient-name" class="form-control-label">
+                            Ünvan:
+                        </label>
+                        <div [hidden]="form.controls.Name.valid || form.controls.Name.pristine" class="alert alert-danger">Bu alanı boş geçemezsiniz.</div>
+                        <input formControlName="Name" type="text" class="form-control" id="recipient-name1" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="userName-name" class="form-control-label">
+                            Kullanıcı Adı:
+                        </label>
+                        <div [hidden]="form.controls.UserName.valid || form.controls.UserName.pristine" class="alert alert-danger">Bu alanı boş geçemezsiniz.</div>
+                        <input formControlName="UserName" type="text" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password-name" class="form-control-label">
+                            Şifre:
+                        </label>
+                        <div [hidden]="form.controls.Password.valid || form.controls.Password.pristine" class="alert alert-danger">Bu alanı boş geçemezsiniz.</div>
+                        <input formControlName="Password" type="password" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email-name" class="form-control-label">
+                            Email:
+                        </label>
+                        <div [hidden]="form.controls.Email.valid || form.controls.Email.pristine" class="alert alert-danger">Geçerli bir email adresi girin.</div>
+                        <input formControlName="Email" type="text" class="form-control" id="email-name1" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="adres-text" class="form-control-label">
+                            Adres:
+                        </label>
+                        <div [hidden]="form.controls.Adress.valid || form.controls.Adress.pristine" class="alert alert-danger">Bu alanı boş geçemezsiniz.</div>
+                        <textarea rows="10" cols="50" formControlName="Adress" class="form-control" id="adres-text" required></textarea>
+                    </div>
+                    <div class="m-form__group form-group row">
+                        <label class="form-control-label" for="adres-text" style="margin-left: 15px;">
+                            Aktif:
+                        </label>
+                        <div [hidden]="form.controls.isActive.valid || form.controls.isActive.pristine" class="alert alert-danger">Bu alanı boş geçemezsiniz.</div>
+                        <div class="col-3">
+                            <span class="m-switch m-switch--icon m-switch--info">
+                                <label>
+                                    <input formControlName="isActive" checked="checked" name="" type="checkbox">
+                                    <span></span>
+                                </label>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        Kapat
+                    </button>
+                    <button type="submit" [disabled]="!form.valid" class="btn btn-primary">
+                        Kaydet
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalConfirm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Sil
+                </h5>
+                <button id="btnCloseConfirmModal" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">
+                        &times;
+                    </span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <p>
+                    Silme işlemine devam etmek istediğinize emin misinizz ?
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    Kapat
+                </button>
+                <button type="submit" (click)="btnDelete()" class="btn btn-primary">
+                    Sil
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
