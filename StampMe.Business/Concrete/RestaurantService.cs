@@ -7,6 +7,7 @@ using StampMe.Common.CustomDTO;
 using StampMe.DataAccess.Abstract;
 using StampMe.Entities.Concrete;
 using System.Linq;
+using MongoDB.Bson;
 
 namespace StampMe.Business.Concrete
 {
@@ -33,7 +34,8 @@ namespace StampMe.Business.Concrete
             if (rest.Images == null)
                 rest.Images = new List<Images>();
 
-            rest.Images.Add(new Images() { Description = item.Info, Image = Convert.FromBase64String(item.Data)});
+            var image = new Images() { Description = item.Info, Image = Convert.FromBase64String(item.Data), Id = ObjectId.GenerateNewId() };
+            rest.Images.Add(image);
 
             await _restaurantDal.UpdateAsync(x => x.Id == rest.Id, rest);
         }
@@ -41,6 +43,23 @@ namespace StampMe.Business.Concrete
         public async Task DeleteAsync(Restaurant entity)
         {
             await _restaurantDal.DeleteAsync(x => x.Id == entity.Id);
+        }
+
+        public async Task DeleteImageAsync(object  restId, object imgId)
+        {
+            var rest = await _restaurantDal.GetAsync(x => x.Id == new MongoDB.Bson.ObjectId((string)restId));
+
+            if (rest == null)
+                throw new Exception("Restaurant Bulunumadı..!!");
+
+           var img = rest.Images.FirstOrDefault(x=> x.Id == new ObjectId((string)imgId));
+
+            if (img == null)
+                throw new Exception("Resim Bulunumadı..!!");
+
+            rest.Images.Remove(img);
+
+            await _restaurantDal.UpdateAsync(x => x.Id == rest.Id, rest);
         }
 
         public async Task DeleteRangeAsync(List<object> ids)
@@ -78,7 +97,7 @@ namespace StampMe.Business.Concrete
             if (result.Images == null)
                 result.Images = new List<Images>();
 
-            return result.Images.Select(x => new ImageDTO { Data = x.Description, Info = Convert.ToBase64String(x.Image) });
+            return result.Images.Select(x => new ImageDTO { Info = x.Description, Data = Convert.ToBase64String(x.Image), Id = x.Id.ToString() });
         }
 
         public async Task<LoginDTO> LoginAsync(string userName, string password)

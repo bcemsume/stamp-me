@@ -3,6 +3,11 @@ namespace StampMe.Common.CustomDTO
 {
     public class ImageDTO
     {
+        public string Id
+        {
+            get;
+            set;
+        }
         public string Info
         {
             get;

@@ -7,7 +7,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AsideLeftDisplayDisabledComponent } from '../aside-left-display-disabled.component';
 import { CommonModule } from '@angular/common';
 import { LayoutModule } from '../../../layouts/layout.module';
-import { DxDataGridModule } from 'devextreme-angular';
+import { DxDataGridModule, DxPopupModule } from 'devextreme-angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToasterModule } from 'angular2-toaster';
 import { NouisliderModule } from 'ng2-nouislider';
@@ -29,7 +29,7 @@ const routes: Routes = [
 
 @NgModule({
     imports: [
-        CommonModule, RouterModule.forChild(routes), MultiselectDropdownModule, LayoutModule, DxDataGridModule, FormsModule, ReactiveFormsModule, ToasterModule, NouisliderModule, AgmCoreModule.forRoot({
+        CommonModule, DxPopupModule, RouterModule.forChild(routes), MultiselectDropdownModule, LayoutModule, DxDataGridModule, FormsModule, ReactiveFormsModule, ToasterModule, NouisliderModule, AgmCoreModule.forRoot({
             apiKey: 'AIzaSyDy5VP8zq7zt5iDKPmqBy5lvnM5tATjEjc'
           })
     ], exports: [

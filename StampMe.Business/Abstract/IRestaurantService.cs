@@ -21,5 +21,6 @@ namespace StampMe.Business.Abstract
         Task<LoginDTO> LoginAsync(string userName, string password);
         Task AddImageAsync(ImageDTO item, object Id);
         Task<IEnumerable<ImageDTO>> GetImages(object Id);
+        Task DeleteImageAsync(object restId,Object imgId);
     }
 }

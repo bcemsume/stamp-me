@@ -15,24 +15,24 @@ import { ToasterConfig, ToasterService, Toast } from 'angular2-toaster';
 })
 export class RestaurantProfileComponent implements OnInit, AfterViewInit {
 
-    imageDTO:ImageDataDTO = new ImageDataDTO();
+    imageDTO: ImageDataDTO = new ImageDataDTO();
     calismaGunleriModel: number[] = [];
     calismaGunleri: IMultiSelectOption[];
 
     odemeTipleriModel: number[] = [];
     odemeTipleri: IMultiSelectOption[];
-
+    popupImgVisible: any;
     @ViewChild('btnCloseImageModal') btnCloseImageModal: ElementRef;
-    
+
     form = new FormGroup({
         Info: new FormControl('', Validators.required),
         Data: new FormControl('', Validators.required),
     });
-    
+
     public config1: ToasterConfig = new ToasterConfig({
         positionClass: 'toast-top-right'
     });
-    
+
     myTexts: IMultiSelectTexts = {
         checkAll: 'Hepsini Seç',
         uncheckAll: 'Hepsini Sil',
@@ -43,8 +43,18 @@ export class RestaurantProfileComponent implements OnInit, AfterViewInit {
         defaultTitle: 'Seç',
         allSelected: 'Hepsi Seçili',
     };
+    imgDataSource: any;
+
+    loadImages() {
+        this.imgDataSource = null;
+        this.svc.getRestImages().subscribe(x => {
+            this.imgDataSource = x; console.log(x);
+        });
+    }
+
     ngOnInit() {
 
+this.loadImages();
         this.calismaGunleri = [
             { id: 1, name: 'Pazartesi' },
             { id: 2, name: 'Salı' },
@@ -123,10 +133,24 @@ export class RestaurantProfileComponent implements OnInit, AfterViewInit {
     }
 
     onSubmit() {
-        this.svc.addImage(this.form.value).subscribe(x=> {
+        this.svc.addImage(this.form.value).subscribe(x => {
             document.getElementById('btnCloseImageModal').click();
-
+            this.loadImages();
         });
+    }
+
+    lastRowCLickedId: number;
+    lastRowClickedTime: Date;
+    imagePath: any;
+    rowClick(e) {
+        var currentTime = new Date();
+        if (e.rowIndex === this.lastRowCLickedId && ((currentTime.getTime() - this.lastRowClickedTime.getTime()) < 300)) {
+            this.popupImgVisible = true;
+            this.imagePath = e.data.data;
+        } else {
+            this.lastRowCLickedId = e.rowIndex;
+            this.lastRowClickedTime = new Date();
+        }
     }
 
 

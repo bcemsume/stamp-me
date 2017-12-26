@@ -51,14 +51,7 @@
                                                                     </span>
                                                                 </a>
                                                             </li>
-                                                            <li class="m-nav__item">
-                                                                <a href="" class="m-nav__link" (click)="btnEdit(); this.popupTitle='Düzenle'" data-toggle="modal" data-target="#m_modal_4">
-                                                                    <i class="m-nav__link-icon flaticon-edit"></i>
-                                                                    <span class="m-nav__link-text">
-                                                                        Düzenle
-                                                                    </span>
-                                                                </a>
-                                                            </li>
+
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -71,13 +64,14 @@
                     </div>
                     <div class="m-portlet__body">
                         <!--begin: Datatable -->
-                        <dx-data-grid #grid id="gridContainer" [dataSource]="dataSource" [showRowLines]="true" [showBorders]="true">
+                        <dx-data-grid (onRowClick)="rowClick($event)" #grid id="gridContainer" [dataSource]="imgDataSource" [showRowLines]="true"
+                            [showBorders]="true">
 
                             <dxo-paging [pageSize]="20"></dxo-paging>
                             <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 50, 100]" [showInfo]="true">
                             </dxo-pager>
                             <dxo-selection [selectAllMode]="allPages" [showCheckBoxesMode]="onClick" mode="multiple"></dxo-selection>
-
+                            <dxi-column dataField="info"></dxi-column>
                         </dx-data-grid>
                         <!--end: Datatable -->
                     </div>
@@ -86,7 +80,7 @@
 
 
             <div class="col-xl-6">
-                <div class="m-portlet m-portlet--creative m-portlet--bordered-semi" >
+                <div class="m-portlet m-portlet--creative m-portlet--bordered-semi">
                     <div class="m-portlet__head">
                         <div class="m-portlet__head-caption">
                             <div class="m-portlet__head-title">
@@ -466,7 +460,7 @@
                 </div>
             </div>
         </div>
-       
+
     </div>
 </div>
 
@@ -477,7 +471,7 @@
                 <h5 class="modal-title" id="exampleModalLabel">
                     Resim Ekle
                 </h5>
-                <button id="btnCloseModal" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button id="btnCloseImageModal" type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">
                         &times;
                     </span>
@@ -518,3 +512,13 @@
         </div>
     </div>
 </div>
+
+
+
+
+<dx-popup class="popup" [showTitle]="true" title="Resim" [dragEnabled]="false" [closeOnOutsideClick]="true"
+    [(visible)]="popupImgVisible">
+    <div *dxTemplate="let data of 'content'">
+        <img [src]="'data:image/jpg;base64,'+imagePath" />
+    </div>
+</dx-popup>

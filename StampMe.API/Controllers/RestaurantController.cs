@@ -81,12 +81,17 @@ namespace StampMe.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<ImageDTO>> GetImages(object Id)
+        public async Task<IEnumerable<ImageDTO>> GetImages(string Id)
         {
             var result = await _restaurantService.GetImages(Id);
             return result;
         }
 
+        [HttpGet]
+        public async Task DeleteImageAsync(string Id, string imgId)
+        {
+            await _restaurantService.DeleteImageAsync(Id,imgId);
+        }
         // DELETE api/values/5
         [HttpGet]
         public async Task DeleteAsync(string id)

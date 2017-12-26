@@ -129,6 +129,11 @@ namespace StampMe.Entities.Concrete
     }
     public class Images
     {
+        public ObjectId Id
+        {
+            get;
+            set;
+        }
         public string Description
         {
             get;
