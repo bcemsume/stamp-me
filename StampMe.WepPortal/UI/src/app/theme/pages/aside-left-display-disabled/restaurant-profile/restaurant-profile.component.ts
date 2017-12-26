@@ -139,6 +139,7 @@ this.loadImages();
         });
     }
 
+    
     lastRowCLickedId: number;
     lastRowClickedTime: Date;
     imagePath: any;
