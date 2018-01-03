@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+
 namespace StampMe.Common.CustomDTO
 {
     public class RestaurantQuickSaveDTO
@@ -13,6 +15,10 @@ namespace StampMe.Common.CustomDTO
             get;
             set;
         }
+        public List<CategoriesDTO> Categories { get; set; }
+        public List<PromotionDTO> Promotion { get; set; }
+        public List<ProductDTO> Product { get; set; }
+        public ContractDTO Contract { get; set; }
 
         public string Email
         {
@@ -30,6 +36,11 @@ namespace StampMe.Common.CustomDTO
             set;
         }
         public string Adress
+        {
+            get;
+            set;
+        }
+        public bool isPromo
         {
             get;
             set;

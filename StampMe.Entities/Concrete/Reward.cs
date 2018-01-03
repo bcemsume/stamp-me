@@ -5,11 +5,8 @@ using MongoDB.Bson;
 
 namespace StampMe.Entities.Concrete
 {
-    public class Reward : IEntity
+    public class RewardDetail : IEntity
     {
-        public Reward()
-        {
-        }
 
         public ObjectId Id
         {
@@ -42,6 +39,12 @@ namespace StampMe.Entities.Concrete
         }
 
         public bool isUsed
+        {
+            get;
+            set;
+        }
+
+        public DateTime StampDate
         {
             get;
             set;

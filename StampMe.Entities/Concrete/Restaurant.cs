@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using StampMe.Core.Entities;
 using MongoDB.Bson;
-
+using System;
+using StampMe.Common.CustomDTO;
 
 namespace StampMe.Entities.Concrete
 {
@@ -41,12 +42,41 @@ namespace StampMe.Entities.Concrete
             get;
             set;
         }
+        public List<Images> Notice
+        {
+            get;
+            set;
+        }
+
         public Info Info
         {
             get;
             set;
         }
+        public List<Product> Product
+        {
+            get;
+            set;
+        }
+        public List<Promotion> Promotion
+        {
+            get;
+            set;
+        }
+
+        public List<Categories> Categories { get; set; }
+        public Contract Contract
+        {
+            get;
+            set;
+        }
+
         public string FacebookToken
+        {
+            get;
+            set;
+        }
+        public bool isPromo
         {
             get;
             set;
@@ -56,7 +86,6 @@ namespace StampMe.Entities.Concrete
             get;
             set;
         }
-
     }
     public class Info
     {
@@ -66,11 +95,6 @@ namespace StampMe.Entities.Concrete
             set;
         }
         public Adress Adress
-        {
-            get;
-            set;
-        }
-        public List<Promotion> Promotion
         {
             get;
             set;
@@ -97,7 +121,17 @@ namespace StampMe.Entities.Concrete
     }
     public class Promotion
     {
+        public ObjectId Id
+        {
+            get;
+            set;
+        }
         public object ProductId
+        {
+            get;
+            set;
+        }
+        public StatusType Status
         {
             get;
             set;
@@ -140,6 +174,30 @@ namespace StampMe.Entities.Concrete
             set;
         }
         public byte[] Image
+        {
+            get;
+            set;
+        }
+    }
+
+    public class Product
+    {
+        public ObjectId Id
+        {
+            get;
+            set;
+        }
+        public string Description
+        {
+            get;
+            set;
+        }
+        public StatusType Status
+        {
+            get;
+            set;
+        }
+        public DateTime DueDate
         {
             get;
             set;

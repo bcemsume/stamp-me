@@ -19,14 +19,14 @@ namespace StampMe.Business.Concrete
             _restaurantDal = restaurantDal;
         }
 
-        public async  Task Add(Restaurant entity)
+        public async Task Add(Restaurant entity)
         {
             await _restaurantDal.AddAsync(entity);
         }
 
         public async Task AddImageAsync(ImageDTO item, object Id)
         {
-            var rest = await _restaurantDal.GetAsync(x=> x.Id == new MongoDB.Bson.ObjectId((string)Id));
+            var rest = await _restaurantDal.GetAsync(x => x.Id == new MongoDB.Bson.ObjectId((string)Id));
 
             if (rest == null)
                 throw new Exception("Restaurant Bulunumadı..!!");
@@ -45,14 +45,14 @@ namespace StampMe.Business.Concrete
             await _restaurantDal.DeleteAsync(x => x.Id == entity.Id);
         }
 
-        public async Task DeleteImageAsync(object  restId, object imgId)
+        public async Task DeleteImageAsync(object restId, object imgId)
         {
             var rest = await _restaurantDal.GetAsync(x => x.Id == new MongoDB.Bson.ObjectId((string)restId));
 
             if (rest == null)
                 throw new Exception("Restaurant Bulunumadı..!!");
 
-           var img = rest.Images.FirstOrDefault(x=> x.Id == new ObjectId((string)imgId));
+            var img = rest.Images.FirstOrDefault(x => x.Id == new ObjectId((string)imgId));
 
             if (img == null)
                 throw new Exception("Resim Bulunumadı..!!");
@@ -78,8 +78,8 @@ namespace StampMe.Business.Concrete
         public async Task<IEnumerable<RestaurantListDTO>> GetAdminRestaurantList()
         {
             var list = await _restaurantDal.GetAllAsync();
-            return list.Select(x => new RestaurantListDTO { isActive= x.isActive, Adress = x.Info.Adress.AdressDetail, Email = x.Email, Id = x.Id.ToString(), Name = x.Name, Password = x.Password,  UserName = x.UserName });
-                                           
+            return list.Select(x => new RestaurantListDTO { isActive = x.isActive, Adress = x.Info.Adress.AdressDetail, Email = x.Email, Id = x.Id.ToString(), Name = x.Name, Password = x.Password, UserName = x.UserName });
+
         }
 
         public async Task<IEnumerable<Restaurant>> GetAllAsync()
@@ -113,15 +113,93 @@ namespace StampMe.Business.Concrete
             return result;
         }
 
+        public async Task AddUpdatePromotion(PromotionDTO item, object Id)
+        {
+            var rest = await FirstOrDefaultAsync(x => x.Id == new ObjectId((string)Id));
+            if (rest == null) throw new Exception("Restaurant Bulunumadı..!!");
+            bool isNew = false;
+
+            var pro = rest.Promotion.FirstOrDefault(x => x.Id == new ObjectId((string)item.Id));
+            if (pro == null) 
+            {
+                isNew = true;
+                pro = new Promotion();
+
+            }
+            if(isNew)
+                rest.Promotion.Add(new Promotion() { Claim = item.Claim, Id = ObjectId.GenerateNewId(), ProductId = item.ProductId, Status = item.Status});
+            else {
+                pro.Claim = item.Claim;
+                pro.ProductId = item.ProductId;
+                pro.Status = item.Status;
+            }
+            await UpdateAsync(rest);
+        }
+
+        public async Task AddUpdateProduct(ProductDTO item, object Id)
+        {
+            var rest = await FirstOrDefaultAsync(x => x.Id == new ObjectId((string)Id));
+            if (rest == null) throw new Exception("Restaurant Bulunumadı..!!");
+            bool isNew = false;
+
+            var pro = rest.Product.FirstOrDefault(x => x.Id == new ObjectId((string)item.Id));
+            if (pro == null)
+            {
+                isNew = true;
+                pro = new Product();
+
+            }
+            if (isNew)
+                rest.Product.Add(new Product() {  Description = item.Description, DueDate = item.DueDate, Id = ObjectId.GenerateNewId(), Status = item.Status });
+            else
+            {
+                pro.Description = item.Description;
+                pro.DueDate = item.DueDate;
+                pro.Status = item.Status;
+            }
+            await UpdateAsync(rest);
+        }
+
+        public async Task ApprovedPromotion(PromotionDTO item, object Id)
+        {
+            var rest = await FirstOrDefaultAsync(x => x.Id == (ObjectId)Id);
+            if (rest == null) throw new Exception("Restaurant Bulunumadı..!!");
+
+            var pro = rest.Promotion.FirstOrDefault(x => x.Id == new ObjectId((string)item.Id));
+            if (pro == null) throw new Exception("Promosyon Bulunumadı..!!");
+
+            pro.Status = StatusType.Approved;
+            await UpdateAsync(rest);
+
+
+        }
+
+        public async Task ApprovedProduct(ProductDTO item, object Id)
+        {
+            var rest = await FirstOrDefaultAsync(x => x.Id == new ObjectId((string)Id));
+            if (rest == null) throw new Exception("Restaurant Bulunumadı..!!");
+
+            var pro = rest.Product.FirstOrDefault(x => x.Id == new ObjectId((string)item.Id));
+
+            if (pro == null) throw new Exception("Ürün Bulunumadı..!!");
+
+            pro.Status = StatusType.Approved;
+            await UpdateAsync(rest);
+
+        }
+
         public async Task QuickSaveAsync(RestaurantQuickSaveDTO entity)
         {
-            var id = entity.Id == null ?  new MongoDB.Bson.ObjectId() : new MongoDB.Bson.ObjectId(entity.Id);
+            var id = entity.Id == null ? new MongoDB.Bson.ObjectId() : new MongoDB.Bson.ObjectId(entity.Id);
             var r = await FirstOrDefaultAsync(x => x.Id == id);
             bool isNew = false;
             if (r == null)
             {
                 r = new Restaurant();
                 isNew = true;
+                r.Categories = new List<Categories>();
+                r.Product = new List<Product>();
+                r.Promotion = new List<Promotion>();
             }
 
             r.Name = entity.Name;
@@ -129,7 +207,24 @@ namespace StampMe.Business.Concrete
             r.Password = entity.Password;
             r.UserName = entity.UserName;
             r.isActive = entity.isActive;
-            r.Info = new Info() { Adress = new Adress { AdressDetail = entity.Adress } };
+            r.isPromo = entity.isPromo;
+            r.Contract = new Contract() { Description = entity.Contract.Description, Id = ObjectId.GenerateNewId(), Price = entity.Contract.Price, Type = entity.Contract.Type };
+
+            foreach (var item in entity.Product)
+            {
+                r.Product.Add(new Product() { Id = ObjectId.GenerateNewId(), Description = item.Description, DueDate = item.DueDate, Status = StatusType.Approved });
+            }
+            foreach (var item in entity.Promotion)
+            {
+                r.Promotion.Add(new Promotion() { Id = ObjectId.GenerateNewId(), Status = StatusType.Approved, Claim = item.Claim, ProductId = item.ProductId });
+            }
+
+            foreach (var item in entity.Categories)
+            {
+                r.Categories.Add(new Categories() { Id = ObjectId.GenerateNewId(), Definition = item.Definition });
+            }
+
+            r.Info = (new Info() { Adress = new Adress { AdressDetail = entity.Adress } });
 
             if (isNew)
                 await Add(r);

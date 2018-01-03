@@ -1,15 +1,12 @@
 ﻿using System;
 using StampMe.Core.Entities;
 using MongoDB.Bson;
+using System.Collections.Generic;
 
 namespace StampMe.Entities.Concrete
 {
     public class User : IEntity
     {
-        public User()
-        {
-        }
-
         public ObjectId Id
         {
             get;
@@ -45,7 +42,58 @@ namespace StampMe.Entities.Concrete
             get;
             set;
         }
+        public List<Reward> Reward
+        {
+            get;
+            set;
+        }
         public string SocialToken
+        {
+            get;
+            set;
+        }
+    }
+
+    public class Reward
+    {
+
+        public ObjectId Id
+        {
+            get;
+            set;
+        }
+
+        public ObjectId UserId
+        {
+            get;
+            set;
+        }
+
+        public ObjectId RestaurantId
+        {
+            get;
+            set;
+        }
+
+        public ObjectId ProductId
+        {
+            get;
+            set;
+        }
+
+        public byte ClaimCount
+        {
+            get;
+            set;
+        }
+
+        public bool isUsed
+        {
+            get;
+            set;
+        }
+
+        public DateTime StampDate
         {
             get;
             set;

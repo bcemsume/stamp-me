@@ -9,6 +9,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\StampMe.Core\StampMe.Core.csproj" />
+    <ProjectReference Include="..\StampMe.Common\StampMe.Common.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Class1.cs" />
