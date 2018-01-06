@@ -28,8 +28,10 @@ namespace StampMe.Business.Abstract
         Task AddUpdateProduct(ProductDTO item, object Id);
         Task ApprovedProduct(ProductDTO item, object Id);
 
-        Task GetWaitingApprovalProduct();
-        Task GetWaitingApprovalPromotion();
+        Task<IEnumerable<WaitApprovalItemDTO>> GetWaitingApprovalProduct();
+        Task<IEnumerable<WaitApprovalItemDTO>> GetWaitingApprovalPromotion();
+        Task<IEnumerable<WaitApprovalItemDTO>> GetApprovedProduct();
+        Task<IEnumerable<WaitApprovalItemDTO>> GetApprovedPromotion();
 
 
     }

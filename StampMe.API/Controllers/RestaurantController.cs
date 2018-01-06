@@ -90,14 +90,47 @@ namespace StampMe.API.Controllers
         [HttpGet]
         public async Task DeleteImageAsync(string Id, string imgId)
         {
-            await _restaurantService.DeleteImageAsync(Id,imgId);
+            await _restaurantService.DeleteImageAsync(Id, imgId);
         }
         // DELETE api/values/5
         [HttpGet]
         public async Task DeleteAsync(string id)
         {
-            await _restaurantService.DeleteAsync(new Restaurant { Id = new ObjectId(id)});
+            await _restaurantService.DeleteAsync(new Restaurant { Id = new ObjectId(id) });
         }
 
+
+        [HttpPost]
+        public async Task ApprovedPromotion([FromBody]PromotionDTO item, string Id)
+        {
+            await _restaurantService.ApprovedPromotion(item, Id);
+        }
+        [HttpPost]
+        public async Task AddUpdatePromotion([FromBody]PromotionDTO item, string Id)
+        {
+            await _restaurantService.AddUpdatePromotion(item, Id);
+
+        }
+        [HttpPost]
+        public async Task AddUpdateProduct([FromBody]ProductDTO item, string Id)
+        {
+            await _restaurantService.AddUpdateProduct(item, Id);
+
+        }
+        [HttpPost]
+        public async Task ApprovedProduct([FromBody]ProductDTO item, string Id)
+        {
+            await _restaurantService.ApprovedProduct(item, Id);
+
+        }
+
+        [HttpGet]
+        public async Task<IEnumerable<WaitApprovalItemDTO>> GetWaitingApprovalProduct() { return await _restaurantService.GetWaitingApprovalProduct(); }
+        [HttpGet]
+        public async Task<IEnumerable<WaitApprovalItemDTO>> GetWaitingApprovalPromotion() { return await _restaurantService.GetWaitingApprovalPromotion(); }
+        [HttpGet]
+        public async Task<IEnumerable<WaitApprovalItemDTO>> GetApprovedProduct() { return await _restaurantService.GetApprovedProduct(); }
+        [HttpGet]
+        public async Task<IEnumerable<WaitApprovalItemDTO>> GetApprovedPromotion() { return await _restaurantService.GetApprovedPromotion(); }
     }
 }

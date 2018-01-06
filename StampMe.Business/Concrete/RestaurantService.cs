@@ -189,32 +189,89 @@ namespace StampMe.Business.Concrete
 
         }
 
-        public async Task GetWaitingApprovalProduct()
+        public async Task<IEnumerable<WaitApprovalItemDTO>> GetWaitingApprovalProduct()
         {
+            var list = new List<WaitApprovalItemDTO>();
             var rests = await GetAllAsync();
 
             var product = rests.Where(x => x.Product.Any(z => z.Status == StatusType.WaitApproval));
+
+            foreach (var item in product)
+            {
+                foreach (var pro in item.Product)
+                {
+                    if (pro.Status == StatusType.WaitApproval)
+                    {
+                        list.Add(new WaitApprovalItemDTO() { ProductName = pro.Description, RestName = item.Name, Status = pro.Status, Claim = 0 });
+                    }
+                }
+            }
+            return list;
         }
 
-        public async Task GetWaitingApprovalPromotion()
+        public async Task<IEnumerable<WaitApprovalItemDTO>> GetWaitingApprovalPromotion()
         {
+            var list = new List<WaitApprovalItemDTO>();
+
             var rests = await GetAllAsync();
             var promotion = rests.Where(x => x.Promotion.Any(z => z.Status == StatusType.WaitApproval));
 
+            foreach (var item in promotion)
+            {
+                foreach (var pro in item.Promotion)
+                {
+                    if (pro.Status == StatusType.Approved)
+                    {
+                        var prod = item.Product.FirstOrDefault(x => x.Id == (ObjectId)pro.ProductId);
+
+                        list.Add(new WaitApprovalItemDTO() { ProductName = prod.Description, RestName = item.Name, Status = pro.Status, Claim = pro.Claim });
+                    }
+                }
+            }
+            return list;
+
         }
 
-        public async Task GetApprovedProduct()
+        public async Task<IEnumerable<WaitApprovalItemDTO>> GetApprovedProduct()
         {
+            var list = new List<WaitApprovalItemDTO>();
             var rests = await GetAllAsync();
 
             var product = rests.Where(x => x.Product.Any(z => z.Status == StatusType.Approved));
+
+            foreach (var item in product)
+            {
+                foreach (var pro in item.Product)
+                {
+                    if (pro.Status == StatusType.Approved)
+                    {
+                        list.Add(new WaitApprovalItemDTO() { ProductName = pro.Description, RestName = item.Name, Status = pro.Status, Claim = 0});
+                    }
+                }
+            }
+            return list;
         }
 
-        public async Task GetApprovedPromotion()
+        public async Task<IEnumerable<WaitApprovalItemDTO>> GetApprovedPromotion()
         {
+            var list = new List<WaitApprovalItemDTO>();
+
             var rests = await GetAllAsync();
             var promotion = rests.Where(x => x.Promotion.Any(z => z.Status == StatusType.Approved));
 
+            foreach (var item in promotion)
+            {
+                foreach (var pro in item.Promotion)
+                {
+                    if (pro.Status == StatusType.Approved)
+                    {
+                        var prod = item.Product.FirstOrDefault(x => x.Id == (ObjectId)pro.ProductId);
+
+                        list.Add(new WaitApprovalItemDTO() { ProductName = prod.Description, RestName = item.Name, Status = pro.Status, Claim = pro.Claim });
+                    }
+                }
+            }
+            return list;
         }
 
         public async Task QuickSaveAsync(RestaurantQuickSaveDTO entity)
