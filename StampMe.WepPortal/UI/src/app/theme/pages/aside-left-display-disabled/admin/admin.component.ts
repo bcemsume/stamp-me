@@ -8,6 +8,10 @@ import * as $ from "jquery";
 import { ToasterConfig, ToasterService, Toast } from 'angular2-toaster';
 import { DxDataGridComponent } from 'devextreme-angular';
 import { errorHandler } from '@angular/platform-browser/src/browser';
+import { DatepickerOptions } from 'ng2-datepicker';
+import * as trLocale from 'date-fns/locale/tr';
+import { ProductDTO } from '../../../../shared/product.mode';
+import { PromotionDTO } from '../../../../shared/promotion.model';
 
 @Component({
     selector: ".m-grid__item.m-grid__item--fluid.m-wrapper",
@@ -32,12 +36,43 @@ export class AdminComponent implements OnInit, AfterViewInit {
         UserName: new FormControl('', Validators.required),
         Password: new FormControl('', Validators.required),
         Adress: new FormControl('', Validators.required),
-        isActive: new FormControl('', Validators.required),
+        isActive: new FormControl(true, Validators.required),
+        isPromo: new FormControl(false, Validators.required),
         Id: new FormControl(''),
+        Product: new FormControl(''),
+        Promotion: new FormControl(''),
     });
+    status = [{ Name: "Onaylı", Value: "Approved" }, { Name: "Beklemede", Value: "WaitApproval" }]
+
+
+    formProduct = new FormGroup({
+        Description: new FormControl('', Validators.required),
+        Status: new FormControl(this.status[0].Value, Validators.required),
+        DueDate: new FormControl(new Date("2019-01-01"), Validators.required),
+    });
+
+    formPromotion = new FormGroup({
+        Product: new FormControl('', Validators.required),
+        Status: new FormControl(this.status[0].Value, Validators.required),
+        Claim: new FormControl('', Validators.required),
+    });
+
+
+    options: DatepickerOptions = {
+        minYear: 1970,
+        maxYear: 2080,
+        displayFormat: 'MM.DD.YYYY',
+        barTitleFormat: 'MMMM YYYY',
+        firstCalendarDay: 1, // 0 - Sunday, 1 - Monday
+        locale: trLocale,
+    };
+
+    prodcutsDTO: ProductDTO[] = [{ Description: "", Status: "", DueDate: "", Id: 0 }]
+    promotionDTO: PromotionDTO[] = [{ Claim: "", Status: "", ProductId: 0 }]
 
     popupTitle: any;
 
+    products: any = [];
 
     constructor(private _script: ScriptLoaderService, private svc: AdminService, private renderer: Renderer, toasterService: ToasterService) {
         this.toasterService = toasterService;
@@ -56,6 +91,58 @@ export class AdminComponent implements OnInit, AfterViewInit {
     ngAfterViewInit() {
 
         Helpers.bodyClass('m-page--wide m-header--fixed m-header--fixed-mobile m-footer--push m-aside--offcanvas-default');
+        this._script.load('.m-grid__item.m-grid__item--fluid.m-wrapper',
+            'assets/demo/default/custom/components/forms/widgets/bootstrap-datepicker.js');
+        this._script.load('.m-grid__item.m-grid__item--fluid.m-wrapper',
+            'assets/demo/default/custom/components/forms/widgets/bootstrap-select.js');
+
+    }
+
+    btnAddProduct() {
+        if (!this.formProduct.invalid) {
+            let product = new ProductDTO();
+            product.Description = this.formProduct.value.Description;
+            product.Status = this.formProduct.value.Status;
+            product.DueDate = this.formProduct.value.DueDate.toLocaleDateString('tr-TR');
+            product.Id = this.prodcutsDTO[this.prodcutsDTO.length - 1].Id + 1;
+
+            this.prodcutsDTO.push(product);
+            this.prodcutsDTO = this.prodcutsDTO.filter(x => x.Description != "");
+
+            this.formProduct.patchValue({ Description: '', Status: 'Approved', DueDate: new Date("2019-01-01") });
+            console.log(this.products);
+
+            document.getElementById('btnCloseConfirmProductModal').click();
+        }
+
+    }
+
+
+    btnAddPromotion() {
+debugger;
+        if (!this.formPromotion.invalid) {
+            let promotion = new PromotionDTO();
+            promotion.Claim = this.formPromotion.value.Claim;
+            promotion.Status = this.formPromotion.value.Status;
+            promotion.ProductId = this.formPromotion.value.Product
+
+            this.promotionDTO.push(promotion);
+            this.promotionDTO = this.promotionDTO.filter(x => x.Claim != "");
+
+            this.formPromotion.patchValue({ Claim: "", Status: "Approved", ProductId: "" });
+            console.log(this.products);
+
+            document.getElementById('btnCloseConfirmPromotionModal').click();
+        }
+    }
+
+
+    prductCellCustom(data) {
+        debugger;
+        let row = this.prodcutsDTO.find(x => x.Id == data);
+        if (row) {
+            return this.prodcutsDTO.find(x => x.Id == data).Description;
+        }
     }
 
     btnDelete() {
@@ -120,12 +207,19 @@ export class AdminComponent implements OnInit, AfterViewInit {
             Adress: item.adress,
             isActive: item.isActive,
             Id: item.id,
+            isPromo : item.isPromo,
+            Product: null,
+            Promotion: null
         });
     }
 
+    sendValue:any;
+
     onSubmit() {
         if (!this.form.invalid) {
-            console.log(this.form.value);
+            this.sendValue = this.form.value;
+            this.sendValue.Product = this.prodcutsDTO;
+            this.sendValue.Promotion = this.promotionDTO;
 
             this.svc.saveRestaurant(this.form.value).subscribe(x => {
                 document.getElementById('btnCloseModal').click();

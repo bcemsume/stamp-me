@@ -141,6 +141,104 @@
                         <div [hidden]="form.controls.Adress.valid || form.controls.Adress.pristine" class="alert alert-danger">Bu alanı boş geçemezsiniz.</div>
                         <textarea rows="10" cols="50" formControlName="Adress" class="form-control" id="adres-text" required></textarea>
                     </div>
+                    <div class="form-group">
+                        <div class="m-portlet m-portlet--success m-portlet--head-solid-bg">
+                            <div class="m-portlet__head">
+                                <div class="m-portlet__head-caption">
+                                    <div class="m-portlet__head-title">
+                                        <span class="m-portlet__head-icon">
+                                            <i class="flaticon-placeholder-2"></i>
+                                        </span>
+                                        <h3 class="m-portlet__head-text">
+                                            Ürün Ekle
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="m-portlet__head-tools">
+                                    <ul class="m-portlet__nav">
+                                        <li class="m-portlet__nav-item">
+                                            <a href="" class="m-portlet__nav-link m-portlet__nav-link--icon" data-toggle="modal" data-target="#modalProduct">
+                                                <i class="la la-close"></i>
+                                            </a>
+                                        </li>
+                                        <li class="m-portlet__nav-item">
+                                            <a href="" class="m-portlet__nav-link m-portlet__nav-link--icon">
+                                                <i class="la la-refresh"></i>
+                                            </a>
+                                        </li>
+                                        <li class="m-portlet__nav-item">
+                                            <a href="" class="m-portlet__nav-link m-portlet__nav-link--icon">
+                                                <i class="la la-angle-down"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="m-portlet__body">
+                                <dx-data-grid #grid id="gridContainer" [dataSource]="prodcutsDTO" [showRowLines]="true" [showBorders]="true">
+
+                                    <dxo-paging [pageSize]="20"></dxo-paging>
+                                    <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 50, 100]" [showInfo]="true">
+                                    </dxo-pager>
+                                    <dxo-selection [selectAllMode]="allPages" [showCheckBoxesMode]="onClick" mode="multiple"></dxo-selection>
+
+                                </dx-data-grid>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <div class="m-portlet m-portlet--success m-portlet--head-solid-bg">
+                            <div class="m-portlet__head">
+                                <div class="m-portlet__head-caption">
+                                    <div class="m-portlet__head-title">
+                                        <span class="m-portlet__head-icon">
+                                            <i class="flaticon-placeholder-2"></i>
+                                        </span>
+                                        <h3 class="m-portlet__head-text">
+                                            Promosyon Ekle
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="m-portlet__head-tools">
+                                    <ul class="m-portlet__nav">
+                                        <li class="m-portlet__nav-item">
+                                            <a href="" class="m-portlet__nav-link m-portlet__nav-link--icon" data-toggle="modal" data-target="#modalPromotion">
+                                                <i class="la la-close"></i>
+                                            </a>
+                                        </li>
+                                        <li class="m-portlet__nav-item">
+                                            <a href="" class="m-portlet__nav-link m-portlet__nav-link--icon">
+                                                <i class="la la-refresh"></i>
+                                            </a>
+                                        </li>
+                                        <li class="m-portlet__nav-item">
+                                            <a href="" class="m-portlet__nav-link m-portlet__nav-link--icon">
+                                                <i class="la la-angle-down"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="m-portlet__body">
+                                <dx-data-grid #grid id="gridContainer" [dataSource]="promotionDTO" [showRowLines]="true" [showBorders]="true">
+
+                                    <dxo-paging [pageSize]="20"></dxo-paging>
+                                    <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 50, 100]" [showInfo]="true">
+                                    </dxo-pager>
+                                    <dxo-selection [selectAllMode]="allPages" [showCheckBoxesMode]="onClick" mode="multiple"></dxo-selection>
+                                    <dxi-column dataField="ProductId" cellTemplate="cellTemplate"></dxi-column>
+                                    <dxi-column dataField="Claim"></dxi-column>
+                                    <dxi-column dataField="Status"></dxi-column>
+
+                                    <div *dxTemplate="let data of 'cellTemplate'">
+                                            {{prductCellCustom(data.value)}}
+                                    </div>
+                                </dx-data-grid>
+                            </div>
+                        </div>
+
+                    </div>
                     <div class="m-form__group form-group row">
                         <label class="form-control-label" for="adres-text" style="margin-left: 15px;">
                             Aktif:
@@ -149,7 +247,21 @@
                         <div class="col-3">
                             <span class="m-switch m-switch--icon m-switch--info">
                                 <label>
-                                    <input formControlName="isActive" checked="checked" name="" type="checkbox">
+                                    <input formControlName="isActive" name="" type="checkbox">
+                                    <span></span>
+                                </label>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="m-form__group form-group row">
+                        <label class="form-control-label" for="adres-text" style="margin-left: 15px;">
+                            Reklamlı:
+                        </label>
+                        <div [hidden]="form.controls.isPromo.valid || form.controls.isPromo.pristine" class="alert alert-danger">Bu alanı boş geçemezsiniz.</div>
+                        <div class="col-3">
+                            <span class="m-switch m-switch--icon m-switch--info">
+                                <label>
+                                    <input formControlName="isPromo" name="" type="checkbox">
                                     <span></span>
                                 </label>
                             </span>
@@ -194,6 +306,130 @@
                 </button>
                 <button type="submit" (click)="btnDelete()" class="btn btn-primary">
                     Sil
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modalProduct" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Ürün Ekle
+                </h5>
+                <button id="btnCloseConfirmProductModal" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">
+                        &times;
+                    </span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <form [formGroup]="formProduct">
+                    <div class="m-portlet__body">
+                        <div class="m-form__section m-form__section--first">
+                            <div class="form-group m-form__group">
+                                <label for="example_input_full_name">
+                                    Ürün Adı:
+                                </label>
+                                <input formControlName="Description" type="text" class="form-control m-input" placeholder="Ürün Adı">
+                                <div [hidden]="formProduct.controls.Description.valid || formProduct.controls.Description.pristine" class="alert alert-danger">Bu alanı boş geçemezsiniz.</div>
+                            </div>
+                            <div class="form-group m-form__group">
+                                <label class="col-form-label col-lg-3 col-sm-12">
+                                    Durum
+                                </label>
+                                <select formControlName="Status" class="form-control m-bootstrap-select m_selectpicker">
+                                    <option *ngFor="let s of status" [value]="s.Value">
+                                        {{s.Name}}
+                                    </option>
+                                </select>
+                                <div [hidden]="formProduct.controls.Status.valid || formProduct.controls.Status.pristine" class="alert alert-danger">Bu alanı boş geçemezsiniz.</div>
+                            </div>
+                            <div class="form-group m-form__group">
+                                <label>
+                                    Bitiş Tarihi:
+                                </label>
+                                <ng-datepicker [options]="options" class="form-control" formControlName="DueDate"> </ng-datepicker>
+                                <!-- <input formControlName="DueDate" type="datetime-local" class="form-control" readonly placeholder="Tarih Seçiniz"/> -->
+                                <div [hidden]="formProduct.controls.DueDate.valid || formProduct.controls.DueDate.pristine" class="alert alert-danger">Bu alanı boş geçemezsiniz.</div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    Kapat
+                </button>
+                <button type="button" [disabled]="!formProduct.valid" (click)="btnAddProduct()" class="btn btn-primary">
+                    Ekle
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalPromotion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Promosyon Ekle
+                </h5>
+                <button id="btnCloseConfirmPromotionModal" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">
+                        &times;
+                    </span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <form [formGroup]="formPromotion">
+                    <div class="m-portlet__body">
+                        <div class="m-form__section m-form__section--first">
+                            <div class="form-group m-form__group">
+                                <label class="col-form-label col-lg-3 col-sm-12">
+                                    Ürün
+                                </label>
+                                <select formControlName="Product">
+                                    <option *ngFor="let product of prodcutsDTO" [value]="product.Id">
+                                        {{product.Description}}
+                                    </option>
+                                </select>
+                                <div [hidden]="formPromotion.controls.Product.valid || formPromotion.controls.Product.pristine" class="alert alert-danger">Bu alanı boş geçemezsiniz.</div>
+                            </div>
+                            <div class="form-group m-form__group">
+                                <label class="col-form-label col-lg-3 col-sm-12">
+                                    Durum
+                                </label>
+                                <select formControlName="Status" class="form-control m-bootstrap-select m_selectpicker">
+                                    <option *ngFor="let s of status" [value]="s.Value">
+                                        {{s.Name}}
+                                    </option>
+                                </select>
+                                <div [hidden]="formPromotion.controls.Status.valid || formPromotion.controls.Status.pristine" class="alert alert-danger">Bu alanı boş geçemezsiniz.</div>
+                            </div>
+                            <div class="form-group m-form__group">
+                                <label>
+                                    Hak Sayısı:
+                                </label>
+                                <input formControlName="Claim" type="text" class="form-control m-input" placeholder="">
+                                <div [hidden]="formPromotion.controls.Claim.valid || formPromotion.controls.Claim.pristine" class="alert alert-danger">Bu alanı boş geçemezsiniz.</div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    Kapat
+                </button>
+                <button type="button" [disabled]="!formPromotion.valid" (click)="btnAddPromotion()" class="btn btn-primary">
+                    Ekle
                 </button>
             </div>
         </div>

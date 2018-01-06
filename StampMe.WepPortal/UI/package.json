@@ -37,6 +37,7 @@
         "enhanced-resolve": "^3.3.0",
         "jquery": "^3.2.1",
         "ng-recaptcha": "^3.0.0",
+        "ng2-datepicker": "^2.1.8",
         "ng2-nouislider": "^1.7.6",
         "nouislider": "^10.1.0",
         "primeng": "^4.1.3",

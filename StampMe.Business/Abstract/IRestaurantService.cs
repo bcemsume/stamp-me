@@ -22,5 +22,15 @@ namespace StampMe.Business.Abstract
         Task AddImageAsync(ImageDTO item, object Id);
         Task<IEnumerable<ImageDTO>> GetImages(object Id);
         Task DeleteImageAsync(object restId,Object imgId);
+
+        Task ApprovedPromotion(PromotionDTO item, object Id);
+        Task AddUpdatePromotion(PromotionDTO item, object Id);
+        Task AddUpdateProduct(ProductDTO item, object Id);
+        Task ApprovedProduct(ProductDTO item, object Id);
+
+        Task GetWaitingApprovalProduct();
+        Task GetWaitingApprovalPromotion();
+
+
     }
 }

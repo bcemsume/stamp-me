@@ -78,7 +78,7 @@ namespace StampMe.Business.Concrete
         public async Task<IEnumerable<RestaurantListDTO>> GetAdminRestaurantList()
         {
             var list = await _restaurantDal.GetAllAsync();
-            return list.Select(x => new RestaurantListDTO { isActive = x.isActive, Adress = x.Info.Adress.AdressDetail, Email = x.Email, Id = x.Id.ToString(), Name = x.Name, Password = x.Password, UserName = x.UserName });
+            return list.Select(x => new RestaurantListDTO { isPromo = x.isPromo, isActive = x.isActive, Adress = x.Info.Adress.AdressDetail, Email = x.Email, Id = x.Id.ToString(), Name = x.Name, Password = x.Password, UserName = x.UserName });
 
         }
 
@@ -120,15 +120,16 @@ namespace StampMe.Business.Concrete
             bool isNew = false;
 
             var pro = rest.Promotion.FirstOrDefault(x => x.Id == new ObjectId((string)item.Id));
-            if (pro == null) 
+            if (pro == null)
             {
                 isNew = true;
                 pro = new Promotion();
 
             }
-            if(isNew)
-                rest.Promotion.Add(new Promotion() { Claim = item.Claim, Id = ObjectId.GenerateNewId(), ProductId = item.ProductId, Status = item.Status});
-            else {
+            if (isNew)
+                rest.Promotion.Add(new Promotion() { Claim = item.Claim, Id = ObjectId.GenerateNewId(), ProductId = item.ProductId, Status = item.Status });
+            else
+            {
                 pro.Claim = item.Claim;
                 pro.ProductId = item.ProductId;
                 pro.Status = item.Status;
@@ -150,7 +151,7 @@ namespace StampMe.Business.Concrete
 
             }
             if (isNew)
-                rest.Product.Add(new Product() {  Description = item.Description, DueDate = item.DueDate, Id = ObjectId.GenerateNewId(), Status = item.Status });
+                rest.Product.Add(new Product() { Description = item.Description, DueDate = item.DueDate, Id = ObjectId.GenerateNewId(), Status = item.Status });
             else
             {
                 pro.Description = item.Description;
@@ -188,8 +189,39 @@ namespace StampMe.Business.Concrete
 
         }
 
+        public async Task GetWaitingApprovalProduct()
+        {
+            var rests = await GetAllAsync();
+
+            var product = rests.Where(x => x.Product.Any(z => z.Status == StatusType.WaitApproval));
+        }
+
+        public async Task GetWaitingApprovalPromotion()
+        {
+            var rests = await GetAllAsync();
+            var promotion = rests.Where(x => x.Promotion.Any(z => z.Status == StatusType.WaitApproval));
+
+        }
+
+        public async Task GetApprovedProduct()
+        {
+            var rests = await GetAllAsync();
+
+            var product = rests.Where(x => x.Product.Any(z => z.Status == StatusType.Approved));
+        }
+
+        public async Task GetApprovedPromotion()
+        {
+            var rests = await GetAllAsync();
+            var promotion = rests.Where(x => x.Promotion.Any(z => z.Status == StatusType.Approved));
+
+        }
+
         public async Task QuickSaveAsync(RestaurantQuickSaveDTO entity)
         {
+            await GetApprovedProduct();
+            await GetApprovedPromotion();
+
             var id = entity.Id == null ? new MongoDB.Bson.ObjectId() : new MongoDB.Bson.ObjectId(entity.Id);
             var r = await FirstOrDefaultAsync(x => x.Id == id);
             bool isNew = false;
@@ -208,21 +240,36 @@ namespace StampMe.Business.Concrete
             r.UserName = entity.UserName;
             r.isActive = entity.isActive;
             r.isPromo = entity.isPromo;
-            r.Contract = new Contract() { Description = entity.Contract.Description, Id = ObjectId.GenerateNewId(), Price = entity.Contract.Price, Type = entity.Contract.Type };
+            if (entity.Contract != null)
+                r.Contract = new Contract() { Description = entity.Contract.Description, Id = ObjectId.GenerateNewId(), Price = entity.Contract.Price, Type = entity.Contract.Type };
 
-            foreach (var item in entity.Product)
-            {
-                r.Product.Add(new Product() { Id = ObjectId.GenerateNewId(), Description = item.Description, DueDate = item.DueDate, Status = StatusType.Approved });
-            }
-            foreach (var item in entity.Promotion)
-            {
-                r.Promotion.Add(new Promotion() { Id = ObjectId.GenerateNewId(), Status = StatusType.Approved, Claim = item.Claim, ProductId = item.ProductId });
-            }
+            if (entity.Product != null)
+                foreach (var item in entity.Product)
+                {
+                    r.Product.Add(new Product() { Id = ObjectId.GenerateNewId(), Description = item.Description, DueDate = item.DueDate, Status = StatusType.Approved });
+                }
 
-            foreach (var item in entity.Categories)
-            {
-                r.Categories.Add(new Categories() { Id = ObjectId.GenerateNewId(), Definition = item.Definition });
-            }
+            if (entity.Promotion != null)
+                foreach (var item in entity.Promotion)
+                {
+                    try
+                    {
+                        var tmpProd = entity.Product.FirstOrDefault(z => z.Id.ToString() == item.ProductId.ToString());
+                        var prodId = r.Product.FirstOrDefault(x => x.Description == tmpProd.Description);
+
+                        r.Promotion.Add(new Promotion() { Id = ObjectId.GenerateNewId(), Status = StatusType.Approved, Claim = item.Claim, ProductId = prodId.Id });
+                    }
+                    catch (Exception ex)
+                    {
+                        throw ex;
+                    }
+                }
+
+            if (entity.Categories != null)
+                foreach (var item in entity.Categories)
+                {
+                    r.Categories.Add(new Categories() { Id = ObjectId.GenerateNewId(), Definition = item.Definition });
+                }
 
             r.Info = (new Info() { Adress = new Adress { AdressDetail = entity.Adress } });
 

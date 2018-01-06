@@ -41,5 +41,10 @@ namespace StampMe.Common.CustomDTO
             get;
             set;
         }
+        public bool isPromo
+        {
+            get;
+            set;
+        }
     }
 }

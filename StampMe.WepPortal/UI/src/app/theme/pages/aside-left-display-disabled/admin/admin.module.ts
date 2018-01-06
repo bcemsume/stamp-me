@@ -13,7 +13,7 @@ import {
 } from 'devextreme-angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToasterModule } from 'angular2-toaster';
-
+import { NgDatepickerModule } from 'ng2-datepicker';
 const routes: Routes = [
     {
         "path": "",
@@ -28,7 +28,7 @@ const routes: Routes = [
 ];
 @NgModule({
     imports: [
-        CommonModule, RouterModule.forChild(routes), LayoutModule, DxDataGridModule, FormsModule, ReactiveFormsModule, ToasterModule
+        CommonModule, RouterModule.forChild(routes), LayoutModule, DxDataGridModule, FormsModule, ReactiveFormsModule, ToasterModule, NgDatepickerModule
     ], exports: [
         RouterModule
     ],
