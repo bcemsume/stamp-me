@@ -82,6 +82,83 @@
                 </div>
             </div>
         </div>
+
+        <div class="row">
+            <div class="col-xl-6">
+                <div class="m-portlet m-portlet--creative m-portlet--bordered-semi" style="height: 85%">
+                    <div class="m-portlet__head">
+                        <div class="m-portlet__head-caption">
+                            <div class="m-portlet__head-title">
+                                <h2 class="m-portlet__head-label m-portlet__head-label--primary" style="width: 300px !important;">
+                                    <span>
+                                        Onay Bekleyen Ürünler
+                                    </span>
+                                </h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-portlet__body">
+                        <!--begin: Datatable -->
+                        <dx-data-grid (onRowClick)="rowClick($event)" #grid id="gridContainer" [dataSource]="waitingProduct" [showRowLines]="true"
+                            [showBorders]="true">
+
+                            <dxo-paging [pageSize]="20"></dxo-paging>
+                            <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 50, 100]" [showInfo]="true">
+                            </dxo-pager>
+                            <dxo-selection [selectAllMode]="allPages" [showCheckBoxesMode]="onClick" mode="multiple"></dxo-selection>
+                            <dxi-column dataField="restName"></dxi-column>
+                            <dxi-column dataField="productName"></dxi-column>
+                            <dxi-column dataField="status"></dxi-column>
+                            <dxi-column captipn="İşlemler" cellTemplate="islemTemplate"></dxi-column>
+                            <div *dxTemplate="let data of 'islemTemplate'">
+                                    <button type="button" class="btn m-btn--pill m-btn--air btn-outline-danger" (click)="btnUrunOnay()" data-dismiss="modal">
+                                        Onayla
+                                    </button>
+                                </div>
+                        </dx-data-grid>
+                        <!--end: Datatable -->
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-xl-6">
+                <div class="m-portlet m-portlet--creative m-portlet--bordered-semi">
+                    <div class="m-portlet__head">
+                        <div class="m-portlet__head-caption">
+                            <div class="m-portlet__head-title">
+                                <h2 class="m-portlet__head-label m-portlet__head-label--warning" style="width: 340px !important;">
+                                    <span>
+                                        Onay Bekleyen Promosyonlar
+                                    </span>
+                                </h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-portlet__body">
+                        <dx-data-grid (onRowClick)="rowClick($event)" #grid id="gridContainer" [dataSource]="waitingPromotion" [showRowLines]="true"
+                            [showBorders]="true">
+
+                            <dxo-paging [pageSize]="20"></dxo-paging>
+                            <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 50, 100]" [showInfo]="true">
+                            </dxo-pager>
+                            <dxo-selection [selectAllMode]="allPages" [showCheckBoxesMode]="onClick" mode="multiple"></dxo-selection>
+                            <dxi-column dataField="restName"></dxi-column>
+                            <dxi-column dataField="productName"></dxi-column>
+                            <dxi-column dataField="claim"></dxi-column>
+                            <dxi-column dataField="status"></dxi-column>
+                            <dxi-column captipn="İşlemler" cellTemplate="islemTemplate"></dxi-column>
+                            <div *dxTemplate="let data of 'islemTemplate'">
+                                <button type="button" class="btn m-btn--pill m-btn--air btn-outline-danger" (click)="btnPromosyonOnay(data)" data-dismiss="modal">
+                                    Onayla
+                                </button>
+                            </div>
+                        </dx-data-grid>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 
@@ -232,7 +309,7 @@
                                     <dxi-column dataField="Status"></dxi-column>
 
                                     <div *dxTemplate="let data of 'cellTemplate'">
-                                            {{prductCellCustom(data.value)}}
+                                        {{prductCellCustom(data.value)}}
                                     </div>
                                 </dx-data-grid>
                             </div>

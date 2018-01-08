@@ -56,7 +56,7 @@ export class AuthComponent implements OnInit {
                 if (!data) {
                     this.showAlert('alertSignin');
                 }
-                    localStorage.setItem('currentUser', JSON.stringify(data));
+                localStorage.setItem('currentUser', JSON.stringify(data));
                 this._router.navigate([this.returnUrl]);
             },
             error => {

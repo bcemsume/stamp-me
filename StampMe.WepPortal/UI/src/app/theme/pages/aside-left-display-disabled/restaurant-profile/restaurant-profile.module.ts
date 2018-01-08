@@ -31,7 +31,7 @@ const routes: Routes = [
     imports: [
         CommonModule, DxPopupModule, RouterModule.forChild(routes), MultiselectDropdownModule, LayoutModule, DxDataGridModule, FormsModule, ReactiveFormsModule, ToasterModule, NouisliderModule, AgmCoreModule.forRoot({
             apiKey: 'AIzaSyDy5VP8zq7zt5iDKPmqBy5lvnM5tATjEjc'
-          })
+        })
     ], exports: [
         RouterModule
     ],
@@ -41,5 +41,5 @@ const routes: Routes = [
 })
 export class RestaurantProfileModule {
 
-//AIzaSyDy5VP8zq7zt5iDKPmqBy5lvnM5tATjEjc
+    //AIzaSyDy5VP8zq7zt5iDKPmqBy5lvnM5tATjEjc
 }

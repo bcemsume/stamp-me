@@ -38,7 +38,7 @@ import { XHRBackend, RequestOptions } from '@angular/http';
         TooltipsComponent,
         HrefPreventDefaultDirective,
     ],
-    
+
     providers: [
         HttpService
     ],

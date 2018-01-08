@@ -10,9 +10,9 @@ export class AuthenticationService {
     constructor(private http: HttpService) { }
 
     login(email: string, password: string) {
-debugger;
+        debugger;
         return this.http.get('restaurant/Login?userName=' + email + '&password=' + password)
-            .map(x=> x.json());
+            .map(x => x.json());
     }
 
     logout() {

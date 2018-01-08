@@ -8,7 +8,7 @@ import { APP_INITIALIZER } from '@angular/core/src/application_init';
 @Injectable()
 export class HttpService extends Http {
 
-    currentUser : any;
+    currentUser: any;
     constructor(backend: XHRBackend, options: RequestOptions) {
         let token = localStorage.getItem('auth_token');
         options.headers.set('Authorization', `Bearer ${token}`);
@@ -18,7 +18,7 @@ export class HttpService extends Http {
 
     request(url: string | Request, options?: RequestOptionsArgs): Observable<Response> {
         console.log(url);
-        let apiURL = "http://localhost:5001/api/";
+        let apiURL = "http://localhost:55556/api/";
         let token = localStorage.getItem('auth_token');
         if (typeof url === 'string') {
             if (!options) {

@@ -101,9 +101,9 @@ namespace StampMe.API.Controllers
 
 
         [HttpPost]
-        public async Task ApprovedPromotion([FromBody]PromotionDTO item, string Id)
+        public async Task ApprovedPromotion([FromBody]PromotionApprovedDTO item)
         {
-            await _restaurantService.ApprovedPromotion(item, Id);
+            await _restaurantService.ApprovedPromotion(item);
         }
         [HttpPost]
         public async Task AddUpdatePromotion([FromBody]PromotionDTO item, string Id)
@@ -118,9 +118,9 @@ namespace StampMe.API.Controllers
 
         }
         [HttpPost]
-        public async Task ApprovedProduct([FromBody]ProductDTO item, string Id)
+        public async Task ApprovedProduct([FromBody]ProductApprovedDTO item)
         {
-            await _restaurantService.ApprovedProduct(item, Id);
+            await _restaurantService.ApprovedProduct(item);
 
         }
 

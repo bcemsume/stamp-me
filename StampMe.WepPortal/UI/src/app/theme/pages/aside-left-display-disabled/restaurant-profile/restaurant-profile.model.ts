@@ -1,5 +1,4 @@
-export class ImageDataDTO
-{
+export class ImageDataDTO {
     Info;
     Data;
 

@@ -19,4 +19,12 @@ export class AdminService {
     deleteRestaurant(item) {
         return this.http.get(`restaurant/DeleteAsync?id=` + item).map(x => x);
     }
+
+    GetWaitingApprovalProduct() {
+        return this.http.get('restaurant/GetWaitingApprovalProduct').map(x => x.json());
+    }
+
+    GetWaitingApprovalPromotion() {
+        return this.http.get('restaurant/GetWaitingApprovalPromotion').map(x => x.json());
+    }
 }

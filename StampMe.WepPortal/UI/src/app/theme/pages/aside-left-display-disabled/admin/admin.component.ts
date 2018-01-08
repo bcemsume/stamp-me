@@ -23,9 +23,12 @@ export class AdminComponent implements OnInit, AfterViewInit {
 
     @ViewChild('btnCloseModal') btnCloseModal: ElementRef;
     @ViewChild('btnCloseConfirmModal') btnCloseConfirmModal: ElementRef;
-
-
     @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
+
+
+    waitingProduct: any;
+    waitingPromotion: any;
+
     public config1: ToasterConfig = new ToasterConfig({
         positionClass: 'toast-top-right'
     });
@@ -44,7 +47,10 @@ export class AdminComponent implements OnInit, AfterViewInit {
     });
     status = [{ Name: "Onaylı", Value: "Approved" }, { Name: "Beklemede", Value: "WaitApproval" }]
 
+    btnPromosyonOnay(data) {
+        console.log(data);
 
+    }
     formProduct = new FormGroup({
         Description: new FormControl('', Validators.required),
         Status: new FormControl(this.status[0].Value, Validators.required),
@@ -82,6 +88,9 @@ export class AdminComponent implements OnInit, AfterViewInit {
 
     ngOnInit() {
         this.gridLoad();
+        this.svc.GetWaitingApprovalProduct().subscribe(x => this.waitingProduct = x);
+        this.svc.GetWaitingApprovalPromotion().subscribe(x => this.waitingPromotion = x);
+
     }
 
     gridLoad() {
@@ -119,7 +128,7 @@ export class AdminComponent implements OnInit, AfterViewInit {
 
 
     btnAddPromotion() {
-debugger;
+        debugger;
         if (!this.formPromotion.invalid) {
             let promotion = new PromotionDTO();
             promotion.Claim = this.formPromotion.value.Claim;
@@ -207,13 +216,13 @@ debugger;
             Adress: item.adress,
             isActive: item.isActive,
             Id: item.id,
-            isPromo : item.isPromo,
+            isPromo: item.isPromo,
             Product: null,
             Promotion: null
         });
     }
 
-    sendValue:any;
+    sendValue: any;
 
     onSubmit() {
         if (!this.form.invalid) {

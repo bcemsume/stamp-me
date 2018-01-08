@@ -161,12 +161,12 @@ namespace StampMe.Business.Concrete
             await UpdateAsync(rest);
         }
 
-        public async Task ApprovedPromotion(PromotionDTO item, object Id)
+        public async Task ApprovedPromotion(PromotionApprovedDTO item)
         {
-            var rest = await FirstOrDefaultAsync(x => x.Id == (ObjectId)Id);
+            var rest = await FirstOrDefaultAsync(x => x.Id == new ObjectId(item.restId));
             if (rest == null) throw new Exception("Restaurant Bulunumadı..!!");
 
-            var pro = rest.Promotion.FirstOrDefault(x => x.Id == new ObjectId((string)item.Id));
+            var pro = rest.Promotion.FirstOrDefault(x => x.Id == new ObjectId((string)item.PromId));
             if (pro == null) throw new Exception("Promosyon Bulunumadı..!!");
 
             pro.Status = StatusType.Approved;
@@ -175,12 +175,12 @@ namespace StampMe.Business.Concrete
 
         }
 
-        public async Task ApprovedProduct(ProductDTO item, object Id)
+        public async Task ApprovedProduct(ProductApprovedDTO item)
         {
-            var rest = await FirstOrDefaultAsync(x => x.Id == new ObjectId((string)Id));
+            var rest = await FirstOrDefaultAsync(x => x.Id == new ObjectId(item.restId));
             if (rest == null) throw new Exception("Restaurant Bulunumadı..!!");
 
-            var pro = rest.Product.FirstOrDefault(x => x.Id == new ObjectId((string)item.Id));
+            var pro = rest.Product.FirstOrDefault(x => x.Id == new ObjectId(item.ProdId));
 
             if (pro == null) throw new Exception("Ürün Bulunumadı..!!");
 
@@ -202,7 +202,15 @@ namespace StampMe.Business.Concrete
                 {
                     if (pro.Status == StatusType.WaitApproval)
                     {
-                        list.Add(new WaitApprovalItemDTO() { ProductName = pro.Description, RestName = item.Name, Status = pro.Status, Claim = 0 });
+                        list.Add(new WaitApprovalItemDTO()
+                        {
+                            ProductId = pro.Id.ToString(),
+                            RestId = item.Id.ToString(),
+                            ProductName = pro.Description,
+                            RestName = item.Name,
+                            Status = pro.Status.ToString(),
+                            Claim = 0
+                        });
                     }
                 }
             }
@@ -220,16 +228,24 @@ namespace StampMe.Business.Concrete
             {
                 foreach (var pro in item.Promotion)
                 {
-                    if (pro.Status == StatusType.Approved)
+                    if (pro.Status == StatusType.WaitApproval)
                     {
                         var prod = item.Product.FirstOrDefault(x => x.Id == (ObjectId)pro.ProductId);
 
-                        list.Add(new WaitApprovalItemDTO() { ProductName = prod.Description, RestName = item.Name, Status = pro.Status, Claim = pro.Claim });
+                        list.Add(new WaitApprovalItemDTO()
+                        {
+                            ProductId = prod.Id.ToString(),
+                            RestId = item.Id.ToString(),
+                            PromotionId = pro.Id.ToString(),
+                            ProductName = prod.Description,
+                            RestName = item.Name,
+                            Status = pro.Status.ToString(),
+                            Claim = pro.Claim
+                        });
                     }
                 }
             }
             return list;
-
         }
 
         public async Task<IEnumerable<WaitApprovalItemDTO>> GetApprovedProduct()
@@ -245,7 +261,16 @@ namespace StampMe.Business.Concrete
                 {
                     if (pro.Status == StatusType.Approved)
                     {
-                        list.Add(new WaitApprovalItemDTO() { ProductName = pro.Description, RestName = item.Name, Status = pro.Status, Claim = 0});
+                        list.Add(new WaitApprovalItemDTO()
+                        {
+                            ProductId = pro.Id.ToString(),
+                            RestId = item.Id.ToString(),
+                            PromotionId = pro.Id.ToString(),
+                            ProductName = pro.Description,
+                            RestName = item.Name,
+                            Status = pro.Status.ToString(),
+                            Claim = 0
+                        });
                     }
                 }
             }
@@ -267,7 +292,16 @@ namespace StampMe.Business.Concrete
                     {
                         var prod = item.Product.FirstOrDefault(x => x.Id == (ObjectId)pro.ProductId);
 
-                        list.Add(new WaitApprovalItemDTO() { ProductName = prod.Description, RestName = item.Name, Status = pro.Status, Claim = pro.Claim });
+                        list.Add(new WaitApprovalItemDTO()
+                        {
+                            ProductId = prod.Id.ToString(),
+                            RestId = item.Id.ToString(),
+                            PromotionId = pro.Id.ToString(),
+                            ProductName = prod.Description,
+                            RestName = item.Name,
+                            Status = pro.Status.ToString(),
+                            Claim = pro.Claim
+                        });
                     }
                 }
             }
@@ -276,9 +310,6 @@ namespace StampMe.Business.Concrete
 
         public async Task QuickSaveAsync(RestaurantQuickSaveDTO entity)
         {
-            await GetApprovedProduct();
-            await GetApprovedPromotion();
-
             var id = entity.Id == null ? new MongoDB.Bson.ObjectId() : new MongoDB.Bson.ObjectId(entity.Id);
             var r = await FirstOrDefaultAsync(x => x.Id == id);
             bool isNew = false;

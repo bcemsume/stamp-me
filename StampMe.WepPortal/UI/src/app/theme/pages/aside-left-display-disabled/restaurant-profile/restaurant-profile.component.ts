@@ -54,7 +54,7 @@ export class RestaurantProfileComponent implements OnInit, AfterViewInit {
 
     ngOnInit() {
 
-this.loadImages();
+        this.loadImages();
         this.calismaGunleri = [
             { id: 1, name: 'Pazartesi' },
             { id: 2, name: 'Salı' },
@@ -139,7 +139,7 @@ this.loadImages();
         });
     }
 
-    
+
     lastRowCLickedId: number;
     lastRowClickedTime: Date;
     imagePath: any;
