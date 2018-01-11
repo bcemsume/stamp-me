@@ -65,7 +65,7 @@ namespace StampMe.Entities.Concrete
         }
 
         public List<Categories> Categories { get; set; }
-        public Contract Contract
+        public ObjectId ContractId
         {
             get;
             set;

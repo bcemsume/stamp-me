@@ -328,9 +328,7 @@ namespace StampMe.Business.Concrete
             r.UserName = entity.UserName;
             r.isActive = entity.isActive;
             r.isPromo = entity.isPromo;
-            if (entity.Contract != null)
-                r.Contract = new Contract() { Description = entity.Contract.Description, Id = ObjectId.GenerateNewId(), Price = entity.Contract.Price, Type = entity.Contract.Type };
-
+            r.ContractId = new ObjectId((string)entity.ContractId);
             if (entity.Product != null)
                 foreach (var item in entity.Product)
                 {

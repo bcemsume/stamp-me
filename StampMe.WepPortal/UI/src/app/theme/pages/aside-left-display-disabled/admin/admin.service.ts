@@ -27,4 +27,12 @@ export class AdminService {
     GetWaitingApprovalPromotion() {
         return this.http.get('restaurant/GetWaitingApprovalPromotion').map(x => x.json());
     }
+
+    ApprovedProduct(item) {
+        return this.http.post('restaurant/ApprovedProduct', item).map(x => x);
+    }
+
+    ApprovedPromotion(item) {
+        return this.http.post('restaurant/ApprovedPromotion', item).map(x => x);
+    }
 }

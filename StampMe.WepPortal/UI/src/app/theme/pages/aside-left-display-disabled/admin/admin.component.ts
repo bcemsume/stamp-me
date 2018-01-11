@@ -17,6 +17,9 @@ import { PromotionDTO } from '../../../../shared/promotion.model';
     selector: ".m-grid__item.m-grid__item--fluid.m-wrapper",
     templateUrl: "./admin.component.html",
     encapsulation: ViewEncapsulation.None,
+    styles: [`.modal-lg {
+        max-width: 95vw;
+    }`],
     providers: [AdminService]
 })
 export class AdminComponent implements OnInit, AfterViewInit {
@@ -48,9 +51,13 @@ export class AdminComponent implements OnInit, AfterViewInit {
     status = [{ Name: "Onaylı", Value: "Approved" }, { Name: "Beklemede", Value: "WaitApproval" }]
 
     btnPromosyonOnay(data) {
-        console.log(data);
-
+        this.svc.ApprovedPromotion({ restId: data.key.restId, PromId: data.key.promotionId }).subscribe(x => { this.popSubmitToast(); this.waitingApPromotion() });
     }
+
+    btnUrunOnay(data) {
+        this.svc.ApprovedProduct({ restId: data.key.restId, ProdId: data.key.productId }).subscribe(x => { this.popSubmitToast(); this.waitingApProduct() });
+    }
+
     formProduct = new FormGroup({
         Description: new FormControl('', Validators.required),
         Status: new FormControl(this.status[0].Value, Validators.required),
@@ -86,11 +93,17 @@ export class AdminComponent implements OnInit, AfterViewInit {
 
     dataSource: any;
 
+    waitingApProduct() {
+        this.svc.GetWaitingApprovalProduct().subscribe(x => this.waitingProduct = x);
+    }
+    waitingApPromotion() {
+        this.svc.GetWaitingApprovalPromotion().subscribe(x => this.waitingPromotion = x);
+    }
+
     ngOnInit() {
         this.gridLoad();
-        this.svc.GetWaitingApprovalProduct().subscribe(x => this.waitingProduct = x);
-        this.svc.GetWaitingApprovalPromotion().subscribe(x => this.waitingPromotion = x);
-
+        this.waitingApProduct();
+        this.waitingApPromotion();
     }
 
     gridLoad() {
@@ -184,7 +197,7 @@ export class AdminComponent implements OnInit, AfterViewInit {
         var toast: Toast = {
             type: 'success',
             title: 'Başarılı',
-            body: 'İşleminiz başaarılı bir şekilde gerçekleştirilmiştir.'
+            body: 'İşleminiz başarılı bir şekilde gerçekleştirilmiştir.'
         };
 
         this.toasterService.pop(toast);

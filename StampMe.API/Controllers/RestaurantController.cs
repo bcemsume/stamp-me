@@ -121,16 +121,31 @@ namespace StampMe.API.Controllers
         public async Task ApprovedProduct([FromBody]ProductApprovedDTO item)
         {
             await _restaurantService.ApprovedProduct(item);
-
         }
 
         [HttpGet]
-        public async Task<IEnumerable<WaitApprovalItemDTO>> GetWaitingApprovalProduct() { return await _restaurantService.GetWaitingApprovalProduct(); }
+        public async Task<IEnumerable<WaitApprovalItemDTO>> GetWaitingApprovalProduct()
+        {
+            return await _restaurantService.GetWaitingApprovalProduct();
+        }
+
         [HttpGet]
-        public async Task<IEnumerable<WaitApprovalItemDTO>> GetWaitingApprovalPromotion() { return await _restaurantService.GetWaitingApprovalPromotion(); }
+        public async Task<IEnumerable<WaitApprovalItemDTO>> GetWaitingApprovalPromotion()
+        {
+            return await _restaurantService.GetWaitingApprovalPromotion();
+        }
+
         [HttpGet]
-        public async Task<IEnumerable<WaitApprovalItemDTO>> GetApprovedProduct() { return await _restaurantService.GetApprovedProduct(); }
+        public async Task<IEnumerable<WaitApprovalItemDTO>> GetApprovedProduct()
+        {
+            return await _restaurantService.GetApprovedProduct();
+        }
+
         [HttpGet]
-        public async Task<IEnumerable<WaitApprovalItemDTO>> GetApprovedPromotion() { return await _restaurantService.GetApprovedPromotion(); }
+        public async Task<IEnumerable<WaitApprovalItemDTO>> GetApprovedPromotion()
+        {
+            return await _restaurantService.GetApprovedPromotion();
+        }
     }
+
 }

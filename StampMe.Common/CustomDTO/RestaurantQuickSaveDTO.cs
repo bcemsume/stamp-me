@@ -18,7 +18,7 @@ namespace StampMe.Common.CustomDTO
         public List<CategoriesDTO> Categories { get; set; }
         public List<PromotionDTO> Promotion { get; set; }
         public List<ProductDTO> Product { get; set; }
-        public ContractDTO Contract { get; set; }
+        public object ContractId { get; set; }
 
         public string Email
         {
