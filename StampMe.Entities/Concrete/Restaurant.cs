@@ -17,6 +17,11 @@ namespace StampMe.Entities.Concrete
             get;
             set;
         }
+        public ObjectId ParentId
+        {
+            get;
+            set;
+        }
         public string Name
         {
             get;
@@ -118,6 +123,8 @@ namespace StampMe.Entities.Concrete
             get;
             set;
         }
+
+        public StatusType Status { get; set; }
     }
     public class Promotion
     {
@@ -178,6 +185,7 @@ namespace StampMe.Entities.Concrete
             get;
             set;
         }
+        public StatusType Statu { get; set; }
     }
 
     public class Product

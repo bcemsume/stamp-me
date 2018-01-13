@@ -45,6 +45,58 @@ namespace StampMe.Business.Concrete
             await _restaurantDal.DeleteAsync(x => x.Id == entity.Id);
         }
 
+        public async Task ApprovedImageAsync(ImageAprovedDTO item)
+        {
+            var rest = await _restaurantDal.GetAsync(x => x.Id == new MongoDB.Bson.ObjectId((string)item.RestId));
+
+            if (rest == null)
+                throw new Exception("Restaurant Bulunumadı..!!");
+
+            var image = rest.Images.FirstOrDefault(x => x.Id == new ObjectId((string)item.ImageId));
+            if (image == null)
+                throw new Exception("Resim Bulunamadı..!!");
+
+            image.Statu = StatusType.Approved;
+
+            await UpdateAsync(rest);
+        }
+        public async Task<List<ImageDTO>> GetApprovedImage(object restId)
+        {
+            var rest = await _restaurantDal.GetAsync(x => x.Id == new MongoDB.Bson.ObjectId((string)restId));
+
+            if (rest == null)
+                throw new Exception("Restaurant Bulunumadı..!!");
+
+            var images = rest.Images.Where(x => x.Statu == StatusType.Approved).Select(x => new ImageDTO
+            {
+                Id = x.Id.ToString(),
+                Statu = x.Statu,
+                Data = Convert.ToBase64String(x.Image),
+                Info = x.Description,
+            }).ToList();
+
+            return images;
+        }
+
+
+        public async Task<List<ImageDTO>> GetWatingApprovalImage(object restId)
+        {
+            var rest = await _restaurantDal.GetAsync(x => x.Id == new MongoDB.Bson.ObjectId((string)restId));
+
+            if (rest == null)
+                throw new Exception("Restaurant Bulunumadı..!!");
+
+            var images = rest.Images.Where(x => x.Statu == StatusType.WaitApproval).Select(x => new ImageDTO
+            {
+                Id = x.Id.ToString(),
+                Statu = x.Statu,
+                Data = Convert.ToBase64String(x.Image),
+                Info = x.Description,
+            }).ToList();
+
+            return images;
+        }
+
         public async Task DeleteImageAsync(object restId, object imgId)
         {
             var rest = await _restaurantDal.GetAsync(x => x.Id == new MongoDB.Bson.ObjectId((string)restId));
@@ -74,6 +126,7 @@ namespace StampMe.Business.Concrete
         {
             return await _restaurantDal.GetAsync(filter);
         }
+
 
         public async Task<IEnumerable<RestaurantListDTO>> GetAdminRestaurantList()
         {
@@ -174,6 +227,7 @@ namespace StampMe.Business.Concrete
 
 
         }
+
 
         public async Task ApprovedProduct(ProductApprovedDTO item)
         {

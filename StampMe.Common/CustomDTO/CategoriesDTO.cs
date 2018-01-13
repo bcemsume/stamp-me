@@ -3,7 +3,7 @@ namespace StampMe.Common.CustomDTO
 {
     public class CategoriesDTO
     {
-        public object Id
+        public string Id
         {
             get;
             set;

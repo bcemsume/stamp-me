@@ -146,6 +146,24 @@ namespace StampMe.API.Controllers
         {
             return await _restaurantService.GetApprovedPromotion();
         }
+
+        [HttpPost]
+        public async Task ApprovedImageAsync(ImageAprovedDTO item)
+        {
+            await _restaurantService.ApprovedImageAsync(item);
+        }
+
+        [HttpGet]
+        public async Task<List<ImageDTO>> GetApprovedImage(string restId)
+        {
+            return await _restaurantService.GetApprovedImage(restId);
+        }
+
+        [HttpGet]
+        public async Task<List<ImageDTO>> GetWatingApprovalImage(string restId)
+        {
+            return await _restaurantService.GetWatingApprovalImage(restId);
+        }
     }
 
 }
