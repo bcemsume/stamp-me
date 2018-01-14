@@ -71,8 +71,13 @@ namespace StampMe.Business.Concrete {
             {
                 foreach (var m in item.Images.Where(x=> x.Statu == StatusType.Approved).ToList())
                 {
+<<<<<<< HEAD
 >>>>>>> 930b9f9... image
                     lst.Add(new ImageDTO() {
+=======
+                    lst.Add(new ImageDTO()
+                    {
+>>>>>>> c4ecf36... asd
                         Id = m.Id.ToString(),
                         Statu = m.Statu,
                         Data = Convert.ToBase64String(m.Image),
@@ -101,6 +106,7 @@ namespace StampMe.Business.Concrete {
             if(rest == null)
                 throw new Exception("Restaurant Bulunumadı..!!");
 
+<<<<<<< HEAD
 
 <<<<<<< HEAD
             foreach(var item in rest) {
@@ -109,6 +115,8 @@ namespace StampMe.Business.Concrete {
                 foreach(var m in item.Images.Where(x => x.Statu == StatusType.WaitApproval).ToList()) {
                     lst.Add(new ImageDTO() {
 =======
+=======
+>>>>>>> c4ecf36... asd
             foreach (var item in rest)
             {
                 foreach (var m in item.Images.Where(x => x.Statu == StatusType.WaitApproval).ToList())
