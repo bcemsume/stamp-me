@@ -40,6 +40,9 @@ namespace StampMe.API
 
             services.AddScoped<IRestaurantService, RestaurantService>();
             services.AddScoped<IRestaurantDal, MongoRestaurantDal>();
+
+            services.AddScoped<IContractService, ContractService>();
+            services.AddScoped<IContractDal, MongoContractDal>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
