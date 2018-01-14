@@ -8,6 +8,7 @@ namespace StampMe.Common.CustomDTO
             get;
             set;
         }
+        public string RestName { get; set; }
         public string Info
         {
             get;

@@ -73,6 +73,7 @@ namespace StampMe.Business.Concrete
                 Statu = x.Statu,
                 Data = Convert.ToBase64String(x.Image),
                 Info = x.Description,
+                RestName = rest.Name
             }).ToList();
 
             return images;
@@ -92,6 +93,7 @@ namespace StampMe.Business.Concrete
                 Statu = x.Statu,
                 Data = Convert.ToBase64String(x.Image),
                 Info = x.Description,
+                RestName = rest.Name
             }).ToList();
 
             return images;
@@ -382,7 +384,9 @@ namespace StampMe.Business.Concrete
             r.UserName = entity.UserName;
             r.isActive = entity.isActive;
             r.isPromo = entity.isPromo;
-            r.ContractId = new ObjectId((string)entity.ContractId);
+            if(!string.IsNullOrEmpty((string)entity.ContractId))
+                r.ContractId = new ObjectId((string)entity.ContractId);
+            
             if (entity.Product != null)
                 foreach (var item in entity.Product)
                 {
