@@ -36,5 +36,9 @@ namespace StampMe.Business.Abstract
         Task ApprovedImageAsync(ImageAprovedDTO item);
         Task<List<ImageDTO>> GetApprovedImage();
         Task<List<ImageDTO>> GetWatingApprovalImage();
+
+        Task SaveRestaurantInfo(RestaurantInfoDTO item);
+        Task<RestaurantInfoDTO> GetRestaurantInfo(object Id);
+
     }
 }

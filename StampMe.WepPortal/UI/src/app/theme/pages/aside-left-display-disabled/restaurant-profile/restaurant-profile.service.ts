@@ -13,7 +13,6 @@ export class RestaurantService {
 
     // token will added automatically to get request header
     addImage(imageData: ImageDataDTO) {
-        debugger;
         return this.http.post(`restaurant/AddImageAsync?id=` + this.http.currentUser.id, imageData).map((res) => {
             return res;
         });
@@ -22,6 +21,7 @@ export class RestaurantService {
     getRestImages() {
         return this.http.get(`restaurant/GetImages?id=` + this.http.currentUser.id).map(x => x.json());
     }
+
     DeleteImageAsync(imgId) {
         return this.http.get(`restaurant/GetImages?id=` + this.http.currentUser.id + '&imgId=' + imgId).map(x => x.json());
 
@@ -31,5 +31,15 @@ export class RestaurantService {
         return this.http.get(`restaurant/DeleteAsync?id=` + item).map(x => x);
     }
 
+    // SaveRestaurantInfo
+    SaveRestaurantInfo(data) {
+        debugger;
+        data.Id = this.http.currentUser.id;
+        return this.http.post(`restaurant/SaveRestaurantInfo`, data).map(x=> x);
+    }
+
+    getRestaurantInfo() {
+        return this.http.get(`restaurant/GetRestaurantInfo?Id=` + this.http.currentUser.id).map(x => x.json());
+    }
 
 }

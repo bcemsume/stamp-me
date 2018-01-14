@@ -99,6 +99,9 @@ namespace StampMe.Entities.Concrete
             get;
             set;
         }
+        public string WorkingDays { get; set; }
+        public string PaymentTypes { get; set; }
+        public string Phone { get; set; }
         public Adress Adress
         {
             get;

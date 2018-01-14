@@ -46,5 +46,6 @@ namespace StampMe.Common.CustomDTO
             get;
             set;
         }
+        public string ContractName { get; set; }
     }
 }

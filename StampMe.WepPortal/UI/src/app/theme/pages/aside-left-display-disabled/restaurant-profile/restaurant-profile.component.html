@@ -72,6 +72,7 @@
                             </dxo-pager>
                             <dxo-selection [selectAllMode]="allPages" [showCheckBoxesMode]="onClick" mode="multiple"></dxo-selection>
                             <dxi-column dataField="info"></dxi-column>
+                            <dxi-column dataField="statu"></dxi-column>
                         </dx-data-grid>
                         <!--end: Datatable -->
                     </div>
@@ -106,7 +107,7 @@
                                         <label class="">
                                             Telefon Numarası:
                                         </label>
-                                        <input type='text' class="form-control" id="m_inputmask_3">
+                                        <input [(ngModel)]="phone" type='text' class="form-control">
                                         <span class="m-form__help">
                                             <code>
                                             (999) 999-9999
@@ -133,7 +134,7 @@
                                 <div class="m-form__actions m-form__actions--solid">
                                     <div class="row">
                                         <div class="col-lg-6">
-                                            <button type="reset" class="btn btn-primary">
+                                            <button type="reset" class="btn btn-primary" (click)="btnCalismaOdeme()">
                                                 Kaydet
                                             </button>
                                             <button type="reset" class="btn btn-secondary">
@@ -150,7 +151,7 @@
         </div>
 
         <div class="row">
-            <div class="col-xl-6">
+            <!-- <div class="col-xl-6">
                 <div class="m-portlet m-portlet--creative m-portlet--bordered-semi">
                     <div class="m-portlet__head">
                         <div class="m-portlet__head-caption">
@@ -215,7 +216,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
 
             <div class="col-xl-6">

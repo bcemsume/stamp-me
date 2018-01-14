@@ -5,6 +5,7 @@ import { RestaurantService } from './restaurant-profile.service';
 import { ImageDataDTO } from './restaurant-profile.model';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ToasterConfig, ToasterService, Toast } from 'angular2-toaster';
+import { debounce } from 'rxjs/operators/debounce';
 
 @Component({
     moduleId: module.id,
@@ -72,6 +73,26 @@ export class RestaurantProfileComponent implements OnInit, AfterViewInit {
             { id: 4, name: 'SetCard' },
             { id: 5, name: 'Kredi Kartı' },
         ];
+
+        this.svc.getRestaurantInfo().subscribe(x => {
+            this.phone = x.phone;
+
+            x.paymentTypes.split(',').forEach(element => {
+                this.odemeTipleriModel.push(+element);
+            });
+
+            x.workingDays.split(',').forEach(element => {
+                this.calismaGunleriModel.push(+element);
+            });
+
+            for (let index = 0; index < x.workingHours.split(',').length; index++) {
+                this.someRange[index]= +x.workingHours.split(',')[index];
+                
+            }
+            x.workingHours.split(',').forEach(element => {
+            });
+
+        });
     }
     toasterService: ToasterService;
 
@@ -83,7 +104,6 @@ export class RestaurantProfileComponent implements OnInit, AfterViewInit {
     someKeyboardConfig: any = {
         behaviour: 'drag',
         connect: true,
-        start: [9, 21],
         keyboard: true,  // same as [keyboard]="true"
         step: 0.5,
         pageSteps: 10,  // number of page steps, defaults to 10
@@ -99,7 +119,7 @@ export class RestaurantProfileComponent implements OnInit, AfterViewInit {
         }
     };
 
-    someRange: any;
+    someRange = [9, 21];
 
     onFileChange(event) {
         let reader = new FileReader();
@@ -110,6 +130,22 @@ export class RestaurantProfileComponent implements OnInit, AfterViewInit {
                 this.form.get('Data').setValue(reader.result.split(',')[1]);
             };
         }
+    }
+    phone: any;
+    btnCalismaOdeme() {
+        debugger;
+        let data = {
+            Phone: this.phone,
+            WorkingDays: this.calismaGunleriModel.join(','),
+            WorkingHours: this.someRange.join(','),
+            PaymentTypes: this.odemeTipleriModel.join(',')
+        };
+
+        this.svc.SaveRestaurantInfo(data).subscribe(x => {
+
+            this.popSubmitToast();
+
+        });
     }
 
     popSubmitToast() {

@@ -165,6 +165,17 @@ namespace StampMe.API.Controllers
             return await _restaurantService.GetWatingApprovalImage();
         }
 
+        [HttpPost]
+        public async Task SaveRestaurantInfo([FromBody]RestaurantInfoDTO item)
+        {
+            await _restaurantService.SaveRestaurantInfo(item);
+        }
+
+        [HttpGet]
+        public async Task<RestaurantInfoDTO> GetRestaurantInfo(string Id)
+        {
+           return await _restaurantService.GetRestaurantInfo(Id);
+        }
 
     }
 
