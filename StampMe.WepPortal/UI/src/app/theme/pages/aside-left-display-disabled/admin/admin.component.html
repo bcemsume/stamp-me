@@ -239,16 +239,15 @@
                         </div>
                     </div>
                     <div class="m-portlet__body">
-                        <dx-data-grid #gridImage id="gridContainer" [dataSource]="waitingImages" [showRowLines]="true" [showBorders]="true">
+                        <dx-data-grid (onRowClick)="rowClick($event)" #gridImage id="gridContainer" [dataSource]="imagesSource" [showRowLines]="true" [showBorders]="true">
                             <dxo-paging [pageSize]="20"></dxo-paging>
                             <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 50, 100]" [showInfo]="true">
                             </dxo-pager>
-                            <dxi-column dataField="id'"></dxi-column>
                             <dxi-column dataField="restName"></dxi-column>
-                            <dxi-column dataField="info'"></dxi-column>
+                            <dxi-column dataField="info"></dxi-column>
                             <dxi-column captipn="İşlemler" cellTemplate="islemTemplate"></dxi-column>
                             <div *dxTemplate="let data of 'islemTemplate'">
-                                <button type="button" class="btn m-btn--pill m-btn--air btn-outline-danger" (click)="btnImagesOnay(gridImage)" data-dismiss="modal">
+                                <button type="button" class="btn m-btn--pill m-btn--air btn-outline-danger" (click)="btnImagesOnay(data)" data-dismiss="modal">
                                     Onayla
                                 </button>
                             </div>
@@ -308,13 +307,15 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="form-group col-lg-8">
-                                <label for="adres-text" class="form-control-label">
-                                    Adres:
-                                </label>
-                                <div [hidden]="form.controls.Adress.valid || form.controls.Adress.pristine" class="alert alert-danger">Bu alanı boş geçemezsiniz.</div>
-                                <textarea rows="10" cols="50" formControlName="Adress" class="form-control" id="adres-text" required></textarea>
+                            <div class="form-group  col-lg-3">
+                                <label for="email-name" class="form-control-label">
+                                            Kontratlar:
+                                        </label>
+                                <div [hidden]="form.controls.Email.valid || form.controls.Email.pristine" class="alert alert-danger">Geçerli bir kontrat seçin.</div>
+                                <dx-select-box formControlName="ContractId" [dataSource]="contractSource" valueExpr="id" displayExpr="type">
+                                </dx-select-box>
                             </div>
+
                             <div class="m-form__group form-group  col-lg-2">
                                 <label class="form-control-label" for="adres-text" style="margin-left: 15px;">
                                     Aktif:
@@ -325,7 +326,7 @@
                                         <label>
                                             <input formControlName="isActive" name="" type="checkbox">
                                             <span></span>
-                                        </label>
+                                    </label>
                                     </span>
                                 </div>
                             </div>
@@ -339,9 +340,16 @@
                                         <label>
                                             <input formControlName="isPromo" name="" type="checkbox">
                                             <span></span>
-                                        </label>
+                                    </label>
                                     </span>
                                 </div>
+                            </div>
+                            <div class="form-group col-lg-8">
+                                <label for="adres-text" class="form-control-label">
+                                        Adres:
+                                    </label>
+                                <div [hidden]="form.controls.Adress.valid || form.controls.Adress.pristine" class="alert alert-danger">Bu alanı boş geçemezsiniz.</div>
+                                <textarea rows="10" cols="50" formControlName="Adress" class="form-control" id="adres-text" required></textarea>
                             </div>
                         </div>
                     </div>
@@ -363,24 +371,19 @@
                                         <ul class="m-portlet__nav">
                                             <li class="m-portlet__nav-item">
                                                 <a href="" class="m-portlet__nav-link m-portlet__nav-link--icon" data-toggle="modal" data-target="#modalProduct">
+                                                    <i class="la la-plus"></i>
+                                                </a>
+                                            </li>
+                                            <li class="m-portlet__nav-item">
+                                                <a href="" class="m-portlet__nav-link m-portlet__nav-link--icon" (click)="removeUrun(gridProduct)">
                                                     <i class="la la-close"></i>
-                                                </a>
-                                            </li>
-                                            <li class="m-portlet__nav-item">
-                                                <a href="" class="m-portlet__nav-link m-portlet__nav-link--icon">
-                                                    <i class="la la-refresh"></i>
-                                                </a>
-                                            </li>
-                                            <li class="m-portlet__nav-item">
-                                                <a href="" class="m-portlet__nav-link m-portlet__nav-link--icon">
-                                                    <i class="la la-angle-down"></i>
                                                 </a>
                                             </li>
                                         </ul>
                                     </div>
                                 </div>
                                 <div class="m-portlet__body">
-                                    <dx-data-grid #grid id="gridContainer" [dataSource]="prodcutsDTO" [showRowLines]="true" [showBorders]="true">
+                                    <dx-data-grid #gridProduct id="gridContainer" [dataSource]="prodcutsDTO" [showRowLines]="true" [showBorders]="true">
                                         <dxo-paging [pageSize]="20"></dxo-paging>
                                         <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 50, 100]" [showInfo]="true">
                                         </dxo-pager>
@@ -406,24 +409,19 @@
                                         <ul class="m-portlet__nav">
                                             <li class="m-portlet__nav-item">
                                                 <a href="" class="m-portlet__nav-link m-portlet__nav-link--icon" data-toggle="modal" data-target="#modalPromotion">
+                                                    <i class="la la-plus"></i>
+                                                </a>
+                                            </li>
+                                            <li class="m-portlet__nav-item">
+                                                <a href="" class="m-portlet__nav-link m-portlet__nav-link--icon" (click)="removePromosyon(gridPromosyon)">
                                                     <i class="la la-close"></i>
-                                                </a>
-                                            </li>
-                                            <li class="m-portlet__nav-item">
-                                                <a href="" class="m-portlet__nav-link m-portlet__nav-link--icon">
-                                                    <i class="la la-refresh"></i>
-                                                </a>
-                                            </li>
-                                            <li class="m-portlet__nav-item">
-                                                <a href="" class="m-portlet__nav-link m-portlet__nav-link--icon">
-                                                    <i class="la la-angle-down"></i>
                                                 </a>
                                             </li>
                                         </ul>
                                     </div>
                                 </div>
                                 <div class="m-portlet__body">
-                                    <dx-data-grid #grid id="gridContainer" [dataSource]="promotionDTO" [showRowLines]="true" [showBorders]="true">
+                                    <dx-data-grid #gridPromosyon id="gridContainer" [dataSource]="promotionDTO" [showRowLines]="true" [showBorders]="true">
                                         <dxo-paging [pageSize]="20"></dxo-paging>
                                         <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 50, 100]" [showInfo]="true">
                                         </dxo-pager>
@@ -461,7 +459,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">
-                    {{popupTitle}} asdasdsad
+                    {{popupTitle}}
                 </h5>
                 <button id="btnCloseContractModal" type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">
@@ -599,6 +597,7 @@
                                 <label class="col-form-label col-lg-3 col-sm-12">
                                     Durum
                                 </label>
+
                                 <select formControlName="Status" class="form-control m-bootstrap-select m_selectpicker">
                                     <option *ngFor="let s of status" [value]="s.Value">
                                         {{s.Name}}
@@ -652,17 +651,17 @@
                                 <label class="col-form-label col-lg-3 col-sm-12">
                                     Ürün
                                 </label>
-                                <select formControlName="Product">
-                                    <option *ngFor="let product of prodcutsDTO" [value]="product.Id">
-                                        {{product.Description}}
-                                    </option>
-                                </select>
+
+                                <dx-select-box formControlName="Product" [dataSource]="prodcutsDTO" valueExpr="Id" displayExpr="Description"></dx-select-box>
+
                                 <div [hidden]="formPromotion.controls.Product.valid || formPromotion.controls.Product.pristine" class="alert alert-danger">Bu alanı boş geçemezsiniz.</div>
                             </div>
                             <div class="form-group m-form__group">
                                 <label class="col-form-label col-lg-3 col-sm-12">
                                     Durum
                                 </label>
+
+
                                 <select formControlName="Status" class="form-control m-bootstrap-select m_selectpicker">
                                     <option *ngFor="let s of status" [value]="s.Value">
                                         {{s.Name}}
@@ -692,3 +691,9 @@
         </div>
     </div>
 </div>
+
+<dx-popup class="popup" [showTitle]="true" title="Resim" [dragEnabled]="false" [closeOnOutsideClick]="true" [(visible)]="popupImgVisible">
+    <div *dxTemplate="let data of 'content'">
+        <img [src]="'data:image/jpg;base64,'+imagePath" />
+    </div>
+</dx-popup>

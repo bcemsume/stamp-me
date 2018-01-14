@@ -1,0 +1,13 @@
+{
+  "User": {
+    "Id": 3,
+    "Username": "erdenizkorkmaz",
+    "Name": "Erdeniz Korkmaz",
+    "Email": "erdenizkorkmaz@mail.com",
+    "AvatarUrl": "http://www.gravatar.com/avatar/b2ca767635010e5631c9378eeb93896b?s=80&d=identicon",
+    "PrivateToken": "891b6b92f20dd0072f143fde5c842fcbd681a58da5c2520a9046d8bf31952981",
+    "Host": "http://51.15.68.39:8042",
+    "TwoFactorEnabled": false,
+    "ApiVersion": 3
+  }
+}

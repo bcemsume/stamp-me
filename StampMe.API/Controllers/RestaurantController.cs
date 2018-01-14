@@ -148,7 +148,7 @@ namespace StampMe.API.Controllers
         }
 
         [HttpPost]
-        public async Task ApprovedImageAsync(ImageAprovedDTO item)
+        public async Task ApprovedImageAsync([FromBody]ImageAprovedDTO item)
         {
             await _restaurantService.ApprovedImageAsync(item);
         }

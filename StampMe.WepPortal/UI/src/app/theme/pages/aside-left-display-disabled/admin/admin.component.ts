@@ -32,6 +32,7 @@ export class AdminComponent implements OnInit, AfterViewInit {
 
     waitingProduct: any;
     waitingPromotion: any;
+    waitingImage: any;
 
     public config1: ToasterConfig = new ToasterConfig({
         positionClass: 'toast-top-right'
@@ -42,6 +43,7 @@ export class AdminComponent implements OnInit, AfterViewInit {
         Email: new FormControl('', Validators.compose([Validators.email, Validators.required])),
         UserName: new FormControl('', Validators.required),
         Password: new FormControl('', Validators.required),
+        ContractId: new FormControl('', Validators.required),
         Adress: new FormControl('', Validators.required),
         isActive: new FormControl(true, Validators.required),
         isPromo: new FormControl(false, Validators.required),
@@ -67,7 +69,8 @@ export class AdminComponent implements OnInit, AfterViewInit {
     }
 
     btnImagesOnay(data) {
-        this.svc.ApprovedProduct({ restName: data.key.restName, info: data.key.info, Id: data.key.Id }).subscribe(x => { this.popSubmitToast(); this.waitingApProduct() });
+        debugger;
+        this.svc.ApprovedImage({ restId: data.key.restId, imageId: data.key.id }).subscribe(x => { this.popSubmitToast(); this.waitingApImage() });
     }
 
     formProduct = new FormGroup({
@@ -100,6 +103,7 @@ export class AdminComponent implements OnInit, AfterViewInit {
     products: any = [];
 
     contractSource: any;
+    imagesSource: any;
 
     constructor(private _script: ScriptLoaderService, private svc: AdminService, private renderer: Renderer, toasterService: ToasterService) {
         this.toasterService = toasterService;
@@ -110,6 +114,10 @@ export class AdminComponent implements OnInit, AfterViewInit {
     waitingApProduct() {
         this.svc.GetWaitingApprovalProduct().subscribe(x => this.waitingProduct = x);
     }
+
+    waitingApImage() {
+        this.svc.GetWaitingApprovalImage().subscribe(x => this.imagesSource = x);
+    }
     waitingApPromotion() {
         this.svc.GetWaitingApprovalPromotion().subscribe(x => this.waitingPromotion = x);
     }
@@ -119,12 +127,26 @@ export class AdminComponent implements OnInit, AfterViewInit {
         this.waitingApProduct();
         this.waitingApPromotion();
         this.contractLoad();
+        this.imagesLoad();
     }
 
     gridLoad() {
         this.svc.getRestaurantList().subscribe(x => this.dataSource = x);
     }
-
+    popupImgVisible: any;
+    lastRowCLickedId: number;
+    lastRowClickedTime: Date;
+    imagePath: any;
+    rowClick(e) {
+        var currentTime = new Date();
+        if (e.rowIndex === this.lastRowCLickedId && ((currentTime.getTime() - this.lastRowClickedTime.getTime()) < 300)) {
+            this.popupImgVisible = true;
+            this.imagePath = e.data.data;
+        } else {
+            this.lastRowCLickedId = e.rowIndex;
+            this.lastRowClickedTime = new Date();
+        }
+    }
     ngAfterViewInit() {
 
         Helpers.bodyClass('m-page--wide m-header--fixed m-header--fixed-mobile m-footer--push m-aside--offcanvas-default');
@@ -204,8 +226,6 @@ export class AdminComponent implements OnInit, AfterViewInit {
         }
         );
     }
-
-
 
     btnDeleteContract(data) {
         console.log(this.dataGrid.instance.getSelectedRowsData());
@@ -301,12 +321,13 @@ export class AdminComponent implements OnInit, AfterViewInit {
             this.sendValue = this.form.value;
             this.sendValue.Product = this.prodcutsDTO;
             this.sendValue.Promotion = this.promotionDTO;
-
             this.svc.saveRestaurant(this.form.value).subscribe(x => {
                 document.getElementById('btnCloseModal').click();
                 this.popSubmitToast();
                 this.gridLoad();
                 this.form.reset();
+                this.promotionDTO = null;
+                this.prodcutsDTO = null;
             }, err => {
                 console.log(err);
                 this.popErrorToast(err)
@@ -316,9 +337,41 @@ export class AdminComponent implements OnInit, AfterViewInit {
 
     }
 
+    removeUrun(data) {
+        debugger;
+
+        data.instance.getSelectedRowsData().forEach(x => {
+            this.prodcutsDTO = this.prodcutsDTO.filter(z => z.Id != x.Id)
+        }
+        );
+        if (this.prodcutsDTO.length == 0) {
+            this.prodcutsDTO = [{ Description: "", Status: "", DueDate: "", Id: 0 }]
+        }
+    }
+
+
+    removePromosyon(data) {
+
+        data.instance.getSelectedRowsData().forEach(x => {
+
+            this.promotionDTO = this.promotionDTO.filter(z => z.ProductId != x.ProductId)
+        }
+        );
+
+        if (this.promotionDTO.length == 0) {
+            this.promotionDTO = [{ Claim: "", Status: "", ProductId: 0 }]
+        }
+    }
+
     contractLoad() {
         this.svc.getContract().subscribe(x => {
             this.contractSource = x; console.log(x);
+        });
+    }
+
+    imagesLoad() {
+        this.svc.getImages().subscribe(x => {
+            this.imagesSource = x; console.log(x);
         });
     }
 

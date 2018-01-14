@@ -9,7 +9,9 @@ import { XHRBackend, RequestOptions } from '@angular/http';
 import {
     DxDataGridModule,
     DxSparklineModule,
-    DxTemplateModule
+    DxTemplateModule,
+    DxPopupModule,
+    DxSelectBoxModule
 } from 'devextreme-angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToasterModule } from 'angular2-toaster';
@@ -28,7 +30,8 @@ const routes: Routes = [
 ];
 @NgModule({
     imports: [
-        CommonModule, RouterModule.forChild(routes), LayoutModule, DxDataGridModule, FormsModule, ReactiveFormsModule, ToasterModule, NgDatepickerModule
+        CommonModule, RouterModule.forChild(routes), LayoutModule, DxDataGridModule, FormsModule, ReactiveFormsModule, ToasterModule, NgDatepickerModule, DxPopupModule,
+        DxSelectBoxModule
     ], exports: [
         RouterModule
     ],

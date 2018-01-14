@@ -38,8 +38,16 @@ export class AdminService {
         return this.http.get(`contract/GetAllAsync`).map(x => x.json());
     }
 
+    getImages() {
+        return this.http.get(`restaurant/GetWaitingApprovalImage`).map(x => x.json());
+    }
+
     GetWaitingApprovalProduct() {
         return this.http.get('restaurant/GetWaitingApprovalProduct').map(x => x.json());
+    }
+
+    GetWaitingApprovalImage() {
+        return this.http.get('restaurant/GetWaitingApprovalImage').map(x => x.json());
     }
 
     GetWaitingApprovalPromotion() {
@@ -48,6 +56,10 @@ export class AdminService {
 
     ApprovedProduct(item) {
         return this.http.post('restaurant/ApprovedProduct', item).map(x => x);
+    }
+
+    ApprovedImage(item) {
+        return this.http.post('restaurant/ApprovedImageAsync', item).map(x => x);
     }
 
     ApprovedPromotion(item) {

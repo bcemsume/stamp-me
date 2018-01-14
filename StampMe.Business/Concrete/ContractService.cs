@@ -43,7 +43,7 @@ namespace StampMe.Business.Concrete
             return result.Select(x => new ContractDTO
             {
                 Description = x.Description,
-                Id = x.Id,
+                Id = x.Id.ToString(),
                 Price = x.Price,
                 Type = x.Type
             }).ToList();
