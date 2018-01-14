@@ -85,7 +85,13 @@ namespace StampMe.Business.Concrete {
             return lst;
         }
 
+<<<<<<< HEAD
         public async Task<List<ImageDTO>> GetWatingApprovalImage() {
+=======
+
+        public async Task<List<ImageDTO>> GetWatingApprovalImage()
+        {
+>>>>>>> 7e9038a... re
             var lst = new List<ImageDTO>();
             var rest = await _restaurantDal.GetAllAsync();
 
