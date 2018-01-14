@@ -16,8 +16,26 @@ export class AdminService {
         return this.http.post(`restaurant/QuickSave`, item).map(x => x);
     }
 
+    saveContract(item) {
+        debugger;
+        return this.http.post(`contract/Add`, item).map(x => x);
+    }
+
+    updateContract(item) {
+        debugger;
+        return this.http.post(`contract/UpdateAsync`, item).map(x => x);
+    }
+
     deleteRestaurant(item) {
         return this.http.get(`restaurant/DeleteAsync?id=` + item).map(x => x);
+    }
+
+    deleteContract(item) {
+        return this.http.post(`contract/DeleteAsync`, item).map(x => x);
+    }
+
+    getContract() {
+        return this.http.get(`contract/GetAllAsync`).map(x => x.json());
     }
 
     GetWaitingApprovalProduct() {

@@ -19,7 +19,8 @@ import { PromotionDTO } from '../../../../shared/promotion.model';
     encapsulation: ViewEncapsulation.None,
     styles: [`.modal-lg {
         max-width: 95vw;
-    }`],
+    }; 
+    `],
     providers: [AdminService]
 })
 export class AdminComponent implements OnInit, AfterViewInit {
@@ -50,12 +51,23 @@ export class AdminComponent implements OnInit, AfterViewInit {
     });
     status = [{ Name: "Onaylı", Value: "Approved" }, { Name: "Beklemede", Value: "WaitApproval" }]
 
+    formContract = new FormGroup({
+        Type: new FormControl('', Validators.required),
+        Price: new FormControl('', Validators.required),
+        Description: new FormControl('', Validators.required),
+        Id: new FormControl(''),
+    });
+
     btnPromosyonOnay(data) {
         this.svc.ApprovedPromotion({ restId: data.key.restId, PromId: data.key.promotionId }).subscribe(x => { this.popSubmitToast(); this.waitingApPromotion() });
     }
 
     btnUrunOnay(data) {
         this.svc.ApprovedProduct({ restId: data.key.restId, ProdId: data.key.productId }).subscribe(x => { this.popSubmitToast(); this.waitingApProduct() });
+    }
+
+    btnImagesOnay(data) {
+        this.svc.ApprovedProduct({ restName: data.key.restName, info: data.key.info, Id: data.key.Id }).subscribe(x => { this.popSubmitToast(); this.waitingApProduct() });
     }
 
     formProduct = new FormGroup({
@@ -87,6 +99,8 @@ export class AdminComponent implements OnInit, AfterViewInit {
 
     products: any = [];
 
+    contractSource: any;
+
     constructor(private _script: ScriptLoaderService, private svc: AdminService, private renderer: Renderer, toasterService: ToasterService) {
         this.toasterService = toasterService;
     }
@@ -104,6 +118,7 @@ export class AdminComponent implements OnInit, AfterViewInit {
         this.gridLoad();
         this.waitingApProduct();
         this.waitingApPromotion();
+        this.contractLoad();
     }
 
     gridLoad() {
@@ -160,7 +175,6 @@ export class AdminComponent implements OnInit, AfterViewInit {
 
 
     prductCellCustom(data) {
-        debugger;
         let row = this.prodcutsDTO.find(x => x.Id == data);
         if (row) {
             return this.prodcutsDTO.find(x => x.Id == data).Description;
@@ -189,8 +203,32 @@ export class AdminComponent implements OnInit, AfterViewInit {
             });
         }
         );
+    }
 
 
+
+    btnDeleteContract(data) {
+        console.log(this.dataGrid.instance.getSelectedRowsData());
+        debugger;
+        data.instance.getSelectedRowsData().forEach(x => {
+
+
+            this.svc.deleteContract(x).subscribe(z => {
+                console.log(data.instance.getSelectedRowsData()[data.instance.getSelectedRowsData().length - 1].Id);
+                console.log(x.Id);
+
+                if (data.instance.getSelectedRowsData()[data.instance.getSelectedRowsData().length - 1].Id == x.Id) {
+                    this.popSubmitToast();
+                    document.getElementById('btnCloseConfirmModalContract').click();
+                    this.contractLoad();
+                }
+
+            }, err => {
+                console.log(err);
+                this.popErrorToast(err)
+            });
+        }
+        );
     }
 
     popSubmitToast() {
@@ -235,6 +273,27 @@ export class AdminComponent implements OnInit, AfterViewInit {
         });
     }
 
+    btnEditContract(data) {
+        debugger;
+        if (data.instance.getSelectedRowsData().length <= 0) {
+            setTimeout(() => {
+                document.getElementById('btnCloseContractModal').click();
+                this.popErrorToast('Lütfen bir kayıt seçiniz');
+                event.preventDefault();
+                return false;
+            }, 1000);
+        } else {
+            var item = data.instance.getSelectedRowsData()[0];
+
+            this.formContract.setValue({
+                Type: item.type,
+                Price: item.price,
+                Description: item.description,
+                Id: item.id
+            });
+        }
+    }
+
     sendValue: any;
 
     onSubmit() {
@@ -255,6 +314,59 @@ export class AdminComponent implements OnInit, AfterViewInit {
             );
         }
 
+    }
+
+    contractLoad() {
+        this.svc.getContract().subscribe(x => {
+            this.contractSource = x; console.log(x);
+        });
+    }
+
+    onSubmitContract() {
+        if (!this.formContract.invalid) {
+            debugger;
+            if (this.formContract.value.Id === null) {
+
+                this.svc.saveContract(this.formContract.value).subscribe(x => {
+                    document.getElementById('btnCloseContractModal').click();
+                    this.popSubmitToast();
+                    this.contractLoad();
+                    this.formContract.reset();
+                }, err => {
+                    console.log(err);
+                    this.popErrorToast(err)
+                }
+                );
+            } else {
+
+                this.svc.updateContract(this.formContract.value).subscribe(x => {
+                    document.getElementById('btnCloseContractModal').click();
+                    this.popSubmitToast();
+                    this.contractLoad();
+                    this.formContract.reset();
+                }, err => {
+                    console.log(err);
+                    this.popErrorToast(err)
+                }
+                );
+            }
+        }
+    }
+
+    onDeleteContract(item) {
+        if (!this.formContract.invalid) {
+
+            this.svc.saveContract(this.formContract.value).subscribe(x => {
+                document.getElementById('btnCloseContractModal').click();
+                this.popSubmitToast();
+                this.contractLoad();
+                this.formContract.reset();
+            }, err => {
+                console.log(err);
+                this.popErrorToast(err)
+            }
+            );
+        }
     }
 
 }

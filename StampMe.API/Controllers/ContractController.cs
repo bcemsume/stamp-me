@@ -8,33 +8,31 @@ using Microsoft.AspNetCore.Mvc;
 using StampMe.Business.Abstract;
 using StampMe.Common.CustomDTO;
 
-namespace StampMe.API.Controllers
-{
+namespace StampMe.API.Controllers {
     [Route("api/[controller]/[action]")]
     [EnableCors("MyPolicy")]
-    public class ContractController : Controller
-    {
+    public class ContractController: Controller {
         IContractService _contractService;
-        public ContractController(IContractService contractService)
-        {
+        public ContractController(IContractService contractService) {
             _contractService = contractService;
         }
 
-        public async Task<IEnumerable<ContractDTO>> GetAllAsync()
-        {
+        [HttpGet]
+        public async Task<IEnumerable<ContractDTO>> GetAllAsync() {
             var result = await _contractService.GetAllAsync();
             return result;
         }
-        public async Task Add(ContractDTO entity)
-        {
+
+        [HttpPost]
+        public async Task Add([FromBody]ContractDTO entity) {
             await _contractService.Add(entity);
         }
-        public async Task DeleteAsync(ContractDTO entity)
-        {
+        [HttpPost]
+        public async Task DeleteAsync([FromBody]ContractDTO entity) {
             await _contractService.DeleteAsync(entity);
         }
-        public async Task UpdateAsync(ContractDTO entity)
-        {
+        [HttpPost]
+        public async Task UpdateAsync([FromBody]ContractDTO entity) {
             await _contractService.UpdateAsync(entity);
         }
     }

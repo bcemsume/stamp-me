@@ -17,8 +17,7 @@
                         <div class="m-portlet__head-tools">
                             <ul class="m-portlet__nav">
                                 <li class="m-portlet__nav-item">
-                                    <div class="m-dropdown m-dropdown--inline m-dropdown--arrow m-dropdown--align-right m-dropdown--align-push" data-dropdown-toggle="hover"
-                                        aria-expanded="true">
+                                    <div class="m-dropdown m-dropdown--inline m-dropdown--arrow m-dropdown--align-right m-dropdown--align-push" data-dropdown-toggle="hover" aria-expanded="true">
                                         <a href="#" class="m-portlet__nav-link btn btn-lg btn-secondary  m-btn m-btn--icon m-btn--icon-only m-btn--pill  m-dropdown__toggle">
                                             <i class="la la-ellipsis-h m--font-brand"></i>
                                         </a>
@@ -70,19 +69,16 @@
                     <div class="m-portlet__body">
                         <!--begin: Datatable -->
                         <dx-data-grid #grid id="gridContainer" [dataSource]="dataSource" [showRowLines]="true" [showBorders]="true">
-
                             <dxo-paging [pageSize]="20"></dxo-paging>
                             <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 50, 100]" [showInfo]="true">
                             </dxo-pager>
                             <dxo-selection [selectAllMode]="allPages" [showCheckBoxesMode]="onClick" mode="multiple"></dxo-selection>
-
                         </dx-data-grid>
                         <!--end: Datatable -->
                     </div>
                 </div>
             </div>
         </div>
-
         <div class="row">
             <div class="col-xl-6">
                 <div class="m-portlet m-portlet--creative m-portlet--bordered-semi" style="height: 85%">
@@ -100,7 +96,6 @@
                     <div class="m-portlet__body">
                         <!--begin: Datatable -->
                         <dx-data-grid #grid id="gridContainer" [dataSource]="waitingProduct" [showRowLines]="true" [showBorders]="true">
-
                             <dxo-paging [pageSize]="20"></dxo-paging>
                             <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 50, 100]" [showInfo]="true">
                             </dxo-pager>
@@ -119,7 +114,6 @@
                 </div>
             </div>
 
-
             <div class="col-xl-6">
                 <div class="m-portlet m-portlet--creative m-portlet--bordered-semi">
                     <div class="m-portlet__head">
@@ -135,7 +129,6 @@
                     </div>
                     <div class="m-portlet__body">
                         <dx-data-grid #grid id="gridContainer" [dataSource]="waitingPromotion" [showRowLines]="true" [showBorders]="true">
-
                             <dxo-paging [pageSize]="20"></dxo-paging>
                             <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 50, 100]" [showInfo]="true">
                             </dxo-pager>
@@ -153,11 +146,120 @@
                     </div>
                 </div>
             </div>
-        </div>
+            <div class="col-xl-6">
+                <div class="m-portlet m-portlet--mobile m-portlet--creative m-portlet--bordered-semi">
+                    <div class="m-portlet__head">
+                        <div class="m-portlet__head-caption">
+                            <div class="m-portlet__head-title">
+                                <h2 class="m-portlet__head-label m-portlet__head-label--danger" style="width: 340px !important;">
+                                    <span>
+                                        Kontratlar
+                                    </span>
+                                </h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-portlet__head-tools" id="custom-mobile-head-tools">
+                        <ul class="m-portlet__nav">
+                            <li class="m-portlet__nav-item">
+                                <div class="m-dropdown m-dropdown--inline m-dropdown--arrow m-dropdown--align-right m-dropdown--align-push" data-dropdown-toggle="hover" aria-expanded="true">
+                                    <a href="#" class="m-portlet__nav-link btn btn-lg btn-secondary  m-btn m-btn--icon m-btn--icon-only m-btn--pill  m-dropdown__toggle">
+                                        <i class="la la-ellipsis-h m--font-brand"></i>
+                                    </a>
+                                    <div class="m-dropdown__wrapper">
+                                        <span class="m-dropdown__arrow m-dropdown__arrow--right m-dropdown__arrow--adjust"></span>
+                                        <div class="m-dropdown__inner">
+                                            <div class="m-dropdown__body">
+                                                <div class="m-dropdown__content">
+                                                    <ul class="m-nav">
+                                                        <li class="m-nav__section m-nav__section--first">
+                                                            <span class="m-nav__section-text">
+                                                                İşlemler
+                                                            </span>
+                                                        </li>
+                                                        <li class="m-nav__item">
+                                                            <a (click)="this.form.reset(); this.popupTitle='Yeni Ekle'" href="" class="m-nav__link" data-toggle="modal" data-target="#m_modal_5">
+                                                                <i class="m-nav__link-icon flaticon-user-add"></i>
+                                                                <span class="m-nav__link-text">
+                                                                    Yeni Ekle
+                                                                </span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="m-nav__item">
+                                                            <a href="" class="m-nav__link" data-toggle="modal" data-target="#modalConfirmContract">
+                                                                <i class="m-nav__link-icon flaticon-delete"></i>
+                                                                <span class="m-nav__link-text">
+                                                                    Sil
+                                                                </span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="m-nav__item">
+                                                            <a href="" class="m-nav__link" (click)="btnEditContract(gridContract);" data-toggle="modal" data-target="#m_modal_5">
+                                                                <i class="m-nav__link-icon flaticon-edit"></i>
+                                                                <span class="m-nav__link-text">
+                                                                    Düzenle
+                                                                </span>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="m-portlet__body">
+                        <dx-data-grid #gridContract id="gridContainer" [dataSource]="contractSource" [showRowLines]="true" [showBorders]="true">
+                            <dxo-paging [pageSize]="20"></dxo-paging>
+                            <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 50, 100]" [showInfo]="true">
+                            </dxo-pager>
+                            <dxi-column dataField="id"></dxi-column>
+                            <dxi-column dataField="type"></dxi-column>
+                            <dxi-column dataField="price"></dxi-column>
+                            <dxi-column dataField="description"></dxi-column>
+                            <dxo-selection [selectAllMode]="allPages" [showCheckBoxesMode]="onClick" mode="multiple"></dxo-selection>
+                        </dx-data-grid>
+                    </div>
+                </div>
+            </div>
 
+            <div class="col-xl-6">
+                <div class="m-portlet m-portlet--creative m-portlet--bordered-semi">
+                    <div class="m-portlet__head">
+                        <div class="m-portlet__head-caption">
+                            <div class="m-portlet__head-title">
+                                <h2 class="m-portlet__head-label m-portlet__head-label--warning" style="width: 340px !important;">
+                                    <span>
+                                        Onay Bekleyen Resimler
+                                    </span>
+                                </h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-portlet__body">
+                        <dx-data-grid #gridImage id="gridContainer" [dataSource]="waitingImages" [showRowLines]="true" [showBorders]="true">
+                            <dxo-paging [pageSize]="20"></dxo-paging>
+                            <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 50, 100]" [showInfo]="true">
+                            </dxo-pager>
+                            <dxi-column dataField="id'"></dxi-column>
+                            <dxi-column dataField="restName"></dxi-column>
+                            <dxi-column dataField="info'"></dxi-column>
+                            <dxi-column captipn="İşlemler" cellTemplate="islemTemplate"></dxi-column>
+                            <div *dxTemplate="let data of 'islemTemplate'">
+                                <button type="button" class="btn m-btn--pill m-btn--air btn-outline-danger" (click)="btnImagesOnay(gridImage)" data-dismiss="modal">
+                                    Onayla
+                                </button>
+                            </div>
+                        </dx-data-grid>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </div>
 </div>
-
 
 <div class="modal fade" id="m_modal_4" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -279,18 +381,14 @@
                                 </div>
                                 <div class="m-portlet__body">
                                     <dx-data-grid #grid id="gridContainer" [dataSource]="prodcutsDTO" [showRowLines]="true" [showBorders]="true">
-
                                         <dxo-paging [pageSize]="20"></dxo-paging>
                                         <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 50, 100]" [showInfo]="true">
                                         </dxo-pager>
                                         <dxo-selection [selectAllMode]="allPages" [showCheckBoxesMode]="onClick" mode="multiple"></dxo-selection>
-
                                     </dx-data-grid>
                                 </div>
                             </div>
-
                         </div>
-
                         <div class="form-group row">
                             <div class="m-portlet m-portlet--success m-portlet--head-solid-bg">
                                 <div class="m-portlet__head">
@@ -326,7 +424,6 @@
                                 </div>
                                 <div class="m-portlet__body">
                                     <dx-data-grid #grid id="gridContainer" [dataSource]="promotionDTO" [showRowLines]="true" [showBorders]="true">
-
                                         <dxo-paging [pageSize]="20"></dxo-paging>
                                         <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 50, 100]" [showInfo]="true">
                                         </dxo-pager>
@@ -334,19 +431,14 @@
                                         <dxi-column dataField="ProductId" cellTemplate="cellTemplate"></dxi-column>
                                         <dxi-column dataField="Claim"></dxi-column>
                                         <dxi-column dataField="Status"></dxi-column>
-
                                         <div *dxTemplate="let data of 'cellTemplate'">
                                             {{prductCellCustom(data.value)}}
                                         </div>
                                     </dx-data-grid>
                                 </div>
                             </div>
-
                         </div>
                     </div>
-
-
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">
@@ -361,6 +453,64 @@
     </div>
 </div>
 
+
+
+
+<div class="modal fade" id="m_modal_5" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    {{popupTitle}} asdasdsad
+                </h5>
+                <button id="btnCloseContractModal" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">
+                        &times;
+                    </span>
+                </button>
+            </div>
+            <form [formGroup]="formContract" (ngSubmit)="onSubmitContract()">
+                <div class="modal-body row">
+                    <div class="col-lg-12">
+                        <div class="row">
+                            <div class="form-group col-lg-12">
+                                <label for="recipient-name" class="form-control-label">
+                                    Tip:
+                                </label>
+                                <div [hidden]="formContract.controls.Type.valid || formContract.controls.Type.pristine" class="alert alert-danger">Bu alanı boş geçemezsiniz.</div>
+                                <input formControlName="Type" type="text" class="form-control" id="recipient-name1" required>
+                            </div>
+                            <div class="form-group col-lg-12">
+                                <label for="userName-name" class="form-control-label">
+                                    Fiyat:
+                                </label>
+                                <div [hidden]="formContract.controls.Price.valid || formContract.controls.Price.pristine" class="alert alert-danger">Bu alanı boş geçemezsiniz.</div>
+                                <input formControlName="Price" type="text" class="form-control" required>
+                            </div>
+                            <div class="form-group  col-lg-12">
+                                <label for="password-name" class="form-control-label">
+                                    Açıklama:
+                                </label>
+                                <div [hidden]="formContract.controls.Description.valid || formContract.controls.Description.pristine" class="alert alert-danger">Bu alanı boş geçemezsiniz.</div>
+                                <textarea rows="10" cols="50" formControlName="Description" class="form-control" id="adres-text" required></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        Kapat
+                    </button>
+                    <button type="submit" [disabled]="!formContract.valid" class="btn btn-primary">
+                        Kaydet
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
 <div class="modal fade" id="modalConfirm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -374,7 +524,6 @@
                     </span>
                 </button>
             </div>
-
             <div class="modal-body">
                 <p>
                     Silme işlemine devam etmek istediğinize emin misinizz ?
@@ -392,6 +541,35 @@
     </div>
 </div>
 
+<div class="modal fade" id="modalConfirmContract" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Sil
+                </h5>
+                <button id="btnCloseConfirmModalContract" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">
+                        &times;
+                    </span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    Silme işlemine devam etmek istediğinize emin misinizz ?
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    Kapat
+                </button>
+                <button type="submit" (click)="btnDeleteContract(gridContract)" class="btn btn-primary">
+                    Sil
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="modal fade" id="modalProduct" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -406,7 +584,6 @@
                     </span>
                 </button>
             </div>
-
             <div class="modal-body">
                 <form [formGroup]="formProduct">
                     <div class="m-portlet__body">
@@ -453,6 +630,7 @@
     </div>
 </div>
 
+
 <div class="modal fade" id="modalPromotion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -466,7 +644,6 @@
                     </span>
                 </button>
             </div>
-
             <div class="modal-body">
                 <form [formGroup]="formPromotion">
                     <div class="m-portlet__body">
