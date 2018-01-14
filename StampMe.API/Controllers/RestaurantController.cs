@@ -160,7 +160,7 @@ namespace StampMe.API.Controllers
         }
 
         [HttpGet]
-        public async Task<List<ImageDTO>> GetWatingApprovalImage()
+        public async Task<List<ImageDTO>> GetWaitingApprovalImage()
         {
             return await _restaurantService.GetWatingApprovalImage();
         }
