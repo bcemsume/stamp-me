@@ -86,9 +86,12 @@ namespace StampMe.Business.Concrete {
         }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         public async Task<List<ImageDTO>> GetWatingApprovalImage() {
 =======
 
+=======
+>>>>>>> 7ebccbe... asd123
         public async Task<List<ImageDTO>> GetWatingApprovalImage()
         {
 >>>>>>> 7e9038a... re

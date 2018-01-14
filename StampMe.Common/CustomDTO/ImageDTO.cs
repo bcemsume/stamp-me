@@ -20,7 +20,6 @@ namespace StampMe.Common.CustomDTO
             get;
             set;
         }
-
         public StatusType Statu { get; set; }
     }
 }
