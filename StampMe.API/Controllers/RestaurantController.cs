@@ -154,15 +154,15 @@ namespace StampMe.API.Controllers
         }
 
         [HttpGet]
-        public async Task<List<ImageDTO>> GetApprovedImage(string restId)
+        public async Task<List<ImageDTO>> GetApprovedImage()
         {
-            return await _restaurantService.GetApprovedImage(restId);
+            return await _restaurantService.GetApprovedImage();
         }
 
         [HttpGet]
-        public async Task<List<ImageDTO>> GetWatingApprovalImage(string restId)
+        public async Task<List<ImageDTO>> GetWatingApprovalImage()
         {
-            return await _restaurantService.GetWatingApprovalImage(restId);
+            return await _restaurantService.GetWatingApprovalImage();
         }
     }
 

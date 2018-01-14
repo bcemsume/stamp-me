@@ -34,7 +34,7 @@ namespace StampMe.Business.Abstract
         Task<IEnumerable<WaitApprovalItemDTO>> GetApprovedPromotion();
 
         Task ApprovedImageAsync(ImageAprovedDTO item);
-        Task<List<ImageDTO>> GetApprovedImage(object restId);
-        Task<List<ImageDTO>> GetWatingApprovalImage(object restId);
+        Task<List<ImageDTO>> GetApprovedImage();
+        Task<List<ImageDTO>> GetWatingApprovalImage();
     }
 }

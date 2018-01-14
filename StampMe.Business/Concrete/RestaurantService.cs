@@ -60,44 +60,61 @@ namespace StampMe.Business.Concrete
 
             await UpdateAsync(rest);
         }
-        public async Task<List<ImageDTO>> GetApprovedImage(object restId)
+        public async Task<List<ImageDTO>> GetApprovedImage()
         {
-            var rest = await _restaurantDal.GetAsync(x => x.Id == new MongoDB.Bson.ObjectId((string)restId));
+            var lst = new List<ImageDTO>();
+            var rest = await _restaurantDal.GetAllAsync();
 
             if (rest == null)
                 throw new Exception("Restaurant Bulunumadı..!!");
 
-            var images = rest.Images.Where(x => x.Statu == StatusType.Approved).Select(x => new ImageDTO
-            {
-                Id = x.Id.ToString(),
-                Statu = x.Statu,
-                Data = Convert.ToBase64String(x.Image),
-                Info = x.Description,
-                RestName = rest.Name
-            }).ToList();
+            var img = rest.Where(x => x.Images.Any(z => z.Statu == StatusType.Approved)).ToList();
 
-            return images;
+
+            foreach (var item in img)
+            {
+                foreach (var m in item.Images.Where(x=> x.Statu == StatusType.Approved))
+                {
+                    lst.Add(new ImageDTO() {
+                        Id = m.Id.ToString(),
+                        Statu = m.Statu,
+                        Data = Convert.ToBase64String(m.Image),
+                        Info = m.Description,
+                        RestName = item.Name
+                    });
+                }
+            }
+            return lst;
         }
 
-
-        public async Task<List<ImageDTO>> GetWatingApprovalImage(object restId)
+        public async Task<List<ImageDTO>> GetWatingApprovalImage()
         {
-            var rest = await _restaurantDal.GetAsync(x => x.Id == new MongoDB.Bson.ObjectId((string)restId));
+            var lst = new List<ImageDTO>();
+            var rest = await _restaurantDal.GetAllAsync();
 
             if (rest == null)
                 throw new Exception("Restaurant Bulunumadı..!!");
 
-            var images = rest.Images.Where(x => x.Statu == StatusType.WaitApproval).Select(x => new ImageDTO
-            {
-                Id = x.Id.ToString(),
-                Statu = x.Statu,
-                Data = Convert.ToBase64String(x.Image),
-                Info = x.Description,
-                RestName = rest.Name
-            }).ToList();
+            var img = rest.Where(x => x.Images.Any(z => z.Statu == StatusType.Approved)).ToList();
 
-            return images;
+
+            foreach (var item in img)
+            {
+                foreach (var m in item.Images.Where(x => x.Statu == StatusType.WaitApproval))
+                {
+                    lst.Add(new ImageDTO()
+                    {
+                        Id = m.Id.ToString(),
+                        Statu = m.Statu,
+                        Data = Convert.ToBase64String(m.Image),
+                        Info = m.Description,
+                        RestName = item.Name
+                    });
+                }
+            }
+            return lst;
         }
+
 
         public async Task DeleteImageAsync(object restId, object imgId)
         {
