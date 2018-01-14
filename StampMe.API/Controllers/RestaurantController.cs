@@ -164,6 +164,8 @@ namespace StampMe.API.Controllers
         {
             return await _restaurantService.GetWatingApprovalImage();
         }
+
+
     }
 
 }
