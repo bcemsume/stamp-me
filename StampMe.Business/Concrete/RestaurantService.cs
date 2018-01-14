@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -60,11 +60,18 @@ namespace StampMe.Business.Concrete {
             if(rest == null)
                 throw new Exception("Restaurant Bulunumadı..!!");
 
+<<<<<<< HEAD
 
             foreach(var item in rest) {
                 if(item.Images == null)
                     continue;
                 foreach(var m in item.Images.Where(x => x.Statu == StatusType.Approved).ToList()) {
+=======
+            foreach (var item in rest)
+            {
+                foreach (var m in item.Images.Where(x=> x.Statu == StatusType.Approved).ToList())
+                {
+>>>>>>> 930b9f9... image
                     lst.Add(new ImageDTO() {
                         Id = m.Id.ToString(),
                         Statu = m.Statu,
@@ -86,11 +93,20 @@ namespace StampMe.Business.Concrete {
                 throw new Exception("Restaurant Bulunumadı..!!");
 
 
+<<<<<<< HEAD
             foreach(var item in rest) {
                 if(item.Images == null)
                     continue;
                 foreach(var m in item.Images.Where(x => x.Statu == StatusType.WaitApproval).ToList()) {
                     lst.Add(new ImageDTO() {
+=======
+            foreach (var item in rest)
+            {
+                foreach (var m in item.Images.Where(x => x.Statu == StatusType.WaitApproval).ToList())
+                {
+                    lst.Add(new ImageDTO()
+                    {
+>>>>>>> 930b9f9... image
                         Id = m.Id.ToString(),
                         Statu = m.Statu,
                         Data = Convert.ToBase64String(m.Image),
