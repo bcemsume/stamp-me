@@ -27,7 +27,7 @@ namespace StampMe.Business.Concrete
 
             if (rest == null) throw new Exception("Restaurant Bulunumadı..!!");
 
-            if(rest.Info == null ) 
+            if (rest.Info == null)
                 rest.Info = new Info();
 
             rest.Info.PaymentTypes = item.PaymentTypes;
@@ -36,7 +36,7 @@ namespace StampMe.Business.Concrete
             rest.Info.Phone = item.Phone;
 
             await UpdateAsync(rest);
-            
+
         }
 
         public async Task<RestaurantInfoDTO> GetRestaurantInfo(object Id)
@@ -424,7 +424,7 @@ namespace StampMe.Business.Concrete
             }
             return list;
         }
-        
+
         public async Task<IEnumerable<WaitApprovalItemDTO>> GetApprovedPromotion()
         {
             var list = new List<WaitApprovalItemDTO>();
@@ -523,6 +523,77 @@ namespace StampMe.Business.Concrete
         public async Task<IEnumerable<Restaurant>> WhereAsync(Expression<Func<Restaurant, bool>> filter)
         {
             return await _restaurantDal.GetAllAsync(filter);
+        }
+
+        public async Task MenuSave(MenuDTO item)
+        {
+            var rest = await _restaurantDal.GetAsync(x => x.Id == new ObjectId(item.RestId));
+            if (rest == null)
+                throw new Exception("Restaurant Bulunumadı..!!");
+
+            if (rest.Info.Menu == null)
+                rest.Info.Menu = new Menu();
+
+
+            rest.Info.Menu.MenuDetail = item.MenuDetail;
+            rest.Info.Menu.Status = StatusType.Approved;
+
+            if (rest.Info.Menu.Image == null)
+                rest.Info.Menu.Image = new List<Images>();
+
+            var menu = rest.Info.Menu.Image.Where(x => x.Id == new ObjectId(item.Id)).FirstOrDefault();
+
+            if (menu == null)
+            {
+                menu.Id = ObjectId.GenerateNewId();
+                menu.Statu = StatusType.Approved;
+                menu.Image = item.Image;
+            }
+            else
+            {
+                menu.Image = item.Image;
+            }
+
+            await UpdateAsync(rest);
+        }
+
+        public async Task<IEnumerable<MenuDTO>> GetMenuList(object Id)
+        {
+            var rest = await _restaurantDal.GetAsync(x => x.Id == new ObjectId((string)Id));
+            if (rest == null)
+                throw new Exception("Restaurant Bulunumadı..!!");
+
+            if (rest.Info.Menu == null)
+                rest.Info.Menu = new Menu();
+
+            var list = rest.Info.Menu.Image.Select(x => new MenuDTO
+            {
+                Image = x.Image,
+                Id = x.Id.ToString()
+
+            }).ToList();
+
+            if (list.Count > 0)
+            {
+                list[0].MenuDetail = rest.Info.Menu.MenuDetail;
+            }
+
+            return list;
+
+        }
+        public async Task MenuDelete(MenuDTO item)
+        {
+            var rest = await _restaurantDal.GetAsync(x => x.Id == new ObjectId(item.RestId));
+            if (rest == null)
+                throw new Exception("Restaurant Bulunumadı..!!");
+
+            var menu = rest.Info.Menu.Image.FirstOrDefault(x => x.Id == new ObjectId(item.Id));
+
+            if (menu == null)
+                throw new Exception("Menü Bulunumadı..!!");
+
+            rest.Info.Menu.Image.Remove(menu);
+            await UpdateAsync(rest);
         }
     }
 }

@@ -174,7 +174,24 @@ namespace StampMe.API.Controllers
         [HttpGet]
         public async Task<RestaurantInfoDTO> GetRestaurantInfo(string Id)
         {
-           return await _restaurantService.GetRestaurantInfo(Id);
+            return await _restaurantService.GetRestaurantInfo(Id);
+        }
+
+        [HttpPost]
+        public async Task MenuSave([FromBody]MenuDTO item)
+        {
+            await _restaurantService.MenuSave(item);
+        }
+        [HttpGet]
+        public async Task<IEnumerable<MenuDTO>> GetMenuList(string Id)
+        {
+
+            return await _restaurantService.GetMenuList(Id);
+        }
+        [HttpPost]
+        public async Task MenuDelete([FromBody]MenuDTO item)
+        {
+            await _restaurantService.MenuDelete(item);
         }
 
     }
