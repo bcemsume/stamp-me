@@ -545,16 +545,20 @@ namespace StampMe.Business.Concrete
 
             if (menu == null)
             {
+                menu = new Images();
                 menu.Id = ObjectId.GenerateNewId();
                 menu.Statu = StatusType.Approved;
                 menu.Image = item.Image;
+
+                rest.Info.Menu.Image.Add(menu);
             }
             else
             {
                 menu.Image = item.Image;
-            }
 
+            }
             await UpdateAsync(rest);
+
         }
 
         public async Task<IEnumerable<MenuDTO>> GetMenuList(object Id)

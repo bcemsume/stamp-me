@@ -6,6 +6,7 @@ import { ImageDataDTO } from './restaurant-profile.model';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ToasterConfig, ToasterService, Toast } from 'angular2-toaster';
 import { debounce } from 'rxjs/operators/debounce';
+import { DxDataGridComponent } from 'devextreme-angular';
 
 @Component({
     moduleId: module.id,
@@ -24,11 +25,35 @@ export class RestaurantProfileComponent implements OnInit, AfterViewInit {
     odemeTipleri: IMultiSelectOption[];
     popupImgVisible: any;
     @ViewChild('btnCloseImageModal') btnCloseImageModal: ElementRef;
+    @ViewChild(DxDataGridComponent) dataGrid: DxDataGridComponent;
 
     form = new FormGroup({
         Info: new FormControl('', Validators.required),
         Data: new FormControl('', Validators.required),
     });
+
+    public defaultDueDate = new Date();
+    formUrunEkleme = new FormGroup({
+        Id: new FormControl(null),
+        Description: new FormControl('', Validators.required),
+        Status: new FormControl(0, Validators.required),
+        DueDate: new FormControl(this.defaultDueDate.getDate() + "/" + (this.defaultDueDate.getMonth() + 1) + "/" + this.defaultDueDate.getFullYear(), Validators.required),
+    });
+
+    formPromosyonEkleme = new FormGroup({
+        Id: new FormControl(null),
+        ProductId: new FormControl('', Validators.required),
+        Status: new FormControl(0, Validators.required),
+        Claim: new FormControl(10, Validators.required),
+    });
+
+    formMenuEkleme = new FormGroup({
+        Id: new FormControl(null),
+        RestId: new FormControl(null),
+        Image: new FormControl(null),
+        MenuDetail: new FormControl(null, Validators.required),
+    });
+
 
     public config1: ToasterConfig = new ToasterConfig({
         positionClass: 'toast-top-right'
@@ -49,12 +74,32 @@ export class RestaurantProfileComponent implements OnInit, AfterViewInit {
     loadImages() {
         this.imgDataSource = null;
         this.svc.getRestImages().subscribe(x => {
-            this.imgDataSource = x; console.log(x);
+            this.imgDataSource = x;
+        });
+    }
+
+    loadUrunler() {
+        this.urunListesi = null;
+        this.svc.getProducts().subscribe(x => {
+            this.urunListesi = x
+        });
+    }
+
+    loadPromosyonlar() {
+        this.promosyonListesi = null;
+        this.svc.getPromotions().subscribe(x => {
+            this.promosyonListesi = x
+        });
+    }
+
+    loadMenu() {
+        this.menuListesi = null;
+        this.svc.getMenus().subscribe(x => {
+            this.menuListesi = x
         });
     }
 
     ngOnInit() {
-
         this.loadImages();
         this.calismaGunleri = [
             { id: 1, name: 'Pazartesi' },
@@ -86,11 +131,23 @@ export class RestaurantProfileComponent implements OnInit, AfterViewInit {
             });
 
             for (let index = 0; index < x.workingHours.split(',').length; index++) {
-                this.someRange[index]= +x.workingHours.split(',')[index];
-                
+                this.someRange[index] = +x.workingHours.split(',')[index];
+
             }
             x.workingHours.split(',').forEach(element => {
             });
+
+        });
+
+        this.svc.getMenus().subscribe(x => {
+            debugger;
+            console.log(x);
+            this.menuListesi = x;
+        });
+
+        this.svc.getAll().subscribe(x => {
+            this.urunListesi = x["product"];
+            this.promosyonListesi = x["promotion"];
 
         });
     }
@@ -131,7 +188,24 @@ export class RestaurantProfileComponent implements OnInit, AfterViewInit {
             };
         }
     }
+
+    onFileChangeMenu(event) {
+        debugger;
+        let reader = new FileReader();
+        if (event.target.files && event.target.files.length > 0) {
+            let file = event.target.files[0];
+            reader.readAsDataURL(file);
+            reader.onload = () => {
+                this.formMenuEkleme.get('Image').setValue(reader.result.split(',')[1]);
+            };
+        }
+    }
+
     phone: any;
+    urunListesi: any;
+    promosyonListesi: any;
+    menuListesi: any;
+
     btnCalismaOdeme() {
         debugger;
         let data = {
@@ -175,6 +249,61 @@ export class RestaurantProfileComponent implements OnInit, AfterViewInit {
         });
     }
 
+    onSubmitUrunEkle() {
+        debugger;
+        this.svc.addUrun(this.formUrunEkleme.value).subscribe(x => {
+            document.getElementById('btnCloseUrunEkleModal').click();
+            this.loadUrunler();
+        });
+    }
+
+    onSubmitPromosyonEkle() {
+        debugger;
+        this.svc.addPromosyon(this.formUrunEkleme.value).subscribe(x => {
+            document.getElementById('btnCloseUrunEkleModal').click();
+            this.loadPromosyonlar();
+        });
+    }
+
+    onSubmitMenuEkle() {
+        debugger;
+        this.svc.addMenu(this.formMenuEkleme.value).subscribe(x => {
+            document.getElementById('btnCloseUrunEkleModal').click();
+            this.loadMenu();
+        });
+    }
+
+    btnEditUrun(data) {
+        if (data.instance.getSelectedRowsData().length <= 0) {
+            document.getElementById('btnCloseUrunEkleModal').click();
+            this.popErrorToast('Lütfen bir kayıt seçiniz');
+            return;
+        }
+        var item = data.instance.getSelectedRowsData()[0];
+        debugger;
+        this.formUrunEkleme.setValue({
+            Id: item.id,
+            Description: item.description,
+            Status: item.status,
+            DueDate: item.dueDate
+        });
+    }
+
+    btnEditPromosyon(data) {
+        if (data.instance.getSelectedRowsData().length <= 0) {
+            document.getElementById('btnCloseUrunEkleModal').click();
+            this.popErrorToast('Lütfen bir kayıt seçiniz');
+            return;
+        }
+        var item = data.instance.getSelectedRowsData()[0];
+        debugger;
+        this.formPromosyonEkleme.setValue({
+            Id: item.id,
+            ProductId: item.productId,
+            Status: item.status,
+            Claim: item.claim
+        });
+    }
 
     lastRowCLickedId: number;
     lastRowClickedTime: Date;

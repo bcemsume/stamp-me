@@ -73,6 +73,10 @@
                             <dxo-selection [selectAllMode]="allPages" [showCheckBoxesMode]="onClick" mode="multiple"></dxo-selection>
                             <dxi-column dataField="info"></dxi-column>
                             <dxi-column dataField="statu"></dxi-column>
+                            <dxi-column caption="Resim" dataField="data" cellTemplate="imageTemplate2"></dxi-column>
+                            <div *dxTemplate="let data of 'imageTemplate2'">
+                                <img style="height:50px; width:50px; float: right;" [src]="'data:image/jpg;base64,'+data.value" />
+                            </div>
                         </dx-data-grid>
                         <!--end: Datatable -->
                     </div>
@@ -251,7 +255,7 @@
                                                                 </span>
                                                             </li>
                                                             <li class="m-nav__item">
-                                                                <a (click)="this.form.reset(); this.popupTitle='Yeni Ekle'" href="" class="m-nav__link" data-toggle="modal" data-target="#m_modal_4">
+                                                                <a (click)="this.form.reset(); this.popupTitle='Yeni Ekle'" href="" class="m-nav__link" data-toggle="modal" data-target="#modelUrunEkleme">
                                                                     <i class="m-nav__link-icon flaticon-user-add"></i>
                                                                     <span class="m-nav__link-text">
                                                                         Yeni Ekle
@@ -267,7 +271,7 @@
                                                                 </a>
                                                             </li>
                                                             <li class="m-nav__item">
-                                                                <a href="" class="m-nav__link" (click)="btnEdit(); this.popupTitle='Düzenle'" data-toggle="modal" data-target="#m_modal_4">
+                                                                <a href="" class="m-nav__link" (click)="btnEditUrun(urunGrid);  this.popupTitle='Düzenle'" data-toggle="modal" data-target="#modelUrunEkleme">
                                                                     <i class="m-nav__link-icon flaticon-edit"></i>
                                                                     <span class="m-nav__link-text">
                                                                         Düzenle
@@ -286,13 +290,20 @@
                     </div>
                     <div class="m-portlet__body">
                         <!--begin: Datatable -->
-                        <dx-data-grid #grid id="gridContainer" [dataSource]="dataSource" [showRowLines]="true" [showBorders]="true">
+                        <dx-data-grid #urunGrid id="gridContainer" [dataSource]="urunListesi" [showRowLines]="true" [showBorders]="true">
 
                             <dxo-paging [pageSize]="20"></dxo-paging>
                             <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 50, 100]" [showInfo]="true">
                             </dxo-pager>
                             <dxo-selection [selectAllMode]="allPages" [showCheckBoxesMode]="onClick" mode="multiple"></dxo-selection>
+                            <dxi-column caption="Açıklama" dataField="description"></dxi-column>
+                            <dxi-column caption="Bitiş Tarih" dataField="dueDate"></dxi-column>
+                            <dxi-column caption="Durum" dataField="status" cellTemplate="statusTemplate"></dxi-column>
 
+                            <div *dxTemplate="let data of 'statusTemplate'">
+                                <span *ngIf="data.value === 0">Onay Bekleyen</span>
+                                <span *ngIf="data.value === 1">Onaylı</span>
+                            </div>
                         </dx-data-grid>
                         <!--end: Datatable -->
                     </div>
@@ -333,7 +344,7 @@
                                                                 </span>
                                                             </li>
                                                             <li class="m-nav__item">
-                                                                <a (click)="this.form.reset(); this.popupTitle='Yeni Ekle'" href="" class="m-nav__link" data-toggle="modal" data-target="#m_modal_4">
+                                                                <a (click)="this.form.reset(); this.popupTitle='Yeni Ekle'" href="" class="m-nav__link" data-toggle="modal" data-target="#modelPromosyonEkleme">
                                                                     <i class="m-nav__link-icon flaticon-user-add"></i>
                                                                     <span class="m-nav__link-text">
                                                                         Yeni Ekle
@@ -349,7 +360,7 @@
                                                                 </a>
                                                             </li>
                                                             <li class="m-nav__item">
-                                                                <a href="" class="m-nav__link" (click)="btnEdit(); this.popupTitle='Düzenle'" data-toggle="modal" data-target="#m_modal_4">
+                                                                <a href="" class="m-nav__link" (click)="btnEditPromosyon(gridPromosyon); this.popupTitle='Düzenle'" data-toggle="modal" data-target="#modelPromosyonEkleme">
                                                                     <i class="m-nav__link-icon flaticon-edit"></i>
                                                                     <span class="m-nav__link-text">
                                                                         Düzenle
@@ -368,13 +379,18 @@
                     </div>
                     <div class="m-portlet__body">
                         <!--begin: Datatable -->
-                        <dx-data-grid #grid id="gridContainer" [dataSource]="dataSource" [showRowLines]="true" [showBorders]="true">
-
+                        <dx-data-grid #gridPromosyon id="gridContainer" [dataSource]="promosyonListesi" [showRowLines]="true" [showBorders]="true">
                             <dxo-paging [pageSize]="20"></dxo-paging>
                             <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 50, 100]" [showInfo]="true">
                             </dxo-pager>
                             <dxo-selection [selectAllMode]="allPages" [showCheckBoxesMode]="onClick" mode="multiple"></dxo-selection>
-
+                            <dxi-column caption="Açıklama" dataField="product.Description"></dxi-column>
+                            <dxi-column caption="Durum" dataField="status" cellTemplate="statusTemplate"></dxi-column>
+                            <div *dxTemplate="let data of 'statusTemplate'">
+                                <span *ngIf="data.value === 0">Onay Bekleyen</span>
+                                <span *ngIf="data.value === 1">Onaylı</span>
+                            </div>
+                            <dxi-column caption="Hak" dataField="claim"></dxi-column>
                         </dx-data-grid>
                         <!--end: Datatable -->
                     </div>
@@ -413,7 +429,7 @@
                                                                 </span>
                                                             </li>
                                                             <li class="m-nav__item">
-                                                                <a (click)="this.form.reset(); this.popupTitle='Yeni Ekle'" href="" class="m-nav__link" data-toggle="modal" data-target="#m_modal_4">
+                                                                <a (click)="this.form.reset(); this.popupTitle='Yeni Ekle'" href="" class="m-nav__link" data-toggle="modal" data-target="#modalMenuEkleme">
                                                                     <i class="m-nav__link-icon flaticon-user-add"></i>
                                                                     <span class="m-nav__link-text">
                                                                         Yeni Ekle
@@ -425,14 +441,6 @@
                                                                     <i class="m-nav__link-icon flaticon-delete"></i>
                                                                     <span class="m-nav__link-text">
                                                                         Sil
-                                                                    </span>
-                                                                </a>
-                                                            </li>
-                                                            <li class="m-nav__item">
-                                                                <a href="" class="m-nav__link" (click)="btnEdit(); this.popupTitle='Düzenle'" data-toggle="modal" data-target="#m_modal_4">
-                                                                    <i class="m-nav__link-icon flaticon-edit"></i>
-                                                                    <span class="m-nav__link-text">
-                                                                        Düzenle
                                                                     </span>
                                                                 </a>
                                                             </li>
@@ -448,13 +456,17 @@
                     </div>
                     <div class="m-portlet__body">
                         <!--begin: Datatable -->
-                        <dx-data-grid #grid id="gridContainer" [dataSource]="dataSource" [showRowLines]="true" [showBorders]="true">
+                        <dx-data-grid #gridMenu id="gridContainer" [dataSource]="menuListesi" [showRowLines]="true" [showBorders]="true">
 
                             <dxo-paging [pageSize]="20"></dxo-paging>
                             <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 50, 100]" [showInfo]="true">
                             </dxo-pager>
                             <dxo-selection [selectAllMode]="allPages" [showCheckBoxesMode]="onClick" mode="multiple"></dxo-selection>
-
+                            <dxi-column caption="Menu Detaylı" dataField="menuDetail"></dxi-column>
+                            <dxi-column caption="Resim" dataField="image" cellTemplate="imageTemplate"></dxi-column>
+                            <div *dxTemplate="let data of 'imageTemplate'">
+                                <img style="height:50px; width:50px; float: right;" [src]="'data:image/jpg;base64,'+data.value" />
+                            </div>
                         </dx-data-grid>
                         <!--end: Datatable -->
                     </div>
@@ -515,11 +527,173 @@
 </div>
 
 
+<!-- Ürün ekleme Modalı -->
+<div class="modal fade" id="modelUrunEkleme" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Ürün Ekle
+                </h5>
+                <button id="btnCloseUrunEkleModal" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">
+                        &times;
+                    </span>
+                </button>
+            </div>
+            <form [formGroup]="formUrunEkleme" (ngSubmit)="onSubmitUrunEkle()">
+
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="recipient-name" class="form-control-label">
+                            Açıklama :
+                        </label>
+                        <div [hidden]="form.controls.Info.valid || form.controls.Info.pristine" class="alert alert-danger">Bu alanı boş geçemezsiniz.</div>
+                        <input formControlName="Description" type="text" class="form-control" id="recipient-name1" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        Kapat
+                    </button>
+                    <button [disabled]="!formUrunEkleme.valid" type="submit" class="btn btn-primary">
+                        Kaydet
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Promosyon ekleme Modalı -->
+<div class="modal fade" id="modelPromosyonEkleme" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Promosyon Ekle
+                </h5>
+                <button id="btnClosePromosyonEkleModal" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">
+                        &times;
+                    </span>
+                </button>
+            </div>
+            <form [formGroup]="formPromosyonEkleme" (ngSubmit)="onSubmitPromosyonEkle()">
+
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="form-group m-form__group">
+                            <label class="col-form-label col-lg-3 col-sm-12">
+                                Ürün
+                            </label>
+                            <dx-select-box formControlName="ProductId" [dataSource]="urunListesi" valueExpr="id" displayExpr="description"> </dx-select-box>
+                        </div>
+                        <div class="form-group m-form__group">
+                            <label>
+                                Hak Sayısı:
+                            </label>
+                            <input formControlName="Claim" type="text" class="form-control m-input" placeholder="">
+                            <!-- <div [hidden]="form.controls.Claim.valid || form.controls.Claim.pristine" class="alert alert-danger">Bu alanı boş geçemezsiniz.</div> -->
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        Kapat
+                    </button>
+                    <button [disabled]="!formUrunEkleme.valid" type="submit" class="btn btn-primary">
+                        Kaydet
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 
-<dx-popup class="popup" [showTitle]="true" title="Resim" [dragEnabled]="false" [closeOnOutsideClick]="true"
-    [(visible)]="popupImgVisible">
+<!-- Menu ekleme Modalı -->
+<div class="modal fade" id="modalMenuEkleme" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Menu Ekle
+                </h5>
+                <button id="btnCloseMenuEkleModal" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">
+                        &times;
+                    </span>
+                </button>
+            </div>
+            <form [formGroup]="formMenuEkleme" (ngSubmit)="onSubmitMenuEkle()">
+
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="form-group m-form__group">
+                            <label class="col-form-label col-lg-3 col-sm-12">
+                                Resim :
+                            </label>
+                            <div></div>
+                            <label class="custom-file">
+                                <input type="file" id="file2" (change)="onFileChangeMenu($event)" #fileInput accept="image/*" class="custom-file-input">
+                                <span class="custom-file-control">{{fileInput.name}}</span>
+                            </label>
+                        </div>
+                        <div class="form-group m-form__group">
+                            <label class="col-form-label col-lg-3 col-sm-12">
+                                Menu Detayı :
+                            </label>
+                            <input formControlName="MenuDetail" type="text" class="form-control m-input" placeholder="">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        Kapat
+                    </button>
+                    <button [disabled]="!formMenuEkleme.valid" type="submit" class="btn btn-primary">
+                        Kaydet
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<dx-popup class="popup" [showTitle]="true" title="Resim" [dragEnabled]="false" [closeOnOutsideClick]="true" [(visible)]="popupImgVisible">
     <div *dxTemplate="let data of 'content'">
         <img [src]="'data:image/jpg;base64,'+imagePath" />
     </div>
 </dx-popup>
+
+
+<div class="modal fade" id="modalConfirm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Sil
+                </h5>
+                <button id="btnCloseConfirmModal" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">
+                        &times;
+                    </span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    Silme işlemine devam etmek istediğinize emin misinizz ?
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    Kapat
+                </button>
+                <button type="submit" (click)="btnDeleteContract(gridContract)" class="btn btn-primary">
+                    Sil
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

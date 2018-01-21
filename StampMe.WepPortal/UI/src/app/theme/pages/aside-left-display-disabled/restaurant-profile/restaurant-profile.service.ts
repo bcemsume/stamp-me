@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpService } from '../../../../shared/http.service';
-import { ImageDataDTO } from './restaurant-profile.model';
+import { ImageDataDTO, UrunEkleDTO, PromosyonEkleDTO, MenuEkleDTO } from './restaurant-profile.model';
 
 @Injectable()
 export class RestaurantService {
@@ -16,6 +16,45 @@ export class RestaurantService {
         return this.http.post(`restaurant/AddImageAsync?id=` + this.http.currentUser.id, imageData).map((res) => {
             return res;
         });
+    }
+
+    addUrun(urunEkleData: UrunEkleDTO) {
+        debugger;
+        return this.http.post(`restaurant/AddUpdateProduct?id=` + this.http.currentUser.id, urunEkleData).map((res) => {
+            return res;
+        });
+    }
+
+    addPromosyon(PromosyonEkleData: PromosyonEkleDTO) {
+        debugger;
+        return this.http.post(`restaurant/AddUpdatePromotion?id=` + this.http.currentUser.id, PromosyonEkleData).map((res) => {
+            return res;
+        });
+    }
+
+    addMenu(MenuEkleData) {
+        debugger;
+        MenuEkleData.restId = this.http.currentUser.id;
+        return this.http.post('restaurant/MenuSave', MenuEkleData).map((res) => {
+            return res;
+        });
+    }
+
+    getAll() {
+        return this.http.get(`restaurant/Get/` + this.http.currentUser.id).map(x => x.json());
+    }
+
+    getProducts() {
+        return this.http.get(`restaurant/Get/` + this.http.currentUser.id).map(x => x.json()["product"]);
+    }
+
+    getPromotions() {
+        return this.http.get(`restaurant/Get/` + this.http.currentUser.id).map(x => x.json()["promotions"]);
+    }
+
+    getMenus() {
+        debugger;
+        return this.http.get(`restaurant/GetMenuList?id=` + this.http.currentUser.id).map(x => x.json());
     }
 
     getRestImages() {
@@ -35,7 +74,7 @@ export class RestaurantService {
     SaveRestaurantInfo(data) {
         debugger;
         data.Id = this.http.currentUser.id;
-        return this.http.post(`restaurant/SaveRestaurantInfo`, data).map(x=> x);
+        return this.http.post(`restaurant/SaveRestaurantInfo`, data).map(x => x);
     }
 
     getRestaurantInfo() {

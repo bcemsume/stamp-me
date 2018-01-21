@@ -10,3 +10,40 @@
 #custom-mobile-head-tools li {
     list-style: none;
 } 	  
+
+.dropdown-menu>li.active>a:hover{
+    background: #5867dd;
+    color: white;
+}	  
+
+.dropdown-menu>li.active>a{
+    color: white;
+}
+
+.dropdown-menu>li>a [type=checkbox]{
+    display: none;
+}
+
+.dropdown-menu>li>a [type=checkbox] + span:before{
+    content: "";
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.3);
+    position: relative;
+    margin-right: 6px;
+    top: 5px;
+}
+
+.dropdown-menu>li.active>a [type=checkbox] + span:before{
+    content: "✔";
+    color:white;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background: rgba(0, 0, 0, 0.3);
+    position: relative;
+    margin-right: 6px;
+    top: 1px;
+    text-align: center;
+}
