@@ -599,5 +599,20 @@ namespace StampMe.Business.Concrete
             rest.Info.Menu.Image.Remove(menu);
             await UpdateAsync(rest);
         }
+
+        public async Task<IEnumerable<AroundMeListDTO>> GetAroundMeList()
+        {
+            var restList = await _restaurantDal.GetAllAsync(x => x.isActive);
+
+            return restList.Select(x => new AroundMeListDTO
+            {
+                Distance = "2 Km",
+                Id = x.Id.ToString(),
+                isPromo = x.isPromo,
+                Name = x.Name,
+                Image = x.Images.FirstOrDefault(z => z.Statu == StatusType.Approved).Image
+            }).ToList();
+        }
+
     }
 }

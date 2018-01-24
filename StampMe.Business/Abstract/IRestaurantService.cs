@@ -44,5 +44,7 @@ namespace StampMe.Business.Abstract
         Task MenuSave(MenuDTO item);
         Task<IEnumerable<MenuDTO>> GetMenuList(object Id);
         Task MenuDelete(MenuDTO item);
+
+        Task<IEnumerable<AroundMeListDTO>> GetAroundMeList();
     }
 }

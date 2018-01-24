@@ -17,7 +17,6 @@ namespace StampMe.Business.Abstract
         Task<User> FirstOrDefaultAsync(Expression<Func<User, bool>> filter);
         Task<IEnumerable<User>> WhereAsync(Expression<Func<User, bool>> filter);
         Task<UserDTO> Login(UserLoginDTO item);
-
     }
 
 }
