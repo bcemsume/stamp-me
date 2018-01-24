@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 using StampMe.Business.Abstract;
+using StampMe.Common.CustomDTO;
 using StampMe.Entities.Concrete;
 
 namespace StampMe.API.Controllers
@@ -49,10 +50,16 @@ namespace StampMe.API.Controllers
 
         // DELETE api/values/5
         [HttpDelete("DeleteAsync")]
-        public async  Task DeleteAsync(string id, User item)
+        public async Task DeleteAsync(string id, User item)
         {
             item.Id = new ObjectId(id);
             await _userService.DeleteAsync(item);
+        }
+
+        [HttpPost]
+        public async Task<UserDTO> Login([FromBody] UserLoginDTO item)
+        {
+            return await _userService.Login(item);
         }
 
     }

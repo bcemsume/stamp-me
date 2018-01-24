@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using StampMe.Entities.Concrete;
 using System.Threading.Tasks;
 using System.Linq.Expressions;
+using StampMe.Common.CustomDTO;
 
 namespace StampMe.Business.Abstract
 {
@@ -15,6 +16,8 @@ namespace StampMe.Business.Abstract
         Task UpdateAsync(User entity);
         Task<User> FirstOrDefaultAsync(Expression<Func<User, bool>> filter);
         Task<IEnumerable<User>> WhereAsync(Expression<Func<User, bool>> filter);
+        Task<UserDTO> Login(UserLoginDTO item);
+
     }
 
 }
