@@ -14,23 +14,7 @@ namespace StampMe.Entities.Concrete
             set;
         }
 
-        public ObjectId UserId
-        {
-            get;
-            set;
-        }
-
-        public ObjectId RestaurantId
-        {
-            get;
-            set;
-        }
-
-        public ObjectId ProductId
-        {
-            get;
-            set;
-        }
+        public ObjectId PromotionId { get; set; }
 
         public byte ClaimCount
         {

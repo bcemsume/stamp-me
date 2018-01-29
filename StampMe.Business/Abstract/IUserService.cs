@@ -10,13 +10,18 @@ namespace StampMe.Business.Abstract
 
     public interface IUserService
     {
-        Task<IEnumerable<User>> GetAllAsync();
-        Task Add(User entity);
-        Task DeleteAsync(User entity);
-        Task UpdateAsync(User entity);
+        Task<IEnumerable<UserDTO>> GetAllAsync();
+        Task Add(UserDTO entity);
+        Task DeleteAsync(UserDTO entity);
+        Task UpdateAsync(UserDTO entity);
         Task<User> FirstOrDefaultAsync(Expression<Func<User, bool>> filter);
         Task<IEnumerable<User>> WhereAsync(Expression<Func<User, bool>> filter);
         Task<UserDTO> Login(UserLoginDTO item);
+
+        Task<IEnumerable<RewardDTO>> GetRewardList(object Id);
+        Task AddRewardAsync(RewardItemDTO item);
+
+        Task UserReward(UserRewardDTO item);
     }
 
 }

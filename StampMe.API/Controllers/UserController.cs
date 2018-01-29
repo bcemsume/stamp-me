@@ -15,7 +15,6 @@ namespace StampMe.API.Controllers
     public class UserController : Controller
     {
         IUserService _userService;
-
         public UserController(IUserService userService)
         {
             _userService = userService;
@@ -24,7 +23,7 @@ namespace StampMe.API.Controllers
         [HttpGet]
         public async Task<IEnumerable<User>> Get()
         {
-            return await _userService.GetAllAsync();
+            throw new NotImplementedException();
         }
 
         [HttpGet("{id}")]
@@ -35,24 +34,22 @@ namespace StampMe.API.Controllers
 
         // POST api/values
         [HttpPost]
-        public async Task AddAsync([FromBody]User item)
+        public async Task AddAsync([FromBody]UserDTO item)
         {
             await _userService.Add(item);
         }
 
         // PUT api/values/5
         [HttpPost]
-        public async Task UpdateAsync(string id, [FromBody]User item)
+        public async Task UpdateAsync([FromBody]UserDTO item)
         {
-            item.Id = new ObjectId(id);
             await _userService.UpdateAsync(item);
         }
 
         // DELETE api/values/5
         [HttpDelete("DeleteAsync")]
-        public async Task DeleteAsync(string id, User item)
+        public async Task DeleteAsync(UserDTO item)
         {
-            item.Id = new ObjectId(id);
             await _userService.DeleteAsync(item);
         }
 
@@ -61,6 +58,13 @@ namespace StampMe.API.Controllers
         {
             return await _userService.Login(item);
         }
+
+        [HttpGet]
+        public async Task<IEnumerable<RewardDTO>> GetRewardList(string Id)
+        {
+            return await _userService.GetRewardList(Id);
+        }
+
 
     }
 }
