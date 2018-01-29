@@ -19,21 +19,24 @@ namespace StampMe.API.Controllers
         {
             _categoriesService = categoriesService;
         }
-
+        [HttpGet]
         public async Task<IEnumerable<CategoriesDTO>> GetAllAsync()
         {
             var result = await _categoriesService.GetAllAsync();
             return result;
         }
-        public async Task Add(CategoriesDTO entity)
+        [HttpPost]
+        public async Task Add([FromBody]CategoriesDTO entity)
         {
             await _categoriesService.Add(entity);
         }
-        public async Task DeleteAsync(CategoriesDTO entity)
+        [HttpPost]
+        public async Task DeleteAsync([FromBody]CategoriesDTO entity)
         {
             await _categoriesService.DeleteAsync(entity);
         }
-        public async Task UpdateAsync(CategoriesDTO entity)
+        [HttpPost]
+        public async Task UpdateAsync([FromBody]CategoriesDTO entity)
         {
             await _categoriesService.UpdateAsync(entity);
         }

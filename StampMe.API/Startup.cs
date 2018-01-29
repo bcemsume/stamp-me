@@ -12,6 +12,7 @@ using StampMe.Business.Abstract;
 using StampMe.Business.Concrete;
 using StampMe.DataAccess.Abstract;
 using StampMe.DataAccess.Concrete;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace StampMe.API
 {
@@ -34,6 +35,12 @@ namespace StampMe.API
                        .AllowAnyHeader();
             }));
 
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
+            });
+
+
             services.AddMvc();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUserDal, MongoUserDal>();
@@ -55,6 +62,15 @@ namespace StampMe.API
 
             app.UseCors("MyPolicy");
             app.UseMvc();
+
+            app.UseSwagger();
+            app.UseStaticFiles();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
+
 
         }
     }

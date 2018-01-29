@@ -194,6 +194,7 @@ namespace StampMe.API.Controllers
             await _restaurantService.MenuDelete(item);
         }
 
+        [HttpGet]
         public async Task<IEnumerable<AroundMeListDTO>> GetAroundMeList()
         {
             return await _restaurantService.GetAroundMeList();

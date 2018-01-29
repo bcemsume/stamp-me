@@ -610,7 +610,7 @@ namespace StampMe.Business.Concrete
                 Id = x.Id.ToString(),
                 isPromo = x.isPromo,
                 Name = x.Name,
-                Image = x.Images.FirstOrDefault(z => z.Statu == StatusType.Approved).Image
+                Image = x.Images == null ? new byte[0] : x.Images.FirstOrDefault(z => z.Statu == StatusType.Approved).Image
             }).ToList();
         }
 
