@@ -45,11 +45,11 @@ export class RestaurantService {
     }
 
     getProducts() {
-        return this.http.get(`restaurant/Get/` + this.http.currentUser.id).map(x => x.json()["product"]);
+        return this.http.get(`restaurant/GetProductByRestaurant?Id=` + this.http.currentUser.id).map(x => x.json());
     }
 
     getPromotions() {
-        return this.http.get(`restaurant/Get/` + this.http.currentUser.id).map(x => x.json()["promotions"]);
+        return this.http.get(`restaurant/GetPromotionByRestaurant?Id=` + this.http.currentUser.id).map(x => x.json());
     }
 
     getMenus() {
@@ -62,7 +62,7 @@ export class RestaurantService {
     }
 
     DeleteImageAsync(imgId) {
-        return this.http.get(`restaurant/GetImages?id=` + this.http.currentUser.id + '&imgId=' + imgId).map(x => x.json());
+        return this.http.get(`restaurant/DeleteImageAsync?Id=` + this.http.currentUser.id + '&imgId=' + imgId).map(x => x);
 
     }
 

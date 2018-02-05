@@ -47,5 +47,16 @@ namespace StampMe.Common.CustomDTO
             set;
         }
         public string ContractName { get; set; }
+
+        public string Longitude
+        {
+            get;
+            set;
+        }
+        public string Latitude
+        {
+            get;
+            set;
+        }
     }
 }

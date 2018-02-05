@@ -91,6 +91,7 @@ namespace StampMe.Entities.Concrete
             get;
             set;
         }
+        public bool isAdmin { get; set; }
     }
     public class Info
     {
@@ -155,12 +156,12 @@ namespace StampMe.Entities.Concrete
 
     public class Adress
     {
-        public string Lang
+        public string Longitude
         {
             get;
             set;
         }
-        public string Latd
+        public string Latitude
         {
             get;
             set;

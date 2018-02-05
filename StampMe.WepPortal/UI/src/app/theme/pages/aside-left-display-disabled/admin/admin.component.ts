@@ -45,11 +45,13 @@ export class AdminComponent implements OnInit, AfterViewInit {
         Password: new FormControl('', Validators.required),
         ContractId: new FormControl('', Validators.required),
         Adress: new FormControl('', Validators.required),
-        isActive: new FormControl(true, Validators.required),
-        isPromo: new FormControl(false, Validators.required),
+        isActive: new FormControl(''),
+        isPromo: new FormControl(''),
         Id: new FormControl(''),
         Product: new FormControl(''),
         Promotion: new FormControl(''),
+        Latitude: new FormControl(''),
+        Longitude:new FormControl('')
     });
     status = [{ Name: "Onaylı", Value: "Approved" }, { Name: "Beklemede", Value: "WaitApproval" }]
 
@@ -169,7 +171,6 @@ export class AdminComponent implements OnInit, AfterViewInit {
             this.prodcutsDTO = this.prodcutsDTO.filter(x => x.Description != "");
 
             this.formProduct.patchValue({ Description: '', Status: 'Approved', DueDate: new Date("2019-01-01") });
-            console.log(this.products);
 
             document.getElementById('btnCloseConfirmProductModal').click();
         }
@@ -189,7 +190,6 @@ export class AdminComponent implements OnInit, AfterViewInit {
             this.promotionDTO = this.promotionDTO.filter(x => x.Claim != "");
 
             this.formPromotion.patchValue({ Claim: "", Status: "Approved", ProductId: "" });
-            console.log(this.products);
 
             document.getElementById('btnCloseConfirmPromotionModal').click();
         }
@@ -204,14 +204,11 @@ export class AdminComponent implements OnInit, AfterViewInit {
     }
 
     btnDelete() {
-        console.log(this.dataGrid.instance.getSelectedRowsData());
 
         this.dataGrid.instance.getSelectedRowsData().forEach(x => {
 
 
             this.svc.deleteRestaurant(x.id).subscribe(z => {
-                console.log(this.dataGrid.instance.getSelectedRowsData()[this.dataGrid.instance.getSelectedRowsData().length - 1].Id);
-                console.log(x.Id);
 
                 if (this.dataGrid.instance.getSelectedRowsData()[this.dataGrid.instance.getSelectedRowsData().length - 1].Id == x.Id) {
                     this.popSubmitToast();
@@ -220,7 +217,6 @@ export class AdminComponent implements OnInit, AfterViewInit {
                 }
 
             }, err => {
-                console.log(err);
                 this.popErrorToast(err)
             });
         }
@@ -228,14 +224,11 @@ export class AdminComponent implements OnInit, AfterViewInit {
     }
 
     btnDeleteContract(data) {
-        console.log(this.dataGrid.instance.getSelectedRowsData());
         debugger;
         data.instance.getSelectedRowsData().forEach(x => {
 
 
             this.svc.deleteContract(x).subscribe(z => {
-                console.log(data.instance.getSelectedRowsData()[data.instance.getSelectedRowsData().length - 1].Id);
-                console.log(x.Id);
 
                 if (data.instance.getSelectedRowsData()[data.instance.getSelectedRowsData().length - 1].Id == x.Id) {
                     this.popSubmitToast();
@@ -244,7 +237,6 @@ export class AdminComponent implements OnInit, AfterViewInit {
                 }
 
             }, err => {
-                console.log(err);
                 this.popErrorToast(err)
             });
         }
@@ -289,7 +281,10 @@ export class AdminComponent implements OnInit, AfterViewInit {
             Id: item.id,
             isPromo: item.isPromo,
             Product: null,
-            Promotion: null
+            Promotion: null,
+            ContractId: this.contractSource.find( x=> x.type == item.contractName).id,
+            Latitude: item.latitude,
+            Longitude: item.longitude
         });
     }
 
@@ -318,18 +313,19 @@ export class AdminComponent implements OnInit, AfterViewInit {
 
     onSubmit() {
         if (!this.form.invalid) {
+            debugger;
             this.sendValue = this.form.value;
             this.sendValue.Product = this.prodcutsDTO;
             this.sendValue.Promotion = this.promotionDTO;
-            this.svc.saveRestaurant(this.form.value).subscribe(x => {
+            this.svc.saveRestaurant(this.sendValue).subscribe(x => {
                 document.getElementById('btnCloseModal').click();
                 this.popSubmitToast();
                 this.gridLoad();
                 this.form.reset();
+                this.sendValue = null;
                 this.promotionDTO = null;
                 this.prodcutsDTO = null;
             }, err => {
-                console.log(err);
                 this.popErrorToast(err)
             }
             );
@@ -365,13 +361,13 @@ export class AdminComponent implements OnInit, AfterViewInit {
 
     contractLoad() {
         this.svc.getContract().subscribe(x => {
-            this.contractSource = x; console.log(x);
+            this.contractSource = x;
         });
     }
 
     imagesLoad() {
         this.svc.getImages().subscribe(x => {
-            this.imagesSource = x; console.log(x);
+            this.imagesSource = x;
         });
     }
 
@@ -386,7 +382,6 @@ export class AdminComponent implements OnInit, AfterViewInit {
                     this.contractLoad();
                     this.formContract.reset();
                 }, err => {
-                    console.log(err);
                     this.popErrorToast(err)
                 }
                 );
@@ -398,7 +393,6 @@ export class AdminComponent implements OnInit, AfterViewInit {
                     this.contractLoad();
                     this.formContract.reset();
                 }, err => {
-                    console.log(err);
                     this.popErrorToast(err)
                 }
                 );
@@ -415,7 +409,6 @@ export class AdminComponent implements OnInit, AfterViewInit {
                 this.contractLoad();
                 this.formContract.reset();
             }, err => {
-                console.log(err);
                 this.popErrorToast(err)
             }
             );

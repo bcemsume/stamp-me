@@ -9,11 +9,13 @@ declare let mLayout: any;
 })
 export class HeaderNavComponent implements OnInit, AfterViewInit {
 
-
+    currentUser: any;
     constructor() {
 
     }
+    
     ngOnInit() {
+        this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
     }
     ngAfterViewInit() {

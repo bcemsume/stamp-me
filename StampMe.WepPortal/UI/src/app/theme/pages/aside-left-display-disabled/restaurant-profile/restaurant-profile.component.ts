@@ -20,7 +20,7 @@ export class RestaurantProfileComponent implements OnInit, AfterViewInit {
     imageDTO: ImageDataDTO = new ImageDataDTO();
     calismaGunleriModel: number[] = [];
     calismaGunleri: IMultiSelectOption[];
-
+    urunCombobox: any = [];
     odemeTipleriModel: number[] = [];
     odemeTipleri: IMultiSelectOption[];
     popupImgVisible: any;
@@ -79,16 +79,24 @@ export class RestaurantProfileComponent implements OnInit, AfterViewInit {
     }
 
     loadUrunler() {
-        this.urunListesi = null;
-        this.svc.getProducts().subscribe(x => {
-            this.urunListesi = x
-        });
+
     }
 
     loadPromosyonlar() {
         this.promosyonListesi = null;
         this.svc.getPromotions().subscribe(x => {
-            this.promosyonListesi = x
+            this.promosyonListesi = x;
+
+            this.urunListesi = null;
+            this.svc.getProducts().subscribe(x => {
+                this.urunListesi = x;
+                this.urunCombobox = [];
+                this.urunCombobox = this.urunListesi.filter(x => x.status != 'WaitApproval');
+                this.promosyonListesi.forEach(element => {
+                    this.urunCombobox =  this.urunCombobox.filter(x=> x.productId != element.productId)
+                });
+            });
+
         });
     }
 
@@ -145,11 +153,8 @@ export class RestaurantProfileComponent implements OnInit, AfterViewInit {
             this.menuListesi = x;
         });
 
-        this.svc.getAll().subscribe(x => {
-            this.urunListesi = x["product"];
-            this.promosyonListesi = x["promotion"];
-
-        });
+        this.loadPromosyonlar();
+        this.loadUrunler();
     }
     toasterService: ToasterService;
 
@@ -177,6 +182,18 @@ export class RestaurantProfileComponent implements OnInit, AfterViewInit {
     };
 
     someRange = [9, 21];
+
+    btnDeleteImage(data) {
+        debugger;
+        var img = data.instance.getSelectedRowsData()[0];
+
+        this.svc.DeleteImageAsync(img.id).subscribe(x => {
+            document.getElementById('btnCloseConfirmModal').click();
+            // btnCloseConfirmModal
+            this.popSubmitToast();
+        })
+    }
+
 
     onFileChange(event) {
         let reader = new FileReader();
@@ -226,7 +243,7 @@ export class RestaurantProfileComponent implements OnInit, AfterViewInit {
         var toast: Toast = {
             type: 'success',
             title: 'Başarılı',
-            body: 'İşleminiz başaarılı bir şekilde gerçekleştirilmiştir.'
+            body: 'İşleminiz başarılı bir şekilde gerçekleştirilmiştir.'
         };
 
         this.toasterService.pop(toast);
@@ -253,23 +270,30 @@ export class RestaurantProfileComponent implements OnInit, AfterViewInit {
         debugger;
         this.svc.addUrun(this.formUrunEkleme.value).subscribe(x => {
             document.getElementById('btnCloseUrunEkleModal').click();
-            this.loadUrunler();
+            this.loadPromosyonlar();
+            this.formUrunEkleme.reset();
+            this.popSubmitToast();
         });
     }
 
     onSubmitPromosyonEkle() {
         debugger;
-        this.svc.addPromosyon(this.formUrunEkleme.value).subscribe(x => {
-            document.getElementById('btnCloseUrunEkleModal').click();
+        this.svc.addPromosyon(this.formPromosyonEkleme.value).subscribe(x => {
+            document.getElementById('btnClosePromosyonEkleModal').click();
             this.loadPromosyonlar();
+            this.formPromosyonEkleme.reset();
+            this.popSubmitToast();
         });
     }
 
     onSubmitMenuEkle() {
         debugger;
+        this.formMenuEkleme.value.Id = "";
         this.svc.addMenu(this.formMenuEkleme.value).subscribe(x => {
-            document.getElementById('btnCloseUrunEkleModal').click();
+            document.getElementById('btnCloseMenuEkleModal').click();
             this.loadMenu();
+            this.formMenuEkleme.reset();
+            this.popSubmitToast();
         });
     }
 

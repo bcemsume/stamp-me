@@ -33,6 +33,10 @@ namespace StampMe.Business.Abstract
         Task<IEnumerable<WaitApprovalItemDTO>> GetApprovedProduct();
         Task<IEnumerable<WaitApprovalItemDTO>> GetApprovedPromotion();
 
+        Task<IEnumerable<WaitApprovalItemDTO>> GetProductByRestaurant(object Id);
+        Task<IEnumerable<WaitApprovalItemDTO>> GetPromotionByRestaurant(object Id);
+
+
         Task ApprovedImageAsync(ImageAprovedDTO item);
         Task<List<ImageDTO>> GetApprovedImage();
         Task<List<ImageDTO>> GetWatingApprovalImage();

@@ -14,6 +14,8 @@ namespace StampMe.Common.CustomDTO
             set;
         }
 
+        public bool isAdmin { get; set; }
+
 
     }
 }

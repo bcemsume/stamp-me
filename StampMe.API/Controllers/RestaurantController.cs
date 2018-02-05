@@ -199,6 +199,19 @@ namespace StampMe.API.Controllers
         {
             return await _restaurantService.GetAroundMeList();
         }
+
+        [HttpGet]
+        public async Task<IEnumerable<WaitApprovalItemDTO>> GetProductByRestaurant(string Id)
+        {
+            return await _restaurantService.GetProductByRestaurant(Id);
+        }
+
+        [HttpGet]
+        public async Task<IEnumerable<WaitApprovalItemDTO>> GetPromotionByRestaurant(string Id)
+        {
+            return await _restaurantService.GetPromotionByRestaurant(Id);
+        }
+
     }
 
 }

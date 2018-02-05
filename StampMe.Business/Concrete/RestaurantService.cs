@@ -207,6 +207,8 @@ namespace StampMe.Business.Concrete
                 isPromo = x.isPromo,
                 isActive = x.isActive,
                 Adress = x.Info.Adress.AdressDetail,
+                Latitude = x.Info.Adress.Latitude,
+                Longitude = x.Info.Adress.Longitude,
                 Email = x.Email,
                 Id = x.Id.ToString(),
                 Name = x.Name,
@@ -250,18 +252,18 @@ namespace StampMe.Business.Concrete
 
             result.Id = rest.Id.ToString();
             result.Name = rest.Name;
-
+            result.isAdmin = rest.isAdmin;
             return result;
         }
 
         public async Task AddUpdatePromotion(PromotionDTO item, object Id)
         {
-            var rest = await FirstOrDefaultAsync(x => x.Id == new ObjectId((string)Id));
+            var rest = await FirstOrDefaultAsync(x => x.Id == (string.IsNullOrEmpty((string)Id) ? new ObjectId() : new ObjectId((string)Id)));
             if (rest == null)
                 throw new Exception("Restaurant Bulunumadı..!!");
             bool isNew = false;
 
-            var pro = rest.Promotion.FirstOrDefault(x => x.Id == new ObjectId((string)item.Id));
+            var pro = rest.Promotion.FirstOrDefault(x => x.Id == (string.IsNullOrEmpty((string)item.Id) ? new ObjectId() : new ObjectId((string)item.Id)));
             if (pro == null)
             {
                 isNew = true;
@@ -269,7 +271,7 @@ namespace StampMe.Business.Concrete
 
             }
             if (isNew)
-                rest.Promotion.Add(new Promotion() { Claim = item.Claim, Id = ObjectId.GenerateNewId(), ProductId = item.ProductId, Status = item.Status });
+                rest.Promotion.Add(new Promotion() { Claim = item.Claim, Id = ObjectId.GenerateNewId(), ProductId = new ObjectId((string)item.ProductId), Status = item.Status });
             else
             {
                 pro.Claim = item.Claim;
@@ -286,7 +288,7 @@ namespace StampMe.Business.Concrete
                 throw new Exception("Restaurant Bulunumadı..!!");
             bool isNew = false;
 
-            var pro = rest.Product.FirstOrDefault(x => x.Id == new ObjectId((string)item.Id));
+            var pro = rest.Product.FirstOrDefault(x => x.Id == (string.IsNullOrEmpty((string)item.Id) ? new ObjectId() : new ObjectId((string)item.Id)));
             if (pro == null)
             {
                 isNew = true;
@@ -507,7 +509,7 @@ namespace StampMe.Business.Concrete
                     r.Categories.Add(new Categories() { Id = ObjectId.GenerateNewId(), Definition = item.Definition });
                 }
 
-            r.Info = (new Info() { Adress = new Adress { AdressDetail = entity.Adress } });
+            r.Info = (new Info() { Adress = new Adress { AdressDetail = entity.Adress, Latitude = entity.Latitude, Longitude = entity.Longitude } });
 
             if (isNew)
                 await Add(r);
@@ -541,7 +543,7 @@ namespace StampMe.Business.Concrete
             if (rest.Info.Menu.Image == null)
                 rest.Info.Menu.Image = new List<Images>();
 
-            var menu = rest.Info.Menu.Image.Where(x => x.Id == new ObjectId(item.Id)).FirstOrDefault();
+            var menu = rest.Info.Menu.Image.Where(x => x.Id == (string.IsNullOrEmpty(item.Id) ? new ObjectId() : new ObjectId(item.Id))).FirstOrDefault();
 
             if (menu == null)
             {
@@ -612,6 +614,54 @@ namespace StampMe.Business.Concrete
                 Name = x.Name,
                 Image = x.Images == null ? new byte[0] : x.Images.FirstOrDefault(z => z.Statu == StatusType.Approved).Image
             }).ToList();
+        }
+
+        public async Task<IEnumerable<WaitApprovalItemDTO>> GetProductByRestaurant(object Id)
+        {
+            var list = new List<WaitApprovalItemDTO>();
+            var rests = await _restaurantDal.GetAsync(x => x.Id == new ObjectId((string)Id));
+
+
+
+            foreach (var item in rests.Product)
+            {
+                list.Add(new WaitApprovalItemDTO()
+                {
+                    ProductId = item.Id.ToString(),
+                    RestId = rests.Id.ToString(),
+                    PromotionId = item.Id.ToString(),
+                    ProductName = item.Description,
+                    RestName = rests.Name,
+                    Status = item.Status.ToString(),
+                    Claim = 0
+                });
+            }
+            return list;
+        }
+
+        public async Task<IEnumerable<WaitApprovalItemDTO>> GetPromotionByRestaurant(object Id)
+        {
+            var list = new List<WaitApprovalItemDTO>();
+
+            var rests = await _restaurantDal.GetAsync(x => x.Id == new ObjectId((string)Id));
+
+
+            foreach (var item in rests.Promotion)
+            {
+                var prod = rests.Product.FirstOrDefault(x => x.Id == (ObjectId)item.ProductId);
+
+                list.Add(new WaitApprovalItemDTO()
+                {
+                    ProductId = prod.Id.ToString(),
+                    RestId = rests.Id.ToString(),
+                    PromotionId = item.Id.ToString(),
+                    ProductName = prod.Description,
+                    RestName = rests.Name,
+                    Status = item.Status.ToString(),
+                    Claim = item.Claim
+                });
+            }
+            return list;
         }
 
     }
