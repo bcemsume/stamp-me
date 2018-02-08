@@ -104,8 +104,11 @@
                             <dxi-column dataField="status"></dxi-column>
                             <dxi-column captipn="İşlemler" cellTemplate="islemTemplate"></dxi-column>
                             <div *dxTemplate="let data of 'islemTemplate'">
-                                <button type="button" class="btn m-btn--pill m-btn--air btn-outline-danger" (click)="btnUrunOnay(data)" data-dismiss="modal">
+                                <button type="button" class="btn m-btn--pill m-btn--air btn-outline-primary" (click)="btnUrunOnay(data)" data-dismiss="modal">
                                     Onayla
+                                </button>
+                                <button type="button" class="btn m-btn--pill m-btn--air btn-outline-danger" (click)="btnUrunRed(data)" data-dismiss="modal">
+                                    Reddet
                                 </button>
                             </div>
                         </dx-data-grid>
@@ -138,8 +141,11 @@
                             <dxi-column dataField="status"></dxi-column>
                             <dxi-column captipn="İşlemler" cellTemplate="islemTemplate"></dxi-column>
                             <div *dxTemplate="let data of 'islemTemplate'">
-                                <button type="button" class="btn m-btn--pill m-btn--air btn-outline-danger" (click)="btnPromosyonOnay(data)" data-dismiss="modal">
+                                <button type="button" class="btn m-btn--pill m-btn--air btn-outline-primary" (click)="btnPromosyonOnay(data)" data-dismiss="modal">
                                     Onayla
+                                </button>
+                                <button type="button" class="btn m-btn--pill m-btn--air btn-outline-danger" (click)="btnPromosyonRed(data)" data-dismiss="modal">
+                                    Reddet
                                 </button>
                             </div>
                         </dx-data-grid>
@@ -247,8 +253,11 @@
                             <dxi-column dataField="info"></dxi-column>
                             <dxi-column captipn="İşlemler" cellTemplate="islemTemplate"></dxi-column>
                             <div *dxTemplate="let data of 'islemTemplate'">
-                                <button type="button" class="btn m-btn--pill m-btn--air btn-outline-danger" (click)="btnImagesOnay(data)" data-dismiss="modal">
+                                <button type="button" class="btn m-btn--pill m-btn--air btn-outline-primary" (click)="btnImagesOnay(data)" data-dismiss="modal">
                                     Onayla
+                                </button>
+                                <button type="button" class="btn m-btn--pill m-btn--air btn-outline-danger" (click)="btnImagesRed(data)" data-dismiss="modal">
+                                    Reddet
                                 </button>
                             </div>
                         </dx-data-grid>

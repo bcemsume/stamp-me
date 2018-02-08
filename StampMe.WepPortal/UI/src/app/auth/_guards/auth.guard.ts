@@ -15,7 +15,13 @@ export class AuthGuard implements CanActivate {
         let currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
         if (currentUser) {
-            return true;
+            if (!currentUser.isAdmin && state.url.indexOf('admin') > -1) {
+
+                return false;
+            }else {
+                return true;
+            }
+
         }
 
         this._router.navigate(['/login'], { queryParams: { returnUrl: state.url } });

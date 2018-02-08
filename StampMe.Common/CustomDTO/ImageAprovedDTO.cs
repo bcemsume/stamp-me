@@ -3,7 +3,7 @@ namespace StampMe.Common.CustomDTO
 {
     public class ImageAprovedDTO
     {
-        public object RestId { get; set; }
-        public object ImageId { get; set; }
+        public string RestId { get; set; }
+        public string ImageId { get; set; }
     }
 }

@@ -50,5 +50,10 @@ namespace StampMe.Business.Abstract
         Task MenuDelete(MenuDTO item);
 
         Task<IEnumerable<AroundMeListDTO>> GetAroundMeList();
+
+        Task RejectProduct(WaitApprovalItemDTO item);
+        Task RejectPromotion(WaitApprovalItemDTO item);
+        Task RejectImage(ImageAprovedDTO item);
+
     }
 }

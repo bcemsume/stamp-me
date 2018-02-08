@@ -28,6 +28,7 @@ namespace StampMe.Common.CustomDTO
     public enum StatusType
     {
         WaitApproval,
-        Approved
+        Approved,
+        Reject
     }
 }

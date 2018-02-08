@@ -65,4 +65,16 @@ export class AdminService {
     ApprovedPromotion(item) {
         return this.http.post('restaurant/ApprovedPromotion', item).map(x => x);
     }
+
+    RejectProduct(item) {
+        return this.http.post('restaurant/RejectProduct', item).map(x => x);
+    }
+
+    RejectPromotion(item) {
+        return this.http.post('restaurant/RejectPromotion', item).map(x => x);
+    }
+
+    RejectImage(item) {
+        return this.http.post('restaurant/RejectImage', item).map(x => x);
+    }
 }

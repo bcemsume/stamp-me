@@ -70,7 +70,7 @@
                             <dxo-paging [pageSize]="20"></dxo-paging>
                             <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 50, 100]" [showInfo]="true">
                             </dxo-pager>
-                            <dxo-selection [selectAllMode]="allPages" [showCheckBoxesMode]="onClick" mode="multiple"></dxo-selection>
+                            <dxo-selection [selectAllMode]="allPages" [showCheckBoxesMode]="onClick" mode="single"></dxo-selection>
                             <dxi-column dataField="info"></dxi-column>
                             <dxi-column dataField="statu"></dxi-column>
                             <dxi-column caption="Resim" dataField="data" cellTemplate="imageTemplate2"></dxi-column>
@@ -295,7 +295,7 @@
                             <dxo-paging [pageSize]="20"></dxo-paging>
                             <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 50, 100]" [showInfo]="true">
                             </dxo-pager>
-                            <dxo-selection [selectAllMode]="allPages" [showCheckBoxesMode]="onClick" mode="multiple"></dxo-selection>
+                            <dxo-selection [selectAllMode]="allPages" [showCheckBoxesMode]="onClick" mode="single"></dxo-selection>
                             <dxi-column caption="Açıklama" dataField="productName"></dxi-column>
                             <dxi-column caption="Bitiş Tarih" dataField="dueDate"></dxi-column>
                             <dxi-column caption="Durum" dataField="status" cellTemplate="statusTemplate"></dxi-column>
@@ -303,6 +303,8 @@
                             <div *dxTemplate="let data of 'statusTemplate'">
                                 <span *ngIf="data.value === 'WaitApproval'">Onay Bekleyen</span>
                                 <span *ngIf="data.value === 'Approved'">Onaylı</span>
+                                <span *ngIf="data.value === 'Reject'">Reddedildi</span>
+                                
                             </div>
                         </dx-data-grid>
                         <!--end: Datatable -->
@@ -383,11 +385,12 @@
                             <dxo-paging [pageSize]="20"></dxo-paging>
                             <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 50, 100]" [showInfo]="true">
                             </dxo-pager>
-                            <dxo-selection [selectAllMode]="allPages" [showCheckBoxesMode]="onClick" mode="multiple"></dxo-selection>
+                            <dxo-selection [selectAllMode]="allPages" [showCheckBoxesMode]="onClick" mode="single"></dxo-selection>
                             <dxi-column caption="Açıklama" dataField="productName"></dxi-column>
                             <dxi-column caption="Durum" dataField="status" cellTemplate="statusTemplate"></dxi-column>
                             <div *dxTemplate="let data of 'statusTemplate'">
                                 <span *ngIf="data.value === 'WaitApproval'">Onay Bekleyen</span>
+                                <span *ngIf="data.value === 'Reject'">Reddedildi</span>
                                 <span *ngIf="data.value === 'Approved'">Onaylı</span>
                             </div>
                             <dxi-column caption="Hak" dataField="claim"></dxi-column>
@@ -437,7 +440,7 @@
                                                                 </a>
                                                             </li>
                                                             <li class="m-nav__item">
-                                                                <a href="" class="m-nav__link" data-toggle="modal" data-target="#modalConfirm">
+                                                                <a href="" class="m-nav__link" data-toggle="modal" data-target="#modalConfirmMenu">
                                                                     <i class="m-nav__link-icon flaticon-delete"></i>
                                                                     <span class="m-nav__link-text">
                                                                         Sil
@@ -461,7 +464,7 @@
                             <dxo-paging [pageSize]="20"></dxo-paging>
                             <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 50, 100]" [showInfo]="true">
                             </dxo-pager>
-                            <dxo-selection [selectAllMode]="allPages" [showCheckBoxesMode]="onClick" mode="multiple"></dxo-selection>
+                            <dxo-selection [selectAllMode]="allPages" [showCheckBoxesMode]="onClick" mode="single"></dxo-selection>
                             <dxi-column caption="Menu Detaylı" dataField="menuDetail"></dxi-column>
                             <dxi-column caption="Resim" dataField="image" cellTemplate="imageTemplate"></dxi-column>
                             <div *dxTemplate="let data of 'imageTemplate'">
@@ -691,6 +694,36 @@
                     Kapat
                 </button>
                 <button type="submit" (click)="btnDeleteImage(gridImage)" class="btn btn-primary">
+                    Sil
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalConfirmMenu" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Sil
+                </h5>
+                <button id="btnCloseConfirmMenuModal" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">
+                        &times;
+                    </span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    Silme işlemine devam etmek istediğinize emin misinizz ?
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    Kapat
+                </button>
+                <button type="submit" (click)="btnDeleteMenu(gridMenu)" class="btn btn-primary">
                     Sil
                 </button>
             </div>

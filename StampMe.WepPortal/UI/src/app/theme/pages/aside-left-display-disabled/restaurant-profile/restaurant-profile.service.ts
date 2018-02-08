@@ -66,6 +66,12 @@ export class RestaurantService {
 
     }
 
+    MenuDelete(menuItem) {
+        let item = { restId: this.http.currentUser.id, Id: menuItem.id }
+        return this.http.post('restaurant/MenuDelete', item).map(x => x);
+
+    }
+
     deleteRestaurant(item) {
         return this.http.get(`restaurant/DeleteAsync?id=` + item).map(x => x);
     }

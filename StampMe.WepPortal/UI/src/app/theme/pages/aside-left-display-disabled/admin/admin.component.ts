@@ -66,13 +66,24 @@ export class AdminComponent implements OnInit, AfterViewInit {
         this.svc.ApprovedPromotion({ restId: data.key.restId, PromId: data.key.promotionId }).subscribe(x => { this.popSubmitToast(); this.waitingApPromotion() });
     }
 
+    btnPromosyonRed(data) {
+        this.svc.RejectPromotion({ restId: data.key.restId, promotionId: data.key.promotionId }).subscribe(x => { this.popSubmitToast(); this.waitingApPromotion() });
+    }
+
     btnUrunOnay(data) {
         this.svc.ApprovedProduct({ restId: data.key.restId, ProdId: data.key.productId }).subscribe(x => { this.popSubmitToast(); this.waitingApProduct() });
     }
 
+    btnUrunRed(data) {
+        this.svc.RejectProduct({ restId: data.key.restId, productId: data.key.productId }).subscribe(x => { this.popSubmitToast(); this.waitingApProduct() });
+    }
+
     btnImagesOnay(data) {
-        debugger;
         this.svc.ApprovedImage({ restId: data.key.restId, imageId: data.key.id }).subscribe(x => { this.popSubmitToast(); this.waitingApImage() });
+    }
+
+    btnImagesRed(data) {
+        this.svc.RejectImage({ restId: data.key.restId, imageId: data.key.id }).subscribe(x => { this.popSubmitToast(); this.waitingApImage() });
     }
 
     formProduct = new FormGroup({

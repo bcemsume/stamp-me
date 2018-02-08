@@ -212,6 +212,24 @@ namespace StampMe.API.Controllers
             return await _restaurantService.GetPromotionByRestaurant(Id);
         }
 
+        [HttpPost]
+        public async Task RejectProduct([FromBody]WaitApprovalItemDTO item)
+        {
+            await _restaurantService.RejectProduct(item);
+        }
+        [HttpPost]
+        public async Task RejectPromotion([FromBody]WaitApprovalItemDTO item)
+        {
+            await _restaurantService.RejectPromotion(item);
+        }
+
+        [HttpPost]
+        public async Task RejectImage([FromBody]ImageAprovedDTO item)
+        {
+            await _restaurantService.RejectImage(item);
+        }
+
+
     }
 
 }

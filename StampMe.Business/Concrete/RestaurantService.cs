@@ -664,5 +664,60 @@ namespace StampMe.Business.Concrete
             return list;
         }
 
+        public async Task RejectProduct(WaitApprovalItemDTO item)
+        {
+            var rest = await _restaurantDal.GetAsync(x => x.Id == new ObjectId(item.RestId));
+
+            if (rest == null)
+                throw new Exception("Restaurant Bulunumadı..!!");
+
+            var prod = rest.Product.FirstOrDefault(x=> x.Id == new ObjectId(item.ProductId));
+
+            if (prod == null)
+                throw new Exception("Ürün Bulunamadı..!!");
+
+            prod.Status = StatusType.Reject;
+
+            await UpdateAsync(rest);
+
+        }
+
+
+        public async Task RejectPromotion(WaitApprovalItemDTO item)
+        {
+            var rest = await _restaurantDal.GetAsync(x => x.Id == new ObjectId(item.RestId));
+
+            if (rest == null)
+                throw new Exception("Restaurant Bulunumadı..!!");
+
+            var prod = rest.Promotion.FirstOrDefault(x => x.Id == new ObjectId(item.PromotionId));
+
+            if (prod == null)
+                throw new Exception("Promosyon Bulunamadı..!!");
+
+            prod.Status = StatusType.Reject;
+
+            await UpdateAsync(rest);
+
+        }
+
+
+        public async Task RejectImage(ImageAprovedDTO item)
+        {
+            var rest = await _restaurantDal.GetAsync(x => x.Id == new ObjectId(item.RestId));
+
+            if (rest == null)
+                throw new Exception("Restaurant Bulunumadı..!!");
+
+            var prod = rest.Images.FirstOrDefault(x => x.Id == new ObjectId(item.ImageId));
+
+            if (prod == null)
+                throw new Exception("Resim Bulunamadı..!!");
+
+            prod.Statu = StatusType.Reject;
+
+            await UpdateAsync(rest);
+        }
+
     }
 }

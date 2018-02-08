@@ -190,7 +190,19 @@ export class RestaurantProfileComponent implements OnInit, AfterViewInit {
         this.svc.DeleteImageAsync(img.id).subscribe(x => {
             document.getElementById('btnCloseConfirmModal').click();
             // btnCloseConfirmModal
+            this.loadImages();
             this.popSubmitToast();
+        })
+    }
+
+    btnDeleteMenu(data) {
+        debugger;
+        var img = data.instance.getSelectedRowsData()[0];
+        this.svc.MenuDelete(img).subscribe(x => {
+            document.getElementById('btnCloseConfirmMenuModal').click();
+            // btnCloseConfirmModal
+            this.popSubmitToast();
+            this.loadMenu();
         })
     }
 
