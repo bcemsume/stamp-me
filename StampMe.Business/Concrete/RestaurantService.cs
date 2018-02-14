@@ -8,6 +8,7 @@ using StampMe.DataAccess.Abstract;
 using StampMe.Entities.Concrete;
 using System.Linq;
 using MongoDB.Bson;
+using StampMe.Common.PasswordProtected;
 
 namespace StampMe.Business.Concrete
 {
@@ -202,6 +203,8 @@ namespace StampMe.Business.Concrete
 
             var contract = await _contractDal.GetAllAsync();
 
+
+
             return list.Select(x => new RestaurantListDTO
             {
                 isPromo = x.isPromo,
@@ -246,9 +249,10 @@ namespace StampMe.Business.Concrete
         public async Task<LoginDTO> LoginAsync(string userName, string password)
         {
             var result = new LoginDTO();
-            var rest = await _restaurantDal.GetAsync(x => x.UserName == userName && x.Password == password);
+            var pass = PasswordHash.GetPasswordHash(password);
+            var rest = await _restaurantDal.GetAsync(x => x.UserName == userName && x.Password == pass);
             if (rest == null)
-                rest = await _restaurantDal.GetAsync(x => x.Email == userName && x.Password == password);
+                rest = await _restaurantDal.GetAsync(x => x.Email == userName && x.Password == pass);
 
             result.Id = rest.Id.ToString();
             result.Name = rest.Name;
@@ -474,7 +478,7 @@ namespace StampMe.Business.Concrete
 
             r.Name = entity.Name;
             r.Email = entity.Email;
-            r.Password = entity.Password;
+            r.Password = PasswordHash.GetPasswordHash(entity.Password);
             r.UserName = entity.UserName;
             r.isActive = entity.isActive;
             r.isPromo = entity.isPromo;

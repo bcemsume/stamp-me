@@ -137,14 +137,10 @@ export class RestaurantProfileComponent implements OnInit, AfterViewInit {
             x.workingDays.split(',').forEach(element => {
                 this.calismaGunleriModel.push(+element);
             });
-
-            for (let index = 0; index < x.workingHours.split(',').length; index++) {
-                this.someRange[index] = +x.workingHours.split(',')[index];
-
+            this.someRange = [];
+            for (let index = 0; index < x.workingHours.split(',').length ; index++) {
+                this.someRange.push(+x.workingHours.split(',')[index]);
             }
-            x.workingHours.split(',').forEach(element => {
-            });
-
         });
 
         this.svc.getMenus().subscribe(x => {

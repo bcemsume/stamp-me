@@ -223,7 +223,7 @@
             </div> -->
 
 
-            <div class="col-xl-6">
+            <!-- <div class="col-xl-6">
                 <div class="m-portlet m-portlet--creative m-portlet--bordered-semi" style="height: 89%">
                     <div class="m-portlet__head">
                         <div class="m-portlet__head-caption">
@@ -289,7 +289,6 @@
                         </div>
                     </div>
                     <div class="m-portlet__body">
-                        <!--begin: Datatable -->
                         <dx-data-grid #urunGrid id="gridContainer" [dataSource]="urunListesi" [showRowLines]="true" [showBorders]="true">
 
                             <dxo-paging [pageSize]="20"></dxo-paging>
@@ -307,14 +306,13 @@
                                 
                             </div>
                         </dx-data-grid>
-                        <!--end: Datatable -->
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
 
         <div class="row">
-            <div class="col-xl-6">
+            <!-- <div class="col-xl-6">
                 <div class="m-portlet m-portlet--creative m-portlet--bordered-semi">
                     <div class="m-portlet__head">
                         <div class="m-portlet__head-caption">
@@ -380,7 +378,6 @@
                         </div>
                     </div>
                     <div class="m-portlet__body">
-                        <!--begin: Datatable -->
                         <dx-data-grid #gridPromosyon id="gridContainer" [dataSource]="promosyonListesi" [showRowLines]="true" [showBorders]="true">
                             <dxo-paging [pageSize]="20"></dxo-paging>
                             <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 50, 100]" [showInfo]="true">
@@ -395,10 +392,9 @@
                             </div>
                             <dxi-column caption="Hak" dataField="claim"></dxi-column>
                         </dx-data-grid>
-                        <!--end: Datatable -->
                     </div>
                 </div>
-            </div>
+            </div> -->
 
             <div class="col-xl-6">
                 <div class="m-portlet m-portlet--creative m-portlet--bordered-semi">
@@ -509,9 +505,8 @@
                             Dosya Seç :
                         </label>
                         <div></div>
-                        <label class="custom-file">
-                            <input type="file" id="file2" (change)="onFileChange($event)" #fileInput accept="image/*" class="custom-file-input">
-                            <span class="custom-file-control">{{fileInput.name}}</span>
+                        <label>
+                            <input type="file" (change)="onFileChange($event)" #fileInput accept="image/*">
                         </label>
                     </div>
 
@@ -638,9 +633,8 @@
                                 Resim :
                             </label>
                             <div></div>
-                            <label class="custom-file">
-                                <input type="file" id="file2" (change)="onFileChangeMenu($event)" #fileInput accept="image/*" class="custom-file-input">
-                                <span class="custom-file-control">{{fileInput.name}}</span>
+                            <label>
+                                <input type="file" id="file2" (change)="onFileChangeMenu($event)" #fileInput accept="image/*">
                             </label>
                         </div>
                         <div class="form-group m-form__group">
@@ -666,7 +660,7 @@
 
 <dx-popup class="popup" [showTitle]="true" title="Resim" [dragEnabled]="false" [closeOnOutsideClick]="true" [(visible)]="popupImgVisible">
     <div *dxTemplate="let data of 'content'">
-        <img [src]="'data:image/jpg;base64,'+imagePath" />
+        <img style="max-width: 100%; height: 80%; width: auto\9; " [src]="'data:image/jpg;base64,'+imagePath" />
     </div>
 </dx-popup>
 

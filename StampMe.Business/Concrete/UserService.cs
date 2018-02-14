@@ -8,6 +8,7 @@ using StampMe.Common.CustomDTO;
 using StampMe.DataAccess.Abstract;
 using StampMe.Entities.Concrete;
 using System.Linq;
+using StampMe.Common.PasswordProtected;
 
 namespace StampMe.Business.Concrete
 {
@@ -33,7 +34,7 @@ namespace StampMe.Business.Concrete
                 Gender = entity.Gender,
                 Id = ObjectId.GenerateNewId(),
                 LastName = entity.LastName,
-                Password = entity.Password,
+                Password = PasswordHash.GetPasswordHash(entity.Password),
                 Reward = new List<Reward>(),
                 SocialToken = entity.SocialToken
             };
