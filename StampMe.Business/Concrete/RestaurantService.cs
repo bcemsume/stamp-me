@@ -12,6 +12,7 @@ using StampMe.Common.PasswordProtected;
 using StampMe.Common.MessageLoggingHandler;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using StampMe.Common.ImageUpload;
 
 namespace StampMe.Business.Concrete
 {
@@ -72,9 +73,10 @@ namespace StampMe.Business.Concrete
 
         public async Task AddImageAsync(ImageDTO item, object Id)
         {
-            var directory = Directory.GetCurrentDirectory() + "/images/" + Id;
-            var pa = System.Reflection.Assembly.GetExecutingAssembly();
-            var imgPath = directory + "/" + (string.IsNullOrEmpty(item.Id) ? ObjectId.GenerateNewId().ToString() : item.Id) + ".jpg";
+            var imgId = (string.IsNullOrEmpty(item.Id) ? ObjectId.GenerateNewId().ToString() : item.Id);
+            var imgPath = "/images/" + Id + "/" + imgId + ".jpg";
+            var imgViewPath = "/img/" + Id + "/" + imgId + ".jpg";
+
             var rest = await _restaurantDal.GetAsync(x => x.Id == new MongoDB.Bson.ObjectId((string)Id));
 
             if (rest == null)
@@ -83,20 +85,12 @@ namespace StampMe.Business.Concrete
             if (rest.Images == null)
                 rest.Images = new List<Images>();
 
-
-            if (!Directory.Exists(directory))
-                Directory.CreateDirectory(directory);
-            
-            if (File.Exists(imgPath))
-                File.Delete(imgPath);
-            
-
-            File.WriteAllBytes(imgPath,Convert.FromBase64String(item.Data));
+            await ImageUpload.Upload(item.Data, imgPath);
 
             var image = new Images()
             {
                 Description = item.Info,
-                Image = imgPath,
+                Image = "http://185.187.186.41" + imgViewPath,
                 Id = ObjectId.GenerateNewId(),
                 Statu = StatusType.WaitApproval
             };

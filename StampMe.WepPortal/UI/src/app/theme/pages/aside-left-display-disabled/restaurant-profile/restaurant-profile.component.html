@@ -660,7 +660,7 @@
 
 <dx-popup class="popup" [showTitle]="true" title="Resim" [dragEnabled]="false" [closeOnOutsideClick]="true" [(visible)]="popupImgVisible">
     <div *dxTemplate="let data of 'content'">
-        <img style="max-width: 100%; height: 80%; width: auto\9; " [src]="'data:image/jpg;base64,'+imagePath" />
+        <img style="max-width: 100%; height: 80%; width: auto\9; " [src]="imagePath" />
     </div>
 </dx-popup>
 
