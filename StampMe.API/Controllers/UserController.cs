@@ -20,12 +20,6 @@ namespace StampMe.API.Controllers
             _userService = userService;
         }
 
-        [HttpGet]
-        public async Task<IEnumerable<User>> Get()
-        {
-            throw new NotImplementedException();
-        }
-
         [HttpGet("{id}")]
         public async Task<User> Get(object id)
         {

@@ -75,7 +75,7 @@
                             <dxi-column dataField="statu"></dxi-column>
                             <dxi-column caption="Resim" dataField="data" cellTemplate="imageTemplate2"></dxi-column>
                             <div *dxTemplate="let data of 'imageTemplate2'">
-                                <img style="height:50px; width:50px; float: right;" [src]="'data:image/jpg;base64,'+data.value" />
+                                <img style="height:50px; width:50px; float: right;" [src]="data.value" />
                             </div>
                         </dx-data-grid>
                         <!--end: Datatable -->

@@ -184,7 +184,7 @@ namespace StampMe.Entities.Concrete
             get;
             set;
         }
-        public byte[] Image
+        public string Image
         {
             get;
             set;

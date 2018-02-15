@@ -11,6 +11,7 @@ using MongoDB.Bson;
 using StampMe.Common.PasswordProtected;
 using StampMe.Common.MessageLoggingHandler;
 using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace StampMe.Business.Concrete
 {
@@ -29,9 +30,7 @@ namespace StampMe.Business.Concrete
             var rest = await _restaurantDal.GetAsync(x => x.Id == new ObjectId((string)item.Id));
 
             if (rest == null) 
-                throw new HttpStatusCodeException(StatusCodes.Status404NotFound, "Ödül Bulunumadı..!!");
-
-                throw new Exception("Restaurant Bulunumadı..!!");
+                throw new HttpStatusCodeException(StatusCodes.Status404NotFound, "Restaurant Bulunumadı..!!");
 
             if (rest.Info == null)
                 rest.Info = new Info();
@@ -53,7 +52,6 @@ namespace StampMe.Business.Concrete
 
             if (rest == null) 
                 throw new HttpStatusCodeException(StatusCodes.Status404NotFound, "Ödül Bulunumadı..!!");
-                throw new Exception("Restaurant Bulunumadı..!!");
 
             if (rest.Info == null)
                 rest.Info = new Info();
@@ -74,20 +72,31 @@ namespace StampMe.Business.Concrete
 
         public async Task AddImageAsync(ImageDTO item, object Id)
         {
+            var directory = Directory.GetCurrentDirectory() + "/images/" + Id;
+            var pa = System.Reflection.Assembly.GetExecutingAssembly();
+            var imgPath = directory + "/" + (string.IsNullOrEmpty(item.Id) ? ObjectId.GenerateNewId().ToString() : item.Id) + ".jpg";
             var rest = await _restaurantDal.GetAsync(x => x.Id == new MongoDB.Bson.ObjectId((string)Id));
 
             if (rest == null)
-                throw new HttpStatusCodeException(StatusCodes.Status404NotFound, "Ödül Bulunumadı..!!");
-
-                throw new Exception("Restaurant Bulunumadı..!!");
+                throw new HttpStatusCodeException(StatusCodes.Status404NotFound, "Restaurant Bulunumadı..!!");
 
             if (rest.Images == null)
                 rest.Images = new List<Images>();
 
+
+            if (!Directory.Exists(directory))
+                Directory.CreateDirectory(directory);
+            
+            if (File.Exists(imgPath))
+                File.Delete(imgPath);
+            
+
+            File.WriteAllBytes(imgPath,Convert.FromBase64String(item.Data));
+
             var image = new Images()
             {
                 Description = item.Info,
-                Image = Convert.FromBase64String(item.Data),
+                Image = imgPath,
                 Id = ObjectId.GenerateNewId(),
                 Statu = StatusType.WaitApproval
             };
@@ -108,13 +117,11 @@ namespace StampMe.Business.Concrete
             if (rest == null)
                 throw new HttpStatusCodeException(StatusCodes.Status404NotFound, "Ödül Bulunumadı..!!");
 
-                throw new Exception("Restaurant Bulunumadı..!!");
 
             var image = rest.Images.FirstOrDefault(x => x.Id == new ObjectId((string)item.ImageId));
             if (image == null)
                 throw new HttpStatusCodeException(StatusCodes.Status404NotFound, "Ödül Bulunumadı..!!");
 
-                throw new Exception("Resim Bulunamadı..!!");
 
             image.Statu = StatusType.Approved;
 
@@ -128,9 +135,6 @@ namespace StampMe.Business.Concrete
             if (rest == null)
                 throw new HttpStatusCodeException(StatusCodes.Status404NotFound, "Ödül Bulunumadı..!!");
 
-                throw new Exception("Restaurant Bulunumadı..!!");
-
-
             foreach (var item in rest)
             {
                 if (item.Images == null)
@@ -141,7 +145,7 @@ namespace StampMe.Business.Concrete
                     {
                         Id = m.Id.ToString(),
                         Statu = m.Statu.ToString(),
-                        Data = Convert.ToBase64String(m.Image),
+                        Data = m.Image,
                         Info = m.Description,
                         RestName = item.Name,
                         RestId = item.Id.ToString()
@@ -171,7 +175,7 @@ namespace StampMe.Business.Concrete
                     {
                         Id = m.Id.ToString(),
                         Statu = m.Statu.ToString(),
-                        Data = Convert.ToBase64String(m.Image),
+                        Data = m.Image,
                         Info = m.Description,
                         RestName = item.Name,
                         RestId = item.Id.ToString()
@@ -258,7 +262,7 @@ namespace StampMe.Business.Concrete
             return result.Images.Select(x => new ImageDTO
             {
                 Info = x.Description,
-                Data = Convert.ToBase64String(x.Image),
+                Data = x.Image,
                 Id = x.Id.ToString(),
                 Statu = x.Statu.ToString()
             });
@@ -635,7 +639,7 @@ namespace StampMe.Business.Concrete
                 Id = x.Id.ToString(),
                 isPromo = x.isPromo,
                 Name = x.Name,
-                Image = x.Images == null ? new byte[0] : x.Images.FirstOrDefault(z => z.Statu == StatusType.Approved).Image
+                Image = x.Images == null ? "" : x.Images.FirstOrDefault(z => z.Statu == StatusType.Approved).Image
             }).ToList();
         }
 

@@ -8,7 +8,7 @@ namespace StampMe.Common.CustomDTO
     {
         public string Id { get; set; }
         public string RestId { get; set; }
-        public byte[] Image { get; set; }
+        public string Image { get; set; }
         public string MenuDetail { get; set; }
 
     }
