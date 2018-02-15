@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 
 namespace StampMe.Common.MessageLoggingHandler
 {
@@ -43,6 +44,30 @@ namespace StampMe.Common.MessageLoggingHandler
         protected abstract Task IncommingMessageAsync(DateTime date, string correlationId, string requestInfo, string ipAdress, byte[] message, string UserSecurityKey);
         protected abstract Task OutgoingMessageAsync(DateTime date, string correlationId, string requestInfo, string ipAdress, byte[] message, long ElapsedTime, string UserSecurityKey, HttpStatusCode statusCode);
     }
+
+    public class HttpStatusCodeException : Exception
+    {
+        public int StatusCode { get; set; }
+        public string ContentType { get; set; } = @"text/plain";
+
+        public HttpStatusCodeException(int statusCode)
+        {
+            this.StatusCode = statusCode;
+        }
+
+        public HttpStatusCodeException(int statusCode, string message) : base(message)
+        {
+            this.StatusCode = statusCode;
+        }
+
+        public HttpStatusCodeException(int statusCode, Exception inner) : this(statusCode, inner.ToString()) { }
+
+        public HttpStatusCodeException(int statusCode, JObject errorObject) : this(statusCode, errorObject.ToString())
+        {
+            this.ContentType = @"application/json";
+        }
+    }
+
 
 
     public static class HttpRequestMessageExtensions

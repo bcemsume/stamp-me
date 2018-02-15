@@ -9,6 +9,8 @@ using StampMe.Entities.Concrete;
 using System.Linq;
 using MongoDB.Bson;
 using StampMe.Common.PasswordProtected;
+using StampMe.Common.MessageLoggingHandler;
+using Microsoft.AspNetCore.Http;
 
 namespace StampMe.Business.Concrete
 {
@@ -26,7 +28,10 @@ namespace StampMe.Business.Concrete
         {
             var rest = await _restaurantDal.GetAsync(x => x.Id == new ObjectId((string)item.Id));
 
-            if (rest == null) throw new Exception("Restaurant Bulunumadı..!!");
+            if (rest == null) 
+                throw new HttpStatusCodeException(StatusCodes.Status404NotFound, "Ödül Bulunumadı..!!");
+
+                throw new Exception("Restaurant Bulunumadı..!!");
 
             if (rest.Info == null)
                 rest.Info = new Info();
@@ -46,7 +51,9 @@ namespace StampMe.Business.Concrete
 
             var rest = await _restaurantDal.GetAsync(x => x.Id == new ObjectId((string)Id));
 
-            if (rest == null) throw new Exception("Restaurant Bulunumadı..!!");
+            if (rest == null) 
+                throw new HttpStatusCodeException(StatusCodes.Status404NotFound, "Ödül Bulunumadı..!!");
+                throw new Exception("Restaurant Bulunumadı..!!");
 
             if (rest.Info == null)
                 rest.Info = new Info();
@@ -70,6 +77,8 @@ namespace StampMe.Business.Concrete
             var rest = await _restaurantDal.GetAsync(x => x.Id == new MongoDB.Bson.ObjectId((string)Id));
 
             if (rest == null)
+                throw new HttpStatusCodeException(StatusCodes.Status404NotFound, "Ödül Bulunumadı..!!");
+
                 throw new Exception("Restaurant Bulunumadı..!!");
 
             if (rest.Images == null)
@@ -97,10 +106,14 @@ namespace StampMe.Business.Concrete
             var rest = await _restaurantDal.GetAsync(x => x.Id == new MongoDB.Bson.ObjectId((string)item.RestId));
 
             if (rest == null)
+                throw new HttpStatusCodeException(StatusCodes.Status404NotFound, "Ödül Bulunumadı..!!");
+
                 throw new Exception("Restaurant Bulunumadı..!!");
 
             var image = rest.Images.FirstOrDefault(x => x.Id == new ObjectId((string)item.ImageId));
             if (image == null)
+                throw new HttpStatusCodeException(StatusCodes.Status404NotFound, "Ödül Bulunumadı..!!");
+
                 throw new Exception("Resim Bulunamadı..!!");
 
             image.Statu = StatusType.Approved;
@@ -113,6 +126,8 @@ namespace StampMe.Business.Concrete
             var rest = await _restaurantDal.GetAllAsync();
 
             if (rest == null)
+                throw new HttpStatusCodeException(StatusCodes.Status404NotFound, "Ödül Bulunumadı..!!");
+
                 throw new Exception("Restaurant Bulunumadı..!!");
 
 
@@ -142,7 +157,8 @@ namespace StampMe.Business.Concrete
             var rest = await _restaurantDal.GetAllAsync();
 
             if (rest == null)
-                throw new Exception("Restaurant Bulunumadı..!!");
+                throw new HttpStatusCodeException(StatusCodes.Status404NotFound, "Restaurant Bulunumadı..!!");
+
 
 
             foreach (var item in rest)
@@ -171,12 +187,14 @@ namespace StampMe.Business.Concrete
             var rest = await _restaurantDal.GetAsync(x => x.Id == new MongoDB.Bson.ObjectId((string)restId));
 
             if (rest == null)
-                throw new Exception("Restaurant Bulunumadı..!!");
+                throw new HttpStatusCodeException(StatusCodes.Status404NotFound, "Restaurant Bulunumadı..!!");
+
 
             var img = rest.Images.FirstOrDefault(x => x.Id == new ObjectId((string)imgId));
 
             if (img == null)
-                throw new Exception("Resim Bulunumadı..!!");
+                throw new HttpStatusCodeException(StatusCodes.Status404NotFound, "Resim Bulunumadı..!!");
+
 
             rest.Images.Remove(img);
 
@@ -232,7 +250,7 @@ namespace StampMe.Business.Concrete
             var result = await _restaurantDal.GetAsync(x => x.Id == new MongoDB.Bson.ObjectId((string)Id));
 
             if (result == null)
-                throw new Exception("Restaurant Bulunumadı..!!");
+                throw new HttpStatusCodeException(StatusCodes.Status404NotFound, "Restaurant Bulunumadı..!!");
 
             if (result.Images == null)
                 result.Images = new List<Images>();
@@ -264,7 +282,7 @@ namespace StampMe.Business.Concrete
         {
             var rest = await FirstOrDefaultAsync(x => x.Id == (string.IsNullOrEmpty((string)Id) ? new ObjectId() : new ObjectId((string)Id)));
             if (rest == null)
-                throw new Exception("Restaurant Bulunumadı..!!");
+                throw new HttpStatusCodeException(StatusCodes.Status404NotFound, "Restaurant Bulunumadı..!!");
             bool isNew = false;
 
             var pro = rest.Promotion.FirstOrDefault(x => x.Id == (string.IsNullOrEmpty((string)item.Id) ? new ObjectId() : new ObjectId((string)item.Id)));
@@ -289,7 +307,7 @@ namespace StampMe.Business.Concrete
         {
             var rest = await FirstOrDefaultAsync(x => x.Id == new ObjectId((string)Id));
             if (rest == null)
-                throw new Exception("Restaurant Bulunumadı..!!");
+                throw new HttpStatusCodeException(StatusCodes.Status404NotFound, "Restaurant Bulunumadı..!!");
             bool isNew = false;
 
             var pro = rest.Product.FirstOrDefault(x => x.Id == (string.IsNullOrEmpty((string)item.Id) ? new ObjectId() : new ObjectId((string)item.Id)));
@@ -314,11 +332,11 @@ namespace StampMe.Business.Concrete
         {
             var rest = await FirstOrDefaultAsync(x => x.Id == new ObjectId(item.restId));
             if (rest == null)
-                throw new Exception("Restaurant Bulunumadı..!!");
+                throw new HttpStatusCodeException(StatusCodes.Status404NotFound, "Restaurant Bulunumadı..!!");
 
             var pro = rest.Promotion.FirstOrDefault(x => x.Id == new ObjectId((string)item.PromId));
             if (pro == null)
-                throw new Exception("Promosyon Bulunumadı..!!");
+                throw new HttpStatusCodeException(StatusCodes.Status404NotFound, "Promosyon Bulunumadı..!!");
 
             pro.Status = StatusType.Approved;
             await UpdateAsync(rest);
@@ -331,12 +349,12 @@ namespace StampMe.Business.Concrete
         {
             var rest = await FirstOrDefaultAsync(x => x.Id == new ObjectId(item.restId));
             if (rest == null)
-                throw new Exception("Restaurant Bulunumadı..!!");
+                throw new HttpStatusCodeException(StatusCodes.Status404NotFound, "Restaurant Bulunumadı..!!");
 
             var pro = rest.Product.FirstOrDefault(x => x.Id == new ObjectId(item.ProdId));
 
             if (pro == null)
-                throw new Exception("Ürün Bulunumadı..!!");
+                throw new HttpStatusCodeException(StatusCodes.Status404NotFound, "Ürün Bulunumadı..!!");
 
             pro.Status = StatusType.Approved;
             await UpdateAsync(rest);
@@ -503,7 +521,8 @@ namespace StampMe.Business.Concrete
                     }
                     catch (Exception ex)
                     {
-                        throw ex;
+                    throw new HttpStatusCodeException(StatusCodes.Status404NotFound,ex.Message);
+
                     }
                 }
 
@@ -535,7 +554,7 @@ namespace StampMe.Business.Concrete
         {
             var rest = await _restaurantDal.GetAsync(x => x.Id == new ObjectId(item.RestId));
             if (rest == null)
-                throw new Exception("Restaurant Bulunumadı..!!");
+                throw new HttpStatusCodeException(StatusCodes.Status404NotFound, "Restaurant Bulunumadı..!!");
 
             if (rest.Info.Menu == null)
                 rest.Info.Menu = new Menu();
@@ -571,7 +590,7 @@ namespace StampMe.Business.Concrete
         {
             var rest = await _restaurantDal.GetAsync(x => x.Id == new ObjectId((string)Id));
             if (rest == null)
-                throw new Exception("Restaurant Bulunumadı..!!");
+                throw new HttpStatusCodeException(StatusCodes.Status404NotFound, "Restaurant Bulunumadı..!!");
 
             if (rest.Info.Menu == null)
                 rest.Info.Menu = new Menu();
@@ -595,12 +614,12 @@ namespace StampMe.Business.Concrete
         {
             var rest = await _restaurantDal.GetAsync(x => x.Id == new ObjectId(item.RestId));
             if (rest == null)
-                throw new Exception("Restaurant Bulunumadı..!!");
+                throw new HttpStatusCodeException(StatusCodes.Status404NotFound, "Restaurant Bulunumadı..!!");
 
             var menu = rest.Info.Menu.Image.FirstOrDefault(x => x.Id == new ObjectId(item.Id));
 
             if (menu == null)
-                throw new Exception("Menü Bulunumadı..!!");
+                throw new HttpStatusCodeException(StatusCodes.Status404NotFound, "Menü Bulunumadı..!!");
 
             rest.Info.Menu.Image.Remove(menu);
             await UpdateAsync(rest);
@@ -673,12 +692,12 @@ namespace StampMe.Business.Concrete
             var rest = await _restaurantDal.GetAsync(x => x.Id == new ObjectId(item.RestId));
 
             if (rest == null)
-                throw new Exception("Restaurant Bulunumadı..!!");
+                throw new HttpStatusCodeException(StatusCodes.Status404NotFound, "Restaurant Bulunumadı..!!");
 
             var prod = rest.Product.FirstOrDefault(x=> x.Id == new ObjectId(item.ProductId));
 
             if (prod == null)
-                throw new Exception("Ürün Bulunamadı..!!");
+                throw new HttpStatusCodeException(StatusCodes.Status404NotFound, "Ürün Bulunumadı..!!");
 
             prod.Status = StatusType.Reject;
 
@@ -692,12 +711,12 @@ namespace StampMe.Business.Concrete
             var rest = await _restaurantDal.GetAsync(x => x.Id == new ObjectId(item.RestId));
 
             if (rest == null)
-                throw new Exception("Restaurant Bulunumadı..!!");
+                throw new HttpStatusCodeException(StatusCodes.Status404NotFound, "Restaurant Bulunumadı..!!");
 
             var prod = rest.Promotion.FirstOrDefault(x => x.Id == new ObjectId(item.PromotionId));
 
             if (prod == null)
-                throw new Exception("Promosyon Bulunamadı..!!");
+                throw new HttpStatusCodeException(StatusCodes.Status404NotFound, "Promosyon Bulunumadı..!!");
 
             prod.Status = StatusType.Reject;
 
@@ -711,12 +730,12 @@ namespace StampMe.Business.Concrete
             var rest = await _restaurantDal.GetAsync(x => x.Id == new ObjectId(item.RestId));
 
             if (rest == null)
-                throw new Exception("Restaurant Bulunumadı..!!");
+                throw new HttpStatusCodeException(StatusCodes.Status404NotFound, "Restaurant Bulunumadı..!!");
 
             var prod = rest.Images.FirstOrDefault(x => x.Id == new ObjectId(item.ImageId));
 
             if (prod == null)
-                throw new Exception("Resim Bulunamadı..!!");
+                throw new HttpStatusCodeException(StatusCodes.Status404NotFound, "Resim Bulunumadı..!!");
 
             prod.Statu = StatusType.Reject;
 

@@ -18,6 +18,7 @@ using MongoDB.Bson;
 using Newtonsoft.Json;
 using StampMe.Business.Abstract;
 using StampMe.Business.Concrete;
+using StampMe.Common.MessageLoggingHandler;
 using StampMe.DataAccess.Abstract;
 using StampMe.DataAccess.Concrete;
 using Swashbuckle.AspNetCore.Swagger;
@@ -117,7 +118,7 @@ namespace StampMe.API
             {
                 await _next(context);
             }
-            catch (Exception e)
+            catch (HttpStatusCodeException e)
             {
                 LogDataService logDataService = new LogDataService(new MongoLogDataDal());
                 await logDataService.Add(new Common.CustomDTO.LogDataDTO()
@@ -132,7 +133,11 @@ namespace StampMe.API
                     Id = ObjectId.GenerateNewId(),
                     ElapsedTime = 1
                 });
-                System.Diagnostics.Debug.WriteLine($"The following error happened: {e.Message}");
+                context.Response.Clear();
+                context.Response.StatusCode = e.StatusCode;
+                context.Response.ContentType = e.ContentType;
+
+                await context.Response.WriteAsync(e.Message);
             }
         }
     }

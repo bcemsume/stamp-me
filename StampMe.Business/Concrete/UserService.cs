@@ -9,6 +9,8 @@ using StampMe.DataAccess.Abstract;
 using StampMe.Entities.Concrete;
 using System.Linq;
 using StampMe.Common.PasswordProtected;
+using StampMe.Common.MessageLoggingHandler;
+using Microsoft.AspNetCore.Http;
 
 namespace StampMe.Business.Concrete
 {
@@ -68,7 +70,7 @@ namespace StampMe.Business.Concrete
             var usr =  await _userDal.GetAsync(x => x.Id == new ObjectId(entity.Id));
 
             if (usr == null)
-                throw new Exception("Kullanıcı Bulunamadı..!!");
+                throw new HttpStatusCodeException(StatusCodes.Status404NotFound,"Kullanıcı Bulunamadı..!!");
 
             await _userDal.UpdateAsync(x => x.Id == usr.Id, usr);
         }
@@ -83,7 +85,8 @@ namespace StampMe.Business.Concrete
             var user = await _userDal.GetAsync(x => x.Email == item.UserName && x.Password == item.Password);
 
             if (user == null)
-                throw new Exception("Kullanıcı Bulunamadı.!!");
+                throw new HttpStatusCodeException(StatusCodes.Status404NotFound,"Kullanıcı Bulunamadı..!!");
+
 
             return new UserDTO
             {
@@ -104,7 +107,8 @@ namespace StampMe.Business.Concrete
             var restList = await _restaurantDal.GetAllAsync();
 
             if (users == null)
-                throw new Exception("Kullanıcı Bulunumadı..!!");
+                throw new HttpStatusCodeException(StatusCodes.Status404NotFound,"Kullanıcı Bulunamadı..!!");
+            
 
 
             foreach (var reward in users.Reward)
@@ -132,15 +136,18 @@ namespace StampMe.Business.Concrete
             var rest = (await _restaurantDal.GetAllAsync()).FirstOrDefault(x => x.Promotion.Any(z => z.Id == new ObjectId(item.PromId)));
 
             if (rest == null)
-                throw new Exception("Restaurant Bulunumadı..!!");
+                throw new HttpStatusCodeException(StatusCodes.Status404NotFound,"Restaurant Bulunamadı..!!");
+
 
             var prom = rest.Promotion.FirstOrDefault(x => x.Id == new ObjectId(item.PromId));
 
             if (prom == null)
-                throw new Exception("Promosyon Bulunumadı..!!");
+                throw new HttpStatusCodeException(StatusCodes.Status404NotFound,"Promosyon Bulunumadı..!!");
+
 
             if (user == null)
-                throw new Exception("Kullanıcı Bulunumadı..!!");
+                throw new HttpStatusCodeException(StatusCodes.Status404NotFound,"Kullanıcı Bulunumadı..!!");
+
 
 
 
@@ -200,12 +207,14 @@ namespace StampMe.Business.Concrete
             var user = await _userDal.GetAsync(x => x.Id == new ObjectId(item.UserId));
 
             if (user == null)
-                throw new Exception("Kullanıcı Bulunamadı..!!");
+                throw new HttpStatusCodeException(StatusCodes.Status404NotFound,"Kullanıcı Bulunumadı..!!");
+
 
             var reward = user.Reward.FirstOrDefault(x => x.Id == new ObjectId(item.RewardId));
 
             if (reward == null)
-                throw new Exception("Ödül Bulunamadı..!!");
+                throw new HttpStatusCodeException(StatusCodes.Status404NotFound,"Ödül Bulunumadı..!!");
+
 
             reward.isUsed = true;
 
