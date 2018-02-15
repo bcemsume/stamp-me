@@ -550,6 +550,10 @@ namespace StampMe.Business.Concrete
 
         public async Task MenuSave(MenuDTO item)
         {
+            var imgId = (string.IsNullOrEmpty(item.Id) ? ObjectId.GenerateNewId().ToString() : item.Id);
+            var imgPath = "/images/" + item.RestId + "/" + imgId + ".jpg";
+            var imgViewPath = "/img/" + item.RestId + "/" + imgId + ".jpg";
+
             var rest = await _restaurantDal.GetAsync(x => x.Id == new ObjectId(item.RestId));
             if (rest == null)
                 throw new HttpStatusCodeException(StatusCodes.Status404NotFound, "Restaurant Bulunumadı..!!");
@@ -565,20 +569,19 @@ namespace StampMe.Business.Concrete
                 rest.Info.Menu.Image = new List<Images>();
 
             var menu = rest.Info.Menu.Image.Where(x => x.Id == (string.IsNullOrEmpty(item.Id) ? new ObjectId() : new ObjectId(item.Id))).FirstOrDefault();
-
+            await ImageUpload.Upload(item.Image, imgPath);
             if (menu == null)
             {
                 menu = new Images();
                 menu.Id = ObjectId.GenerateNewId();
                 menu.Statu = StatusType.Approved;
-                menu.Image = item.Image;
-
+                // menu.Image = item.Image;
+                menu.Image = "http://185.187.186.41" + imgViewPath;
                 rest.Info.Menu.Image.Add(menu);
             }
             else
             {
-                menu.Image = item.Image;
-
+                menu.Image = "http://185.187.186.41" + imgViewPath;
             }
             await UpdateAsync(rest);
 

@@ -464,7 +464,7 @@
                             <dxi-column caption="Menu Detaylı" dataField="menuDetail"></dxi-column>
                             <dxi-column caption="Resim" dataField="image" cellTemplate="imageTemplate"></dxi-column>
                             <div *dxTemplate="let data of 'imageTemplate'">
-                                <img style="height:50px; width:50px; float: right;" [src]="'data:image/jpg;base64,'+data.value" />
+                                <img style="height:50px; width:50px; float: right;" [src]="data.value" />
                             </div>
                         </dx-data-grid>
                         <!--end: Datatable -->
