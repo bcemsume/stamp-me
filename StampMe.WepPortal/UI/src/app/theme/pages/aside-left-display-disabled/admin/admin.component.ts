@@ -2,7 +2,7 @@ import { Component, OnInit, ViewEncapsulation, AfterViewInit, ElementRef, ViewCh
 import { Helpers } from '../../../../helpers';
 import { ScriptLoaderService } from '../../../../_services/script-loader.service';
 import { AdminService } from './admin.service';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { formArrayNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
 import * as $ from "jquery";
 import { ToasterConfig, ToasterService, Toast } from 'angular2-toaster';
@@ -38,21 +38,7 @@ export class AdminComponent implements OnInit, AfterViewInit {
         positionClass: 'toast-top-right'
     });
     toasterService: ToasterService;
-    form = new FormGroup({
-        Name: new FormControl('', Validators.required),
-        Email: new FormControl('', Validators.compose([Validators.email, Validators.required])),
-        UserName: new FormControl('', Validators.required),
-        Password: new FormControl('', Validators.required),
-        ContractId: new FormControl('', Validators.required),
-        Adress: new FormControl('', Validators.required),
-        isActive: new FormControl(''),
-        isPromo: new FormControl(''),
-        Id: new FormControl(''),
-        Product: new FormControl(''),
-        Promotion: new FormControl(''),
-        Latitude: new FormControl(''),
-        Longitude:new FormControl('')
-    });
+
     status = [{ Name: "Onaylı", Value: "Approved" }, { Name: "Beklemede", Value: "WaitApproval" }]
 
     formContract = new FormGroup({
@@ -117,9 +103,26 @@ export class AdminComponent implements OnInit, AfterViewInit {
 
     contractSource: any;
     imagesSource: any;
-
-    constructor(private _script: ScriptLoaderService, private svc: AdminService, private renderer: Renderer, toasterService: ToasterService) {
+    form: any;
+    constructor(private _script: ScriptLoaderService, private svc: AdminService, private renderer: Renderer, toasterService: ToasterService, private fb: FormBuilder) {
         this.toasterService = toasterService;
+
+        this.form = fb.group({
+            Name: ['', Validators.required],
+            Email: new FormControl('', Validators.compose([Validators.email, Validators.required])),
+            UserName: ['', Validators.required],
+            Password: [''],
+            ContractId: ['', Validators.required],
+            Adress: ['', Validators.required],
+            isActive: [''],
+            isPromo: [''],
+            Id: [''],
+            Product: [''],
+            Promotion: [''],
+            Latitude: [''],
+            Longitude: [''],
+        });
+
     }
 
     dataSource: any;
@@ -285,7 +288,7 @@ export class AdminComponent implements OnInit, AfterViewInit {
         this.form.setValue({
             Name: item.name,
             Email: item.email,
-            Password: item.password,
+            Password: '0',
             UserName: item.userName,
             Adress: item.adress,
             isActive: item.isActive,
@@ -293,7 +296,7 @@ export class AdminComponent implements OnInit, AfterViewInit {
             isPromo: item.isPromo,
             Product: null,
             Promotion: null,
-            ContractId: this.contractSource.find( x=> x.type == item.contractName).id,
+            ContractId: this.contractSource.find(x => x.type == item.contractName).id,
             Latitude: item.latitude,
             Longitude: item.longitude
         });
@@ -326,8 +329,21 @@ export class AdminComponent implements OnInit, AfterViewInit {
         if (!this.form.invalid) {
             debugger;
             this.sendValue = this.form.value;
+
             this.sendValue.Product = this.prodcutsDTO;
+
+            if (this.prodcutsDTO.length == 0)
+                this.sendValue.Product = null;
+            else if (this.prodcutsDTO[0].Id == 0)
+                this.sendValue.Product = null;
+
             this.sendValue.Promotion = this.promotionDTO;
+
+            if (this.promotionDTO.length == 0)
+                this.sendValue.Promotion = null;
+            else if (this.promotionDTO[0].ProductId == 0)
+                this.sendValue.Promotion = null;
+
             this.svc.saveRestaurant(this.sendValue).subscribe(x => {
                 document.getElementById('btnCloseModal').click();
                 this.popSubmitToast();

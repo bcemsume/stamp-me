@@ -7,10 +7,13 @@ using MongoDB.Bson;
 using StampMe.Business.Abstract;
 using StampMe.Common.CustomDTO;
 using StampMe.Entities.Concrete;
+using Microsoft.AspNetCore.Authorization;
+
 
 namespace StampMe.API.Controllers
 {
     [Route("api/[controller]/[action]")]
+    [Authorize]
     [EnableCors("MyPolicy")]
     public class UserController : Controller
     {
@@ -20,10 +23,10 @@ namespace StampMe.API.Controllers
             _userService = userService;
         }
 
-        [HttpGet("{id}")]
-        public async Task<User> Get(object id)
+        [HttpGet]
+        public async Task<User> GetAsync(string id)
         {
-            return await _userService.FirstOrDefaultAsync(x => x.Id == (ObjectId)id);
+            return await _userService.FirstOrDefaultAsync(x => x.Id == new ObjectId(id));
         }
 
         // POST api/values

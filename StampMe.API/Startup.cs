@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
@@ -14,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using MongoDB.Bson;
 using Newtonsoft.Json;
 using StampMe.Business.Abstract;
@@ -51,7 +53,40 @@ namespace StampMe.API
                 c.SwaggerDoc("v1", new Info { Title = "hupp API", Version = "v1" });
             });
 
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                    .AddJwtBearer(options => {
+                        options.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            ValidateIssuer = true,
+                            ValidateAudience = true,
+                            ValidateLifetime = true,
+                            ValidateIssuerSigningKey = true,
 
+                            ValidIssuer = "StampMe.API.Controller",
+                            ValidAudience = "StampMe.API.Controller",
+                            IssuerSigningKey = JwtSecurityKey.Create("huppa-secret-key")
+                        };
+
+                        options.Events = new JwtBearerEvents
+                        {
+                            OnAuthenticationFailed = context =>
+                            {
+                                Console.WriteLine("OnAuthenticationFailed: " + context.Exception.Message);
+                                return Task.CompletedTask;
+                            },
+                            OnTokenValidated = context =>
+                            {
+                                Console.WriteLine("OnTokenValidated: " + context.SecurityToken);
+                                return Task.CompletedTask;
+                            }
+                        };
+                    });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Member",
+                    policy => policy.RequireClaim("MembershipId"));
+            });
 
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUserDal, MongoUserDal>();
@@ -80,6 +115,7 @@ namespace StampMe.API
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseAuthentication();
 
             app.UseMiddleware<ErrorLoggingMiddleware>();
             app.UseMvc();
@@ -102,7 +138,14 @@ namespace StampMe.API
 
         }
     }
-
+    public static class JwtSecurityKey
+    {
+        public static SymmetricSecurityKey Create(string secret)
+        {
+            var token = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
+            return token;
+        }
+    }
     public class ErrorLoggingMiddleware
     {
         private readonly RequestDelegate _next;

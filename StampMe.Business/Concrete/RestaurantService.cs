@@ -219,8 +219,6 @@ namespace StampMe.Business.Concrete
 
             var contract = await _contractDal.GetAllAsync();
 
-
-
             return list.Select(x => new RestaurantListDTO
             {
                 isPromo = x.isPromo,
@@ -231,9 +229,8 @@ namespace StampMe.Business.Concrete
                 Email = x.Email,
                 Id = x.Id.ToString(),
                 Name = x.Name,
-                Password = x.Password,
                 UserName = x.UserName,
-                ContractName = contract.Where(z => z.Id == x.ContractId).Select(z => z.Type).FirstOrDefault() ?? ""
+                ContractName = contract.FirstOrDefault(z => z.Id == x.ContractId) == null ? "" : contract.FirstOrDefault(z => z.Id == x.ContractId).Type
             });
 
         }
@@ -494,7 +491,10 @@ namespace StampMe.Business.Concrete
 
             r.Name = entity.Name;
             r.Email = entity.Email;
-            r.Password = PasswordHash.GetPasswordHash(entity.Password);
+
+            if(entity.Password != "0")
+                r.Password = PasswordHash.GetPasswordHash(entity.Password);
+            
             r.UserName = entity.UserName;
             r.isActive = entity.isActive;
             r.isPromo = entity.isPromo;
@@ -636,8 +636,7 @@ namespace StampMe.Business.Concrete
                 Id = x.Id.ToString(),
                 isPromo = x.isPromo,
                 Name = x.Name,
-                Image = x.Images == null ? "" : x.Images.FirstOrDefault(z => z.Statu == StatusType.Approved).Image
-            }).ToList();
+                Image = x.Images == null ? "" : (x.Images.FirstOrDefault(z => z.Statu == StatusType.Approved) == null ? "" : x.Images.FirstOrDefault(z => z.Statu == StatusType.Approved).Image)            }).ToList();
         }
 
         public async Task<IEnumerable<WaitApprovalItemDTO>> GetProductByRestaurant(object Id)

@@ -18,7 +18,7 @@ export class HttpService extends Http {
 
     request(url: string | Request, options?: RequestOptionsArgs): Observable<Response> {
         console.log(url);
-        let apiURL = "http://localhost:5001/api/";
+        let apiURL = "http://185.187.186.41:90/api/";
         let token = localStorage.getItem('auth_token');
         if (typeof url === 'string') {
             if (!options) {
