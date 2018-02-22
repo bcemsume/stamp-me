@@ -10,6 +10,8 @@ namespace StampMe.Common.CustomDTO
         public string RestName { get; set; }
         public int Claim { get; set; }
         public bool isUsed { get; set; }
+        public string ProductId { get; set; }
+        public string ProductName { get; set; }
         public DateTime StampDate { get; set; }
 
     }

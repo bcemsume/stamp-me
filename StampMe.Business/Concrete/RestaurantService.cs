@@ -13,6 +13,7 @@ using StampMe.Common.MessageLoggingHandler;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using StampMe.Common.ImageUpload;
+using System.Diagnostics.Contracts;
 
 namespace StampMe.Business.Concrete
 {
@@ -292,7 +293,7 @@ namespace StampMe.Business.Concrete
             else
             {
                 pro.Claim = item.Claim;
-                pro.ProductId = item.ProductId;
+                pro.ProductId = new ObjectId((string)item.ProductId);
                 pro.Status = item.Status;
             }
             await UpdateAsync(rest);

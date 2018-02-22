@@ -117,12 +117,23 @@ namespace StampMe.Business.Concrete
                 if (rest == null)
                     continue;
 
+                var promotion = rest.Promotion.FirstOrDefault(z => z.Id == reward.PromotionId);
+                if (promotion == null)
+                    continue;
+
+                var product = rest.Product.FirstOrDefault(x => x.Id == promotion.ProductId);
+                if (product == null)
+                    continue;
+
                 lst.Add(new RewardDTO
                 {
+
                     Claim = reward.ClaimCount,
                     isUsed = reward.isUsed,
                     RestId = rest.Id.ToString(),
                     RestName = rest.Name,
+                    ProductName = product.Description,
+                    ProductId = product.Id.ToString(),
                     StampDate = reward.StampDate
                 });
             }
@@ -220,6 +231,44 @@ namespace StampMe.Business.Concrete
 
             await _userDal.UpdateAsync(x => x.Id == user.Id, user);
 
+        }
+
+        public async Task<IEnumerable<RewardDTO>> GetRewardListByRestaurant(object Id, object RestId)
+        {
+            var lst = new List<RewardDTO>();
+            var users = await _userDal.GetAsync(x => x.Id == new ObjectId((string)Id));
+            var rest = await _restaurantDal.GetAsync(x=> x.Id == new ObjectId((string)RestId));
+
+            if (users == null)
+                throw new HttpStatusCodeException(StatusCodes.Status404NotFound, "Kullanıcı Bulunamadı..!!");
+
+            foreach (var reward in users.Reward)
+            {
+                if (rest == null)
+                    continue;
+
+                var promotion = rest.Promotion.FirstOrDefault(z => z.Id == reward.PromotionId);
+                if (promotion == null)
+                    continue;
+                
+                var product = rest.Product.FirstOrDefault(x => x.Id == promotion.ProductId);
+                if (product == null)
+                    continue;
+
+                lst.Add(new RewardDTO
+                {
+
+                    Claim = reward.ClaimCount,
+                    isUsed = reward.isUsed,
+                    RestId = rest.Id.ToString(),
+                    RestName = rest.Name,
+                    ProductName = product.Description,
+                    ProductId = product.Id.ToString(),
+                    StampDate = reward.StampDate
+                });
+            }
+
+            return lst;
         }
     }
 }

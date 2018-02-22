@@ -19,6 +19,8 @@ namespace StampMe.Business.Abstract
         Task<UserDTO> Login(UserLoginDTO item);
 
         Task<IEnumerable<RewardDTO>> GetRewardList(object Id);
+        Task<IEnumerable<RewardDTO>> GetRewardListByRestaurant(object Id, object RestId);
+
         Task AddRewardAsync(RewardItemDTO item);
 
         Task UserReward(UserRewardDTO item);

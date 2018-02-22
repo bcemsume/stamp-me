@@ -137,7 +137,7 @@ namespace StampMe.Entities.Concrete
             get;
             set;
         }
-        public object ProductId
+        public ObjectId ProductId
         {
             get;
             set;

@@ -62,6 +62,11 @@ namespace StampMe.API.Controllers
             return await _userService.GetRewardList(Id);
         }
 
+        [HttpGet]
+        public async Task<IEnumerable<RewardDTO>> GetRewardListByRestaurant(string Id, string RestId)
+        {
+            return await _userService.GetRewardListByRestaurant(Id, RestId);
+        }
 
     }
 }
