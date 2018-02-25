@@ -82,7 +82,8 @@ namespace StampMe.Business.Concrete
 
         public async Task<UserDTO> Login(UserLoginDTO item)
         {
-            var user = await _userDal.GetAsync(x => x.Email == item.UserName && x.Password == item.Password);
+            var pass = PasswordHash.GetPasswordHash(item.Password);
+            var user = await _userDal.GetAsync(x => x.Email == item.UserName && x.Password == pass);
 
             if (user == null)
                 throw new HttpStatusCodeException(StatusCodes.Status404NotFound,"Kullanıcı Bulunamadı..!!");

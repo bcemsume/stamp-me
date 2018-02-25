@@ -344,14 +344,18 @@ export class AdminComponent implements OnInit, AfterViewInit {
             else if (this.promotionDTO[0].ProductId == 0)
                 this.sendValue.Promotion = null;
 
+            this.sendValue.isPromo = this.sendValue.isPromo == null ? false : this.sendValue.isPromo;
+            this.sendValue.isAdmin = this.sendValue.isAdmin == null ? false : this.sendValue.isAdmin;
+            
+
             this.svc.saveRestaurant(this.sendValue).subscribe(x => {
                 document.getElementById('btnCloseModal').click();
                 this.popSubmitToast();
                 this.gridLoad();
                 this.form.reset();
                 this.sendValue = null;
-                this.promotionDTO = null;
-                this.prodcutsDTO = null;
+                this.prodcutsDTO = [{ Description: "", Status: "", DueDate: "", Id: 0 }]
+                this.promotionDTO = [{ Claim: "", Status: "", ProductId: 0 }]
             }, err => {
                 this.popErrorToast(err)
             }
@@ -401,7 +405,7 @@ export class AdminComponent implements OnInit, AfterViewInit {
     onSubmitContract() {
         if (!this.formContract.invalid) {
             debugger;
-            if (this.formContract.value.Id === null) {
+            if (this.formContract.value.Id === "") {
 
                 this.svc.saveContract(this.formContract.value).subscribe(x => {
                     document.getElementById('btnCloseContractModal').click();

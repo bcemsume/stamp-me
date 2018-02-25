@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace StampMe.API.Controllers
 {
     [Route("api/[controller]/[action]")]
-    [Authorize]
+    // [Authorize]
     [EnableCors("MyPolicy")]
     public class UserController : Controller
     {
