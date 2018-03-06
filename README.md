@@ -1,6 +1,6 @@
 # stamp-me
 
-#Uygulamanın Amacı:
+## Uygulamanın Amacı:
   Starbucks uygulamasını biliyorsunuz bunun tam tersi mantığında çalışacak bir uygulama. Yani şöyle;
     Kahvecilerde bir qr code olacak telefondan adam o qr code'u okutup bir hak kazanacak.
     Web ve mobil kısmı olarak ikiye ayrılıyor.
