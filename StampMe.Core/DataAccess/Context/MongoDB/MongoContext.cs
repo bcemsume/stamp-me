@@ -9,7 +9,7 @@ namespace StampMe.Core.DataAccess.Context.MongoDB
 
         public MongoContext()
         {
-            var client = new MongoClient("mongodb://51.15.68.39:27017/");
+            var client = new MongoClient("mongodb://127.0.0.1:27017/");
             if (client != null)
                 _database = client.GetDatabase("StampMeDB");
         }
